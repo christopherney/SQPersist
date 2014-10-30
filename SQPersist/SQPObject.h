@@ -10,6 +10,7 @@
 #import <objc/runtime.h>
 #include <objc/objc.h>
 #include <objc/NSObjCRuntime.h>
+#import <UIKit/UIKit.h>
 
 #import "SQPDatabase.h"
 #import "FMDatabase.h"
@@ -24,14 +25,18 @@
 @property (nonatomic, strong) NSString *objectID;
 @property (nonatomic) BOOL deleteObject;
 
++ (id)SQPCreateEntity;
+
 - (BOOL)SQPSaveEntity;
 
 + (NSMutableArray*)SQPFetchAll;
 
 + (NSMutableArray*)SQPFetchAllWhere:(NSString*)queryOptions;
 
-+ (SQPObject*)SQPFetchOneWhere:(NSString*)queryOptions;
++ (NSMutableArray*)SQPFetchAllWhere:(NSString*)queryOptions orderBy:(NSString*)orderOptions;
 
-+ (SQPObject*)SQPFetchOneByID:(NSString*)objectID;
++ (id)SQPFetchOneWhere:(NSString*)queryOptions;
+
++ (id)SQPFetchOneByID:(NSString*)objectID;
 
 @end

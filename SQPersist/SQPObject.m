@@ -21,6 +21,7 @@
 - (NSString *)uuidString;
 + (SQPObject*)SQPObjectFromClassName:(NSString*)className;
 - (void)completeObject:(SQPObject*)object withResultSet:(FMResultSet*)resultSet;
+- (id)objcObjectToSQLite:(id)value;
 - (BOOL)SQPInsertObject;
 - (BOOL)SQPUpdateObject;
 - (BOOL)SQPDeleteObject;
@@ -35,6 +36,15 @@
         [self SQPInitialization];
     }
     return self;
+}
+
++ (id)SQPCreateEntity {
+    
+    NSString *className = NSStringFromClass([self class]);
+    
+    id entity = [SQPObject SQPObjectFromClassName:className];
+    
+    return entity;
 }
 
 - (void)SQPInitialization {
@@ -175,6 +185,39 @@
     }
 }
 
+- (id)objcObjectToSQLite:(id)value {
+    
+    if (value == nil) {
+        
+        return [NSNull null];
+        
+    } else {
+        
+        // Convert Date to timestamp :
+        if ([value isKindOfClass:[NSDate class]]) {
+            
+            NSDate *dateValue = (NSDate*)value;
+            return [NSNumber numberWithInt:[dateValue timeIntervalSince1970]];
+            
+        } else if ([value isKindOfClass:[UIImage class]]) {
+            
+            UIImage *imageValue = (UIImage*)value;
+            NSData *imageData = UIImagePNGRepresentation(imageValue);
+            
+            if (imageData == nil) {
+                imageData = UIImageJPEGRepresentation(imageValue, 1);
+            }
+            
+            return imageData;
+            
+        } else {
+            
+            // No cast :
+            return value;
+        }
+    }
+}
+
 - (BOOL)SQPInsertObject {
     
     FMDatabase *db = [[SQPDatabase sharedInstance] database];
@@ -198,17 +241,9 @@
         
         id propertyValue = [self valueForKey:property.name];
         
-        // Convert Date to timestamp :
-        if ([propertyValue isKindOfClass:[NSDate class]]) {
-            NSDate *dateValue = (NSDate*)propertyValue;
-            propertyValue = [NSNumber numberWithInt:[dateValue timeIntervalSince1970]];
-        }
+        id sqliteValue = [self objcObjectToSQLite:propertyValue];
         
-        if (propertyValue != nil) {
-            [argsDict setObject:propertyValue forKey:property.name];
-        } else {
-            [argsDict setObject:[NSNull null] forKey:property.name];
-        }
+        [argsDict setObject:sqliteValue forKey:property.name];
     }
     
     // Object ID (UUID) :
@@ -246,20 +281,12 @@
         } else {
             [sqlArgs appendFormat:@", %@ = :%@", property.name, property.name];
         }
-        
+
         id propertyValue = [self valueForKey:property.name];
         
-        // Convert Date to timestamp :
-        if ([propertyValue isKindOfClass:[NSDate class]]) {
-            NSDate *dateValue = (NSDate*)propertyValue;
-            propertyValue = [NSNumber numberWithInt:[dateValue timeIntervalSince1970]];
-        }
+        id sqliteValue = [self objcObjectToSQLite:propertyValue];
         
-        if (propertyValue != nil) {
-            [argsDict setObject:propertyValue forKey:property.name];
-        } else {
-            [argsDict setObject:[NSNull null] forKey:property.name];
-        }
+        [argsDict setObject:sqliteValue forKey:property.name];
     }
 
     [sql appendFormat:@"%@ WHERE %@ = '%@'", sqlArgs, kSQPObjectIDName, self.objectID];
@@ -285,7 +312,12 @@
     return [SQPObject SQPFetchAllWhere:nil];
 }
 
-+ (NSMutableArray*)SQPFetchAllWhere:(NSString*)queryOptions {
++ (NSMutableArray*)SQPFetchAllWhere:(NSString*)queryOption {
+ 
+    return [SQPObject SQPFetchAllWhere:nil orderBy:nil];
+}
+
++ (NSMutableArray*)SQPFetchAllWhere:(NSString*)queryOptions orderBy:(NSString*)orderOptions {
     
     NSString *className = NSStringFromClass([self class]);
     NSString *tableName = [NSString stringWithFormat:@"%@%@", kSQPTablePrefix, className];
@@ -294,14 +326,12 @@
     
     FMDatabase *db = [[SQPDatabase sharedInstance] database];
     
-    NSString *sql = nil;
+    NSMutableString *sql = [[NSMutableString alloc] initWithFormat:@"SELECT * FROM %@", tableName];
     
-    if (queryOptions != nil) {
-        sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@", tableName, queryOptions];
-    } else {
-        sql = [NSString stringWithFormat:@"SELECT * FROM %@", tableName];
-    }
-
+    if (queryOptions != nil) [sql appendFormat:@" WHERE %@", queryOptions];
+    
+    if (orderOptions != nil) [sql appendFormat:@" ORDER BY %@", orderOptions];
+    
     FMResultSet *s = [db executeQuery:sql];
     
     while ([s next]) {
@@ -314,7 +344,7 @@
     return items;
 }
 
-+ (SQPObject*)SQPFetchOneWhere:(NSString*)queryOptions {
++ (id)SQPFetchOneWhere:(NSString*)queryOptions {
     
     NSString *className = NSStringFromClass([self class]);
     NSString *tableName = [NSString stringWithFormat:@"%@%@", kSQPTablePrefix, className];
@@ -336,7 +366,7 @@
     return object;
 }
 
-+ (SQPObject*)SQPFetchOneByID:(NSString*)objectID {
++ (id)SQPFetchOneByID:(NSString*)objectID {
     
     NSString *className = NSStringFromClass([self class]);
     NSString *tableName = [NSString stringWithFormat:@"%@%@", kSQPTablePrefix, className];
@@ -368,13 +398,24 @@
             
             // Convert Date to timestamp :
             if (property.type == kPropertyTypeDate) {
+                
                 NSNumber *interval = (NSNumber*)value;
                 NSDate *dateValue = [[NSDate alloc] initWithTimeIntervalSince1970:[interval integerValue]];
-                value = dateValue;
+                
+                [self setValue:dateValue forKey:property.name];
+                
+            } else if (property.type == kPropertyTypeImage) {
+                
+                NSData *imageData = (NSData*)value;
+                UIImage *image = [UIImage imageWithData:imageData];
+                
+                [self setValue:image forKey:property.name];
+                
+            } else {
+                
+                [self setValue:value forKey:property.name];
             }
-            
-            
-            [self setValue:value forKey:property.name];
+  
         }
     }
     

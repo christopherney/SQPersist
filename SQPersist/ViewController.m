@@ -24,10 +24,11 @@
     [[SQPDatabase sharedInstance] removeDatabase];
     
     // Create Table at the first init (if tbale ne exists) :
-    User *userJohn = [[User alloc] init];
+    User *userJohn = [User SQPCreateEntity];
     userJohn.firstName = @"John";
     userJohn.lastName = @"McClane";
     userJohn.birthday = [NSDate date];
+    userJohn.photo = [UIImage imageNamed:@"tn_john-mcclane-1.jpg"];
     
     // INSERT Object :
     [userJohn SQPSaveEntity];
@@ -39,7 +40,7 @@
     // UPDATE Object :
     [userSelected SQPSaveEntity];
     
-    User *friendJohn = [[User alloc] init];
+    User *friendJohn = [User SQPCreateEntity];
     friendJohn.firstName = @"Hans";
     friendJohn.lastName = @"Gruber";
     
@@ -48,28 +49,41 @@
     // UPDATE Object :
     [userJohn SQPSaveEntity];
     
-    Car *car1 = [[Car alloc] init];
+    User *userJohn2 = [User SQPFetchOneWhere:@"lastname = 'McClane'"];
+    
+    NSLog(@"Name user : %@", userJohn2.firstName);
+    
+    Car *car1 = [Car SQPCreateEntity];
     car1.name = @"Ferrari";
     car1.color = @"Red";
     car1.owner = userJohn;
+    car1.power = 350;
     [car1 SQPSaveEntity]; // INSERT Object
     
-    Car *car2 = [[Car alloc] init];
+    Car *car2 = [Car SQPCreateEntity];
     car2.name = @"BMW";
     car2.color = @"Black";
+    car2.power = 220;
     [car2 SQPSaveEntity]; // INSERT Object
     
-    Car *car3 = [[Car alloc] init];
+    Car *car3 = [Car SQPCreateEntity];
     car3.name = @"Ferrari";
     car3.color = @"Yellow";
+    car3.power = 150;
     [car3 SQPSaveEntity]; // INSERT Object
     
     // DELETE Object :
     car3.deleteObject = YES;
     [car3 SQPSaveEntity];
     
+    Car *car4 = [Car SQPCreateEntity];
+    car4.name = @"Ferrari";
+    car4.color = @"Green";
+    car4.power = 152;
+    [car4 SQPSaveEntity]; // INSERT Object
+    
     // SELECT ALL 'Ferrari' :
-    NSMutableArray *cars = [Car SQPFetchAllWhere:@"name = 'Ferrari'"];
+    NSMutableArray *cars = [Car SQPFetchAllWhere:@"name = 'Ferrari'" orderBy:@"power DESC"];
     
     NSLog(@"Number of cars: %d", [cars count]);
 }
