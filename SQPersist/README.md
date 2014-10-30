@@ -88,7 +88,7 @@ INSERT an object
 ----------------
 To insert a new object into your database, just call the method named ***SQPSaveEntity*** :
 ```
-// Create Table at the first init (if tbale ne exists) :
+// Create Table at the first init (if the table not exists) :
 User *userCreated = [User SQPCreateEntity];
 userCreated.firstName = @"John";
 userCreated.lastName = @"McClane";
