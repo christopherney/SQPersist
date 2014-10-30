@@ -24,6 +24,7 @@
 - (BOOL)SQPInsertObject;
 - (BOOL)SQPUpdateObject;
 - (BOOL)SQPDeleteObject;
+- (void)SQPSaveChildren;
 @end
 
 @implementation SQPObject
@@ -109,14 +110,67 @@
 
 - (BOOL)SQPSaveEntity {
     
+    BOOL result = NO;
+    
     if (self.deleteObject == YES) {
-        return [self SQPDeleteObject];
+        result = [self SQPDeleteObject];
     } else {
         
         if ([self.objectID length] > 0) {
-            return [self SQPUpdateObject];
+            result = [self SQPUpdateObject];
         } else {
-            return [self SQPInsertObject];
+            result = [self SQPInsertObject];
+        }
+    }
+
+    if (result == YES) {
+        [self SQPSaveChildren];
+    }
+ 
+    return result;
+}
+
+- (void)SQPSaveChildren {
+    
+    if (self.SQPProperties != nil) {
+        
+        for (SQPProperty *property in self.SQPProperties) {
+            
+            // If Array :
+            if (property.type == kPropertyTypeArray || property.type == kPropertyTypeMutableArray) {
+                
+                NSArray *items = (NSArray*)[self valueForKey:property.name];
+                
+                if (items != nil) {
+                    
+                    if ([items isKindOfClass:[NSArray class]] || [items isKindOfClass:[NSMutableArray class]]) {
+                        
+                        for (NSObject *item in items) {
+                            
+                            if ([item isKindOfClass:[SQPObject class]]) {
+                                
+                                SQPObject *sqpObject = (SQPObject*)item;
+                                [sqpObject SQPSaveEntity];
+                            }
+                        }
+                    }
+                }
+                
+            // If Object :
+            } else if (property.type == kPropertyTypeObject) {
+                
+                NSObject *item = (NSObject*)[self valueForKey:property.name];
+                
+                if (item != nil) {
+                    
+                    if ([item isKindOfClass:[SQPObject class]]) {
+                        
+                        SQPObject *sqpObject = (SQPObject*)item;
+                        [sqpObject SQPSaveEntity];
+                    }
+                }
+                
+            }
         }
     }
 }

@@ -9,10 +9,13 @@
 #import <Foundation/Foundation.h>
 #import "SQPObject.h"
 
+@class User;
+
 @interface Car : SQPObject
 
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSString *color;
 @property (nonatomic) int power;
+@property (nonatomic) User *owner;
 
 @end

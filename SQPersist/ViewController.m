@@ -24,24 +24,34 @@
     [[SQPDatabase sharedInstance] removeDatabase];
     
     // Create Table at the first init (if tbale ne exists) :
-    User *userCreated = [[User alloc] init];
-    userCreated.firstName = @"John";
-    userCreated.lastName = @"McClane";
-    userCreated.birthday = [NSDate date];
+    User *userJohn = [[User alloc] init];
+    userJohn.firstName = @"John";
+    userJohn.lastName = @"McClane";
+    userJohn.birthday = [NSDate date];
     
     // INSERT Object :
-    [userCreated SQPSaveEntity];
+    [userJohn SQPSaveEntity];
     
-    // SELECT BY objectID :
-    User *userSelected = (User*)[User SQPFetchOneByID:userCreated.objectID];
+    // SELECT BY objectID (John McClane) :
+    User *userSelected = (User*)[User SQPFetchOneByID:userJohn.objectID];
     userSelected.amount = 10.50f;
     
     // UPDATE Object :
     [userSelected SQPSaveEntity];
     
+    User *friendJohn = [[User alloc] init];
+    friendJohn.firstName = @"Hans";
+    friendJohn.lastName = @"Gruber";
+    
+    userJohn.friends = [[NSMutableArray alloc] initWithObjects:friendJohn, nil];
+    
+    // UPDATE Object :
+    [userJohn SQPSaveEntity];
+    
     Car *car1 = [[Car alloc] init];
     car1.name = @"Ferrari";
     car1.color = @"Red";
+    car1.owner = userJohn;
     [car1 SQPSaveEntity]; // INSERT Object
     
     Car *car2 = [[Car alloc] init];
