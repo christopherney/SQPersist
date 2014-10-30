@@ -57,6 +57,9 @@ Car *car1 = [[Car alloc] init];
 ```
 
 Every object is identified by a unique identifier named ***objectID***. The ***objectID*** is a UUID (NSString).
+```
+NSLog(@"Object identifier : %@", car1.objectID);
+```
 
 Manipulate the objects
 ----------------------
