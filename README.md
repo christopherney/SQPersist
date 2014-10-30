@@ -39,6 +39,19 @@ At the first initialization of your object, the **SQPersist** will check if the 
 @end
 ```
 
+The table result into the SQLite database will be :
+```
++---------------------------------+
+|SQPCar                           |
++----------+------+-------+-------+
+| objectID | name | color | power |
++----------+------+-------+-------+
+| -------- | ---- | ----- | ----- |
++----------+------+-------+-------+
+| -------- | ---- | ----- | ----- |
++----------+------+-------+-------+
+```
+
 Add, Update, Delete and Select objets into the storage
 ---------------
 
