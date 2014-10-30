@@ -61,6 +61,21 @@ Every object is identified by a unique identifier named ***objectID***. The ***o
 NSLog(@"Object identifier : %@", car1.objectID);
 ```
 
+Compatibles Objective-C Types
+-----------------------------
+SQPersist is compatible with the following Objective-c types :
+* ***NSString*** -> become ***TEXT*** into SQLite database
+* ***NSNumber*** -> become ***REAL*** into SQLite database
+* ***NSDecimalNumber*** -> become ***REAL*** into SQLite database
+* ***NSDate*** -> become ***INTEGER*** into SQLite database
+* ***NSData*** -> become ***BLOB*** into SQLite database
+* ***int*** -> become ***INTEGER*** into SQLite database
+* ***double*** -> become ***REAL*** into SQLite database
+* ***long*** -> become ***REAL*** into SQLite database
+* ***long long*** -> become ***REAL*** into SQLite database
+* ***short*** -> become ***INTEGER*** into SQLite database
+* ***float*** -> become ***REAL*** into SQLite database
+
 Manipulate the objects
 ----------------------
 
