@@ -76,6 +76,10 @@ SQPersist is compatible with the following Objective-c types :
 * ***short*** -> become ***INTEGER*** into SQLite database
 * ***float*** -> become ***REAL*** into SQLite database
 
+Children entities
+-----------------
+If your object contains some properties of SQPObject type, or arrays of SQPObject. The children objects will be save to when you call the metho ***SQPSaveEntity*** of the main object.
+
 Manipulate the objects
 ----------------------
 
