@@ -82,3 +82,10 @@ NSMutableArray *cars = [Car SQPFetchAllWhere:@"name = 'Ferrari'"];
 
 NSLog(@"Number of cars: %d", [cars count]);
 ```
+License
+----
+
+MIT
+
+
+**Free Library**
