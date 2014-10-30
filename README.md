@@ -6,14 +6,14 @@ Objective-C Persistence framework wrapper around SQLite.
 ```!!! Development in progress !!!```
 
 What is it?
----------------
+-----------
 
 **SQPersist** is a Objective-C Persistence framework wrapper around **SQLite** based on FMDB (https://github.com/ccgus/fmdb).
 
 With **SQPersist** you can store your custom objects in **SQLite** database without create a database and without used Core Data Framework.
 
 Language
----------------
+--------
 
 SQPersist is written in Objective-C with Automatic Reference Counting (ARC) system.
 
@@ -21,7 +21,7 @@ How it's work ?
 ---------------
 
 Add a model object into the storage
----------------
+-----------------------------------
 
 Simply inherits your object with the class named **SQPObject**.
 
@@ -57,10 +57,10 @@ Car *car1 = [[Car alloc] init];
 ```
 
 Manipulate the objects
----------------
+----------------------
 
 INSERT an object
----------------
+----------------
 To insert a new object into your database, just call the method named ***SQPSaveEntity*** :
 ```
 // Create Table at the first init (if tbale ne exists) :
@@ -73,7 +73,7 @@ userCreated.lastName = @"Ney";
 ```
 
 UPDATE an object
----------------
+----------------
 To update an existing object into your database, just call the method named ***SQPSaveEntity*** :
 ```
 // SELECT BY objectID :
@@ -85,8 +85,8 @@ existingUser.amount = 10.50f;
 ```
 
 DELETE an object
----------------
-To dlete an existing object of your database, set the property ***deleteObject*** to ***YES*** and call the method named ***SQPSaveEntity*** :
+----------------
+To delete an existing object of your database, set the property ***deleteObject*** to ***YES*** and call the method named ***SQPSaveEntity*** :
 
 ```
 // DELETE Object :
@@ -94,8 +94,16 @@ existingUser.deleteObject = YES;
 [existingUser SQPSaveEntity];
 ```
 
+SELECT One object
+--------------------
+To select one objet you can use two methods ***SQPFetchOneByID*** or ***SQPFetchOneWhere***.
+```
+// SELECT BY objectID :
+User *userSelected = (User*)[User SQPFetchOneByID:userCreated.objectID];
+```
+
 Other methods
----------------
+-------------
 
 ```
 // REMOVE Local Database :
