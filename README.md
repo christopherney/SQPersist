@@ -39,7 +39,7 @@ At the first initialization of your object, the **SQPersist** will check if the 
 @end
 ```
 
-The table result into the SQLite database will be :
+The resulting table into the SQLite database will be :
 ```
 +---------------------------------+
 |SQPCar                           |
