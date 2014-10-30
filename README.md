@@ -25,8 +25,9 @@ Setup your local storage
 To setup (create the SQLite file), use the following method :
 the table will be create automaticatly.
 ```
-[[SQPDatabase sharedInstance] setupDatabaseWithName:@"SQPersist.db"];
+[[SQPDatabase sharedInstance] setupDatabaseWithName:@"myDbName.db"];
 ```
+> If your start to used the entities without setup the database name, by default the database name will be ***SQPersist.db***.
 
 Add a model object into the storage
 -----------------------------------
@@ -167,9 +168,9 @@ NSLog(@"Total cars 'Ferrari' : %lld", [Car SQPCountAllWhere:@"name = 'Ferrari'"]
 
 TRUNCATE Entities
 -----------------
-To remove every entities (truncate), use the method ***SQPCountAll***.
+To remove every entities (truncate), use the method ***SQPTruncateAll***.
 ```
-[Car SQPCountAll];
+[Car SQPTruncateAll];
 ```
 
 Other methods
