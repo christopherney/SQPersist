@@ -86,13 +86,16 @@ existingUser.amount = 10.50f;
 
 DELETE an object
 ---------------
-To dlete an existing object of your database, set the property **deleteObject*** to ***YES*** and call the method named ***SQPSaveEntity*** :
+To dlete an existing object of your database, set the property ***deleteObject*** to ***YES*** and call the method named ***SQPSaveEntity*** :
+
 ```
 // DELETE Object :
-car3.deleteObject = YES;
-[car3 SQPSaveEntity];
+existingUser.deleteObject = YES;
+[existingUser SQPSaveEntity];
 ```
 
+Other methods
+---------------
 
 ```
 // REMOVE Local Database :
