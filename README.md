@@ -56,6 +56,8 @@ The table will be create at the first initialization of your object (if the tabl
 Car *car1 = [[Car alloc] init];
 ```
 
+Every object is identified by a unique identifier named ***objectID***. The ***objectID*** is a UUID (NSString).
+
 Manipulate the objects
 ----------------------
 
