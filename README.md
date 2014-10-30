@@ -3,6 +3,8 @@ SQPersist
 
 Objective-C Persistence framework wrapper around SQLite.
 
+    !!! Development in progress !!!
+
 How it's work ?
 ---------------
 
