@@ -153,6 +153,12 @@ You can remove the database with the method ***removeDatabase***.
 [[SQPDatabase sharedInstance] removeDatabase];
 ```
 
+Tips
+----
+When you change the structure of your object :
+* Clean your Xcode project before rebuild the solution.
+* Remove the older database with the method ***removeDatabase*** (before changes).
+
 License
 ----
 
