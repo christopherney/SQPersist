@@ -5,7 +5,7 @@ Objective-C Persistence framework wrapper around SQLite.
 
 ```!!! Development in progress !!!```
 
-How it's work ?
+What is it?
 ---------------
 
 **SQPersist** is a Objective-C Persistence framework wrapper around **SQLite** based on FMDB (https://github.com/ccgus/fmdb).
@@ -16,6 +16,9 @@ Language
 ---------------
 
 SQPersist is written in Objective-C with Automatic Reference Counting (ARC) system.
+
+How it's work ?
+---------------
 
 Add a model object into the storage
 ---------------
