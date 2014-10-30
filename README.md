@@ -51,14 +51,18 @@ The resulting table into the SQLite database will be :
 | -------- | ---- | ----- | ----- |
 +----------+------+-------+-------+
 ```
+The table will be create at the first initialization of your object (if the table not already exists) :
+```
+Car *car1 = [[Car alloc] init];
+```
 
-Add, Update, Delete and Select objets into the storage
+Manipulate the objects
 ---------------
 
+INSERT an object
+---------------
+To insert a new object into your database, just call the method named ***SQPSaveEntity*** :
 ```
-// REMOVE Local Database :
-[[SQPDatabase sharedInstance] removeDatabase];
-    
 // Create Table at the first init (if tbale ne exists) :
 User *userCreated = [[User alloc] init];
 userCreated.firstName = @"Christopher";
@@ -66,6 +70,35 @@ userCreated.lastName = @"Ney";
     
 // INSERT Object :
 [userCreated SQPSaveEntity];
+```
+
+UPDATE an object
+---------------
+To update an existing object into your database, just call the method named ***SQPSaveEntity*** :
+```
+// SELECT BY objectID :
+User *existingUser = (User*)[User SQPFetchOneByID:objectID];
+existingUser.amount = 10.50f;
+    
+// UPDATE Object :
+[existingUser SQPSaveEntity];
+```
+
+DELETE an object
+---------------
+To dlete an existing object of your database, set the property **deleteObject*** to ***YES*** and call the method named ***SQPSaveEntity*** :
+```
+// DELETE Object :
+car3.deleteObject = YES;
+[car3 SQPSaveEntity];
+```
+
+
+```
+// REMOVE Local Database :
+[[SQPDatabase sharedInstance] removeDatabase];
+    
+
     
 // SELECT BY objectID :
 User *userSelected = (User*)[User SQPFetchOneByID:userCreated.objectID];
