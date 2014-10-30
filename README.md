@@ -116,12 +116,12 @@ SELECT collection of objects
 ------------------------
 To select a collection of objets you can use two methods ***SQPFetchAll*** or ***SQPFetchAllWhere***.
 ```
-// SELECT ALL 'Ferrari' :
+// SELECT ALL 'Cars' :
 NSMutableArray *allCars = [Car SQPFetchAll];
 ```
 
 ```
-// SELECT ALL 'Ferrari' :
+// SELECT ALL 'Ferrari cars' :
 NSMutableArray *ferrariCars = [Car SQPFetchAllWhere:@"name = 'Ferrari'"];
 ```
 
