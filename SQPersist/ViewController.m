@@ -34,7 +34,7 @@
     [userJohn SQPSaveEntity];
     
     // SELECT BY objectID (John McClane) :
-    User *userSelected = (User*)[User SQPFetchOneByID:userJohn.objectID];
+    User *userSelected = [User SQPFetchOneByID:userJohn.objectID];
     userSelected.amount = 10.50f;
     
     // UPDATE Object :
