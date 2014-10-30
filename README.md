@@ -20,7 +20,7 @@ SQPersist is written in Objective-C with Automatic Reference Counting (ARC) syst
 Add a model object into the storage
 ---------------
 
-Simply inherit your object with the class named **SQPObject**.
+Simply inherits your object with the class named **SQPObject**.
 
 At the first initialization of your object, the **SQPersist** will check if the associate table exists in the database. If not, the table will be create automaticatly.
 ```
