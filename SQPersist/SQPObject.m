@@ -85,7 +85,7 @@
         
         [props addObject:prop];
         
-        NSLog(@"%@", [prop description]);
+        //NSLog(@"%@", [prop description]);
     }
     
     free(properties);
@@ -386,6 +386,62 @@
     }
     
     return object;
+}
+
++ (long long)SQPCountAll {
+    
+    NSString *className = NSStringFromClass([self class]);
+    NSString *tableName = [NSString stringWithFormat:@"%@%@", kSQPTablePrefix, className];
+    
+    FMDatabase *db = [[SQPDatabase sharedInstance] database];
+    
+    NSString *sql = [NSString stringWithFormat:@"SELECT COUNT(*) AS total_entities FROM %@", tableName];
+    
+    FMResultSet *s = [db executeQuery:sql];
+    
+    long long numberEntities = 0;
+    
+    while ([s next]) {
+        numberEntities = [s longLongIntForColumn:@"total_entities"];
+        break;
+    }
+    
+    return numberEntities;
+}
+
++ (long long)SQPCountAllWhere:(NSString*)queryOptions {
+    
+    NSString *className = NSStringFromClass([self class]);
+    NSString *tableName = [NSString stringWithFormat:@"%@%@", kSQPTablePrefix, className];
+    
+    FMDatabase *db = [[SQPDatabase sharedInstance] database];
+    
+    NSString *sql = [NSString stringWithFormat:@"SELECT COUNT(*) AS total_entities FROM %@ WHERE %@", tableName, queryOptions];
+    
+    FMResultSet *s = [db executeQuery:sql];
+    
+    long long numberEntities = 0;
+    
+    while ([s next]) {
+        numberEntities = [s longLongIntForColumn:@"total_entities"];
+        break;
+    }
+    
+    return numberEntities;
+}
+
++ (BOOL)SQPTruncateAll {
+    
+    NSString *className = NSStringFromClass([self class]);
+    NSString *tableName = [NSString stringWithFormat:@"%@%@", kSQPTablePrefix, className];
+    
+    FMDatabase *db = [[SQPDatabase sharedInstance] database];
+    
+    NSString *sql = [NSString stringWithFormat:@"DELETE FROM %@", tableName];
+    
+    BOOL result = [db executeUpdate:sql];
+    
+    return result;
 }
 
 - (void)completeWithResultSet:(FMResultSet*)resultSet {

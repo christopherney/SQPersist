@@ -17,12 +17,24 @@
 @implementation ViewController
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    // REMOVE Local Database :
-    [[SQPDatabase sharedInstance] removeDatabase];
+    // Create Database :
+    [[SQPDatabase sharedInstance] setupDatabaseWithName:@"SQPersist.db"];
     
+    NSLog(@"DB path: %@ ", [[SQPDatabase sharedInstance] getDdPath]);
+    
+    // If database exists:
+    if ([[SQPDatabase sharedInstance] databaseExists]) {
+        
+        // REMOVE Local Database :
+        [[SQPDatabase sharedInstance] removeDatabase];
+        
+        NSLog(@"DB '%@' removed!", [[SQPDatabase sharedInstance] getDdName]);
+    }
+
     // Create Table at the first init (if tbale ne exists) :
     User *userJohn = [User SQPCreateEntity];
     userJohn.firstName = @"John";
@@ -82,10 +94,18 @@
     car4.power = 152;
     [car4 SQPSaveEntity]; // INSERT Object
     
+    NSLog(@"Total cars : %lld", [Car SQPCountAll]);
+    NSLog(@"Total cars 'Ferrari' : %lld", [Car SQPCountAllWhere:@"name = 'Ferrari'"]);
+    
     // SELECT ALL 'Ferrari' :
     NSMutableArray *cars = [Car SQPFetchAllWhere:@"name = 'Ferrari'" orderBy:@"power DESC"];
     
     NSLog(@"Number of cars: %d", [cars count]);
+    
+    // Truncate all entities :
+    [Car SQPTruncateAll];
+    
+    NSLog(@"Total cars : %lld", [Car SQPCountAll]);
 }
 
 - (void)didReceiveMemoryWarning {

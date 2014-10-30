@@ -8,7 +8,7 @@
 
 #import "SQPDatabase.h"
 
-#define kSQPDatabaseName @"SQPersist.db"
+#define kSQPDefaultDdName @"SQPersist.db"
 
 @interface SQPDatabase ()
 - (FMDatabase*)createDatabase;
@@ -26,24 +26,40 @@
     return _sharedObject;
 }
 
+- (void)setupDatabaseWithName:(NSString*)dbName {
+ 
+    _dbName = dbName;
+    _database = [self createDatabase];
+}
+
+- (NSString*)getDdName {
+    return _dbName;
+}
+
+- (NSString*)getDdPath {
+    return _dbPath;
+}
+
 - (id)init {
     
     if ([super init]) {
-        _database = [self createDatabase];
+       
     }
     return self;
 }
 
 - (FMDatabase*)createDatabase {
     
-    NSString *documentdir = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
-    _dbPath = [documentdir stringByAppendingPathComponent:kSQPDatabaseName];
+    if (_dbName == nil) _dbName = kSQPDefaultDdName;
     
-    NSLog(@"%@", _dbPath);
+    NSString *documentdir = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
+    _dbPath = [documentdir stringByAppendingPathComponent:_dbName];
+    
+    //NSLog(@"%@", _dbPath);
     
     FMDatabase *db = [FMDatabase databaseWithPath:_dbPath];
     db.logsErrors = YES;
-    db.traceExecution = YES;
+    db.traceExecution = NO;
     
     if (![db open]) {
         return nil;
@@ -59,6 +75,15 @@
     }
     
     return _database;
+}
+
+- (BOOL)databaseExists {
+ 
+    if (_dbPath != nil) {
+        return [[NSFileManager defaultManager] fileExistsAtPath:_dbPath isDirectory:NO];
+    } else {
+        return NO;
+    }
 }
 
 - (BOOL)removeDatabase {

@@ -14,12 +14,21 @@
 @interface SQPDatabase : NSObject {
     
     FMDatabase *_database;
+    NSString *_dbName;
     NSString *_dbPath;
 }
 
 + (id)sharedInstance;
 
+- (void)setupDatabaseWithName:(NSString*)dbName;
+
+- (NSString*)getDdName;
+
+- (NSString*)getDdPath;
+
 - (FMDatabase*)database;
+
+- (BOOL)databaseExists;
 
 - (BOOL)removeDatabase;
 

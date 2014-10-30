@@ -39,4 +39,10 @@
 
 + (id)SQPFetchOneByID:(NSString*)objectID;
 
++ (long long)SQPCountAll;
+
++ (long long)SQPCountAllWhere:(NSString*)queryOptions;
+
++ (BOOL)SQPTruncateAll;
+
 @end
