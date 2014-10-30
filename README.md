@@ -20,6 +20,15 @@ SQPersist is written in Objective-C with Automatic Reference Counting (ARC) syst
 How it's work ?
 ---------------
 
+Setup your local storage
+------------------------
+To setup (create the SQLite file), use the following method :
+the table will be create automaticatly.
+```
+[[SQPDatabase sharedInstance] setupDatabaseWithName:@"SQPersist.db"];
+the table will be create automaticatly.
+```
+
 Add a model object into the storage
 -----------------------------------
 
@@ -134,7 +143,7 @@ User *userSelected = [User SQPFetchOneWhere:@"lastName = 'McClane'"];
 
 SELECT collection of objects
 ------------------------
-To select a collection of objets you can use two methods ***SQPFetchAll*** or ***SQPFetchAllWhere:***.
+To select a collection of objets you can use 3 methods ***SQPFetchAll*** or ***SQPFetchAllWhere:***  or ***SQPFetchAllWhere:orderBy:***.
 ```
 // SELECT ALL 'Cars' :
 NSMutableArray *allCars = [Car SQPFetchAll];
@@ -145,12 +154,37 @@ NSMutableArray *allCars = [Car SQPFetchAll];
 NSMutableArray *ferrariCars = [Car SQPFetchAllWhere:@"name = 'Ferrari'"];
 ```
 
+```
+// SELECT ALL 'Ferrari cars' :
+NSMutableArray *ferrariCars = [Car SQPFetchAllWhere:@"name = 'Ferrari' orderBy:@"power DESC"];
+```
+COUNT Entities
+--------------
+To count the number of entities you can use 2 methods ***SQPCountAll*** or ***SQPCountAllWhere:***.
+```
+NSLog(@"Total cars : %lld", [Car SQPCountAll]);
+NSLog(@"Total cars 'Ferrari' : %lld", [Car SQPCountAllWhere:@"name = 'Ferrari'"]);
+```
+
+TRUNCATE Entities
+-----------------
+To remove every entities (truncate), use the method ***SQPCountAll***.
+```
+[Car SQPCountAll];
+```
+
 Other methods
 -------------
-You can remove the database with the method ***removeDatabase***.
+You can remove the database with the method ***removeDatabase*** :
 ```
 // REMOVE Local Database :
 [[SQPDatabase sharedInstance] removeDatabase];
+```
+Test if database file exists on local :
+```
+if ([[SQPDatabase sharedInstance] databaseExists]) {
+    // SQLite Db file exists.
+}
 ```
 
 Tips
