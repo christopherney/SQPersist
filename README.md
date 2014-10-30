@@ -26,7 +26,6 @@ To setup (create the SQLite file), use the following method :
 the table will be create automaticatly.
 ```
 [[SQPDatabase sharedInstance] setupDatabaseWithName:@"SQPersist.db"];
-the table will be create automaticatly.
 ```
 
 Add a model object into the storage
@@ -34,7 +33,7 @@ Add a model object into the storage
 
 Simply inherits your object with the class named **SQPObject**.
 
-At the first initialization of your object, the **SQPersist** will check if the associate table exists in the database. If not, the table will be create automaticatly.
+At the first initialization of your object, the **SQPersist** will check if the associating table exists in the database. If not, the table will be create automaticatly.
 ```
 #import <Foundation/Foundation.h>
 #import "SQPObject.h"
