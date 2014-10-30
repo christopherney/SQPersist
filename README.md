@@ -78,7 +78,7 @@ SQPersist is compatible with the following Objective-c types :
 
 Children entities
 -----------------
-If your object contains some properties of SQPObject type, or arrays of SQPObject. The children objects will be save to when you call the metho ***SQPSaveEntity*** of the main object.
+If your object contains some properties of ***SQPObject*** type, or ***NSArray*** of SQPObject. The children objects will be save too, when you call the method ***SQPSaveEntity*** of the main object.
 
 Manipulate the objects
 ----------------------
