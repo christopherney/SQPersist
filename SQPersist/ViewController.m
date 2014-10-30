@@ -23,9 +23,11 @@
     // REMOVE Local Database :
     [[SQPDatabase sharedInstance] removeDatabase];
     
+    // Create Table at the first init (if tbale ne exists) :
     User *userCreated = [[User alloc] init];
-    userCreated.firstName = @"Christopher";
-    userCreated.lastName = @"Ney";
+    userCreated.firstName = @"John";
+    userCreated.lastName = @"McClane";
+    userCreated.birthday = [NSDate date];
     
     // INSERT Object :
     [userCreated SQPSaveEntity];

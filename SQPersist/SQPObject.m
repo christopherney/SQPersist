@@ -144,6 +144,12 @@
         
         id propertyValue = [self valueForKey:property.name];
         
+        // Convert Date to timestamp :
+        if ([propertyValue isKindOfClass:[NSDate class]]) {
+            NSDate *dateValue = (NSDate*)propertyValue;
+            propertyValue = [NSNumber numberWithInt:[dateValue timeIntervalSince1970]];
+        }
+        
         if (propertyValue != nil) {
             [argsDict setObject:propertyValue forKey:property.name];
         } else {
@@ -170,11 +176,7 @@
 }
 
 - (BOOL)SQPUpdateObject {
-    
-    /*UPDATE table_name
-     SET column1 = value1, column2 = value2...., columnN = valueN
-     WHERE [condition];*/
-    
+
     FMDatabase *db = [[SQPDatabase sharedInstance] database];
     
     NSMutableDictionary *argsDict = [[NSMutableDictionary alloc] init];
@@ -192,6 +194,12 @@
         }
         
         id propertyValue = [self valueForKey:property.name];
+        
+        // Convert Date to timestamp :
+        if ([propertyValue isKindOfClass:[NSDate class]]) {
+            NSDate *dateValue = (NSDate*)propertyValue;
+            propertyValue = [NSNumber numberWithInt:[dateValue timeIntervalSince1970]];
+        }
         
         if (propertyValue != nil) {
             [argsDict setObject:propertyValue forKey:property.name];
@@ -303,6 +311,15 @@
         id value = [resultSet objectForColumnName:property.name];
         
         if (value != nil && property.type != kPropertyTypeChar) {
+            
+            // Convert Date to timestamp :
+            if (property.type == kPropertyTypeDate) {
+                NSNumber *interval = (NSNumber*)value;
+                NSDate *dateValue = [[NSDate alloc] initWithTimeIntervalSince1970:[interval integerValue]];
+                value = dateValue;
+            }
+            
+            
             [self setValue:value forKey:property.name];
         }
     }
