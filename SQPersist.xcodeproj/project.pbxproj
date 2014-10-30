@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6B2BE62C1A0236E500598B75 /* SQPDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B2BE62B1A0236E500598B75 /* SQPDatabase.m */; };
 		6B5D3B521A01781D00F7A96F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B5D3B511A01781D00F7A96F /* main.m */; };
 		6B5D3B551A01781D00F7A96F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B5D3B541A01781D00F7A96F /* AppDelegate.m */; };
 		6B5D3B581A01781E00F7A96F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B5D3B571A01781E00F7A96F /* ViewController.m */; };
@@ -33,6 +34,8 @@
 
 /* Begin PBXFileReference section */
 		1107EB44F7FDDAC211574D17 /* Pods-SQPersist.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SQPersist.release.xcconfig"; path = "Pods/Target Support Files/Pods-SQPersist/Pods-SQPersist.release.xcconfig"; sourceTree = "<group>"; };
+		6B2BE62A1A0236E500598B75 /* SQPDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQPDatabase.h; sourceTree = "<group>"; };
+		6B2BE62B1A0236E500598B75 /* SQPDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQPDatabase.m; sourceTree = "<group>"; };
 		6B5D3B4C1A01781D00F7A96F /* SQPersist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SQPersist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B5D3B501A01781D00F7A96F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6B5D3B511A01781D00F7A96F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -81,7 +84,6 @@
 			isa = PBXGroup;
 			children = (
 				6B5D3B4E1A01781D00F7A96F /* SQPersist */,
-				6B5D3B681A01781E00F7A96F /* SQPersistTests */,
 				6B5D3B4D1A01781D00F7A96F /* Products */,
 				A78B7FFA5AA7CAF3D5478B91 /* Pods */,
 				7CD22487B7E1199229E8DECF /* Frameworks */,
@@ -116,6 +118,9 @@
 				6B5D3B791A01795800F7A96F /* SQPObject.m */,
 				6B5D3B7B1A0180EC00F7A96F /* SQPProperty.h */,
 				6B5D3B7C1A0180EC00F7A96F /* SQPProperty.m */,
+				6B2BE62A1A0236E500598B75 /* SQPDatabase.h */,
+				6B2BE62B1A0236E500598B75 /* SQPDatabase.m */,
+				6B5D3B681A01781E00F7A96F /* SQPersistTests */,
 			);
 			path = SQPersist;
 			sourceTree = "<group>";
@@ -136,7 +141,7 @@
 				6B5D3B691A01781E00F7A96F /* Supporting Files */,
 			);
 			path = SQPersistTests;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		6B5D3B691A01781E00F7A96F /* Supporting Files */ = {
 			isa = PBXGroup;
@@ -299,6 +304,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6B5D3B7A1A01795800F7A96F /* SQPObject.m in Sources */,
+				6B2BE62C1A0236E500598B75 /* SQPDatabase.m in Sources */,
 				6B5D3B771A0178B400F7A96F /* User.m in Sources */,
 				6B5D3B581A01781E00F7A96F /* ViewController.m in Sources */,
 				6B5D3B551A01781D00F7A96F /* AppDelegate.m in Sources */,
@@ -428,6 +434,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = SQPersist/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -439,6 +446,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = SQPersist/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

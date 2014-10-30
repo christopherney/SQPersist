@@ -12,7 +12,6 @@
 #import "Car.h"
 
 @interface ViewController ()
-
 @end
 
 @implementation ViewController
@@ -21,12 +20,46 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
+    // REMOVE Local Database :
+    [[SQPDatabase sharedInstance] removeDatabase];
     
-    User *user = [[User alloc] init];
+    User *userCreated = [[User alloc] init];
+    userCreated.firstName = @"Christopher";
+    userCreated.lastName = @"Ney";
     
-    [user SQPFetchOne:1];
+    // INSERT Object :
+    [userCreated SQPSaveEntity];
     
-    Car *car = [[Car alloc] init];
+    // SELECT BY objectID :
+    User *userSelected = (User*)[User SQPFetchOneByID:userCreated.objectID];
+    userSelected.amount = 10.50f;
+    
+    // UPDATE Object :
+    [userSelected SQPSaveEntity];
+    
+    Car *car1 = [[Car alloc] init];
+    car1.name = @"Ferrari";
+    car1.color = @"Red";
+    [car1 SQPSaveEntity]; // INSERT Object
+    
+    Car *car2 = [[Car alloc] init];
+    car2.name = @"BMW";
+    car2.color = @"Black";
+    [car2 SQPSaveEntity]; // INSERT Object
+    
+    Car *car3 = [[Car alloc] init];
+    car3.name = @"Ferrari";
+    car3.color = @"Yellow";
+    [car3 SQPSaveEntity]; // INSERT Object
+    
+    // DELETE Object :
+    car3.deleteObject = YES;
+    [car3 SQPSaveEntity];
+    
+    // SELECT ALL 'Ferrari' :
+    NSMutableArray *cars = [Car SQPFetchAllWhere:@"name = 'Ferrari'"];
+    
+    NSLog(@"Number of cars: %d", [cars count]);
 }
 
 - (void)didReceiveMemoryWarning {

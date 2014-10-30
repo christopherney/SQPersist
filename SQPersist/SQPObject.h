@@ -11,6 +11,7 @@
 #include <objc/objc.h>
 #include <objc/NSObjCRuntime.h>
 
+#import "SQPDatabase.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 
@@ -21,13 +22,16 @@
 @property (nonatomic, strong) NSArray *SQPProperties;
 
 @property (nonatomic, strong) NSString *objectID;
-
-- (void)SQPCreateTable;
+@property (nonatomic) BOOL deleteObject;
 
 - (BOOL)SQPSaveEntity;
 
-- (NSArray*)SQPFetchAll:(NSString*)queryOptions;
++ (NSMutableArray*)SQPFetchAll;
 
-- (SQPObject*)SQPFetchOne:(NSInteger)objectID;
++ (NSMutableArray*)SQPFetchAllWhere:(NSString*)queryOptions;
+
++ (SQPObject*)SQPFetchOneWhere:(NSString*)queryOptions;
+
++ (SQPObject*)SQPFetchOneByID:(NSString*)objectID;
 
 @end

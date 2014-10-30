@@ -9,16 +9,21 @@
 #import "SQPObject.h"
 #import "SQPProperty.h"
 
-#define kSQPTablePrefix @"SQP"
 #define kSQPObjectIDName @"objectID"
+#define kSQPTablePrefix @"SQP"
 
 @interface SQPObject ()
+- (void)completeWithResultSet:(FMResultSet*)resultSet;
+- (void)SQPCreateTable;
 - (void)SQPInitialization;
-- (FMDatabase*)SQPDatabase;
-- (NSMutableArray *)properties_sqp;
-- (void)class_sqp;
+- (NSMutableArray *)SQPAnalyseProperties;
+- (void)SQPClassOfObject:(SQPObject*)object;
 - (NSString *)uuidString;
-- (SQPObject*)SQPObjectFromClassName:(NSString*)className;
++ (SQPObject*)SQPObjectFromClassName:(NSString*)className;
+- (void)completeObject:(SQPObject*)object withResultSet:(FMResultSet*)resultSet;
+- (BOOL)SQPInsertObject;
+- (BOOL)SQPUpdateObject;
+- (BOOL)SQPDeleteObject;
 @end
 
 @implementation SQPObject
@@ -33,20 +38,20 @@
 
 - (void)SQPInitialization {
     
-    [self class_sqp];
+    [self SQPClassOfObject:self];
     
-    self.SQPProperties = [NSArray arrayWithArray:[self properties_sqp]];
+    self.SQPProperties = [NSArray arrayWithArray:[self SQPAnalyseProperties]];
     
     [self SQPCreateTable];
 }
 
-- (void)class_sqp {
+- (void)SQPClassOfObject:(SQPObject*)object {
     
-    self.SQPClassName = NSStringFromClass([self class]);
-    self.SQPTableName = [NSString stringWithFormat:@"%@%@", kSQPTablePrefix, self.SQPClassName];
+    object.SQPClassName = NSStringFromClass([object class]);
+    object.SQPTableName = [NSString stringWithFormat:@"%@%@", kSQPTablePrefix, object.SQPClassName];
 }
 
-- (NSMutableArray *)properties_sqp {
+- (NSMutableArray *)SQPAnalyseProperties {
     
     NSMutableArray *props = [NSMutableArray array];
     
@@ -77,28 +82,11 @@
     return props;
 }
 
-- (FMDatabase*)SQPDatabase {
-    
-    NSString *documentdir = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
-    NSString *dbPath = [documentdir stringByAppendingPathComponent:@"SQPersist.db"];
-    
-    NSLog(@"%@", dbPath);
-    
-    FMDatabase *db = [FMDatabase databaseWithPath:dbPath];
-    db.logsErrors = YES;
-    
-    if (![db open]) {
-        return nil;
-    } else {
-        return db;
-    }
-}
-
 - (void)SQPCreateTable {
     
     if ([self.SQPProperties count] > 0) {
         
-        FMDatabase *db = [self SQPDatabase];
+        FMDatabase *db = [[SQPDatabase sharedInstance] database];
         
         if ([db tableExists:self.SQPTableName] == NO) {
  
@@ -121,55 +109,210 @@
 
 - (BOOL)SQPSaveEntity {
     
-    return NO;
+    if (self.deleteObject == YES) {
+        return [self SQPDeleteObject];
+    } else {
+        
+        if ([self.objectID length] > 0) {
+            return [self SQPUpdateObject];
+        } else {
+            return [self SQPInsertObject];
+        }
+    }
 }
 
-- (NSArray*)SQPFetchAll:(NSString*)queryOptions {
+- (BOOL)SQPInsertObject {
     
-    FMDatabase *db = [self SQPDatabase];
+    FMDatabase *db = [[SQPDatabase sharedInstance] database];
     
-    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@", self.SQPTableName];
+    NSMutableDictionary *argsDict = [[NSMutableDictionary alloc] init];
     
-    FMResultSet *s = [db executeQuery:sql];
+    NSMutableString *sql = [[NSMutableString alloc] initWithFormat:@"INSERT INTO %@", self.SQPTableName];
     
-    while ([s next]) {
+    NSMutableString *sqlColumns = [[NSMutableString alloc] init];
+    NSMutableString *sqlArgs = [[NSMutableString alloc] init];
+    
+    for (SQPProperty *property in self.SQPProperties) {
         
-        for (SQPProperty *property in self.SQPProperties) {
-            
-            id value = [s objectForColumnName:property.name];
-            
-            if (value != nil) {
-                [self setValue:value forKey:property.name];
-            }
+        if ([sqlArgs length] == 0) {
+            [sqlArgs appendFormat:@":%@", property.name];
+            [sqlColumns appendString:property.name];
+        } else {
+            [sqlColumns appendFormat:@", %@", property.name];
+            [sqlArgs appendFormat:@", :%@", property.name];
+        }
+        
+        id propertyValue = [self valueForKey:property.name];
+        
+        if (propertyValue != nil) {
+            [argsDict setObject:propertyValue forKey:property.name];
+        } else {
+            [argsDict setObject:[NSNull null] forKey:property.name];
         }
     }
     
-    return nil;
+    // Object ID (UUID) :
+    NSString *udid = [self uuidString];
+    [sqlColumns appendFormat:@", %@", kSQPObjectIDName];
+    [sqlArgs appendFormat:@", :%@", kSQPObjectIDName];
+    [argsDict setObject:udid forKey:kSQPObjectIDName];
+    
+    
+    [sql appendFormat:@"(%@) VALUES (%@)", sqlColumns, sqlArgs];
+    
+    BOOL result = [db executeUpdate:sql withParameterDictionary:argsDict];
+    
+    if (result == YES) {
+        self.objectID = udid;
+    }
+    
+    return result;
 }
 
-- (SQPObject*)SQPFetchOne:(NSInteger)objectID {
+- (BOOL)SQPUpdateObject {
     
-    FMDatabase *db = [self SQPDatabase];
+    /*UPDATE table_name
+     SET column1 = value1, column2 = value2...., columnN = valueN
+     WHERE [condition];*/
     
-    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ = %ld", self.SQPTableName, kSQPObjectIDName, (long)objectID];
+    FMDatabase *db = [[SQPDatabase sharedInstance] database];
+    
+    NSMutableDictionary *argsDict = [[NSMutableDictionary alloc] init];
+    
+    NSMutableString *sql = [[NSMutableString alloc] initWithFormat:@"UPDATE %@ SET ", self.SQPTableName];
+    
+    NSMutableString *sqlArgs = [[NSMutableString alloc] init];
+    
+    for (SQPProperty *property in self.SQPProperties) {
+        
+        if ([sqlArgs length] == 0) {
+            [sqlArgs appendFormat:@"%@ = :%@", property.name, property.name];
+        } else {
+            [sqlArgs appendFormat:@", %@ = :%@", property.name, property.name];
+        }
+        
+        id propertyValue = [self valueForKey:property.name];
+        
+        if (propertyValue != nil) {
+            [argsDict setObject:propertyValue forKey:property.name];
+        } else {
+            [argsDict setObject:[NSNull null] forKey:property.name];
+        }
+    }
+
+    [sql appendFormat:@"%@ WHERE %@ = '%@'", sqlArgs, kSQPObjectIDName, self.objectID];
+    
+    BOOL result = [db executeUpdate:sql withParameterDictionary:argsDict];
+    
+    return result;
+}
+
+- (BOOL)SQPDeleteObject {
+    
+    FMDatabase *db = [[SQPDatabase sharedInstance] database];
+    
+    NSString *sql = [NSString stringWithFormat:@"DELETE FROM %@ WHERE %@ = '%@'", self.SQPTableName, kSQPObjectIDName, self.objectID];
+    
+    BOOL result = [db executeUpdate:sql];
+    
+    return result;
+}
+
++ (NSMutableArray*)SQPFetchAll {
+    
+    return [SQPObject SQPFetchAllWhere:nil];
+}
+
++ (NSMutableArray*)SQPFetchAllWhere:(NSString*)queryOptions {
+    
+    NSString *className = NSStringFromClass([self class]);
+    NSString *tableName = [NSString stringWithFormat:@"%@%@", kSQPTablePrefix, className];
+    
+    NSMutableArray *items = [[NSMutableArray alloc] init];
+    
+    FMDatabase *db = [[SQPDatabase sharedInstance] database];
+    
+    NSString *sql = nil;
+    
+    if (queryOptions != nil) {
+        sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@", tableName, queryOptions];
+    } else {
+        sql = [NSString stringWithFormat:@"SELECT * FROM %@", tableName];
+    }
+
+    FMResultSet *s = [db executeQuery:sql];
+    
+    while ([s next]) {
+    
+        SQPObject *object = [self SQPObjectFromClassName:className];
+        [object completeWithResultSet:s];
+        [items addObject:object];
+    }
+    
+    return items;
+}
+
++ (SQPObject*)SQPFetchOneWhere:(NSString*)queryOptions {
+    
+    NSString *className = NSStringFromClass([self class]);
+    NSString *tableName = [NSString stringWithFormat:@"%@%@", kSQPTablePrefix, className];
+    
+    FMDatabase *db = [[SQPDatabase sharedInstance] database];
+    
+    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@", tableName, queryOptions];
     
     FMResultSet *s = [db executeQuery:sql];
     
-    SQPObject *object = [self SQPObjectFromClassName:self.SQPClassName];
+    SQPObject *object;
     
     while ([s next]) {
-        
-        for (SQPProperty *property in self.SQPProperties) {
-            
-            id value = [s objectForColumnName:property.name];
-            
-            if (value != nil && property.type != kPropertyTypeChar) {
-                [object setValue:value forKey:property.name];
-            }
-        }
+        object = [SQPObject SQPObjectFromClassName:className];
+        [object completeWithResultSet:s];
+        break;
     }
     
     return object;
+}
+
++ (SQPObject*)SQPFetchOneByID:(NSString*)objectID {
+    
+    NSString *className = NSStringFromClass([self class]);
+    NSString *tableName = [NSString stringWithFormat:@"%@%@", kSQPTablePrefix, className];
+    
+    FMDatabase *db = [[SQPDatabase sharedInstance] database];
+    
+    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ = '%@'", tableName, kSQPObjectIDName, objectID];
+    
+    FMResultSet *s = [db executeQuery:sql];
+    
+    SQPObject *object;
+    
+    while ([s next]) {
+        object = [SQPObject SQPObjectFromClassName:className];
+        [object completeWithResultSet:s];
+        break;
+    }
+    
+    return object;
+}
+
+- (void)completeWithResultSet:(FMResultSet*)resultSet {
+    
+    for (SQPProperty *property in self.SQPProperties) {
+        
+        id value = [resultSet objectForColumnName:property.name];
+        
+        if (value != nil && property.type != kPropertyTypeChar) {
+            [self setValue:value forKey:property.name];
+        }
+    }
+    
+    self.objectID = [resultSet stringForColumn:kSQPObjectIDName];
+}
+
+- (void)completeObject:(SQPObject*)object withResultSet:(FMResultSet*)resultSet {
+    
+    [object completeWithResultSet:resultSet];
 }
 
 - (NSString *)uuidString {
@@ -181,7 +324,7 @@
     return uuidString;
 }
 
-- (SQPObject*)SQPObjectFromClassName:(NSString*)className {
++ (SQPObject*)SQPObjectFromClassName:(NSString*)className {
     
     Class theClass = NSClassFromString(className);
     
