@@ -65,8 +65,8 @@ To insert a new object into your database, just call the method named ***SQPSave
 ```
 // Create Table at the first init (if tbale ne exists) :
 User *userCreated = [[User alloc] init];
-userCreated.firstName = @"Christopher";
-userCreated.lastName = @"Ney";
+userCreated.firstName = @"John";
+userCreated.lastName = @"McClane";
     
 // INSERT Object :
 [userCreated SQPSaveEntity];
@@ -102,46 +102,32 @@ To select one objet you can use two methods ***SQPFetchOneByID*** or ***SQPFetch
 User *userSelected = (User*)[User SQPFetchOneByID:userCreated.objectID];
 ```
 
+```
+// SELECT BY objectID :
+User *userSelected = (User*)[User SQPFetchOneWhere:@"lastName = 'McClane'"];
+```
+
+SELECT collection of objects
+------------------------
+To select a collection of objets you can use two methods ***SQPFetchAll*** or ***SQPFetchAllWhere***.
+```
+// SELECT ALL 'Ferrari' :
+NSMutableArray *allCars = [Car SQPFetchAll];
+```
+
+```
+// SELECT ALL 'Ferrari' :
+NSMutableArray *ferrariCars = [Car SQPFetchAllWhere:@"name = 'Ferrari'"];
+```
+
 Other methods
 -------------
-
+You can remove the database with the method ***removeDatabase***.
 ```
 // REMOVE Local Database :
 [[SQPDatabase sharedInstance] removeDatabase];
-    
-
-    
-// SELECT BY objectID :
-User *userSelected = (User*)[User SQPFetchOneByID:userCreated.objectID];
-userSelected.amount = 10.50f;
-    
-// UPDATE Object :
-[userSelected SQPSaveEntity];
-    
-Car *car1 = [[Car alloc] init];
-car1.name = @"Ferrari";
-car1.color = @"Red";
-[car1 SQPSaveEntity]; // INSERT Object
-    
-Car *car2 = [[Car alloc] init];
-car2.name = @"BMW";
-car2.color = @"Black";
-[car2 SQPSaveEntity]; // INSERT Object
- 
-Car *car3 = [[Car alloc] init];
-car3.name = @"Ferrari";
-car3.color = @"Yellow";
-[car3 SQPSaveEntity]; // INSERT Object
-  
-// DELETE Object :
-car3.deleteObject = YES;
-[car3 SQPSaveEntity];
-
-// SELECT ALL 'Ferrari' :
-NSMutableArray *cars = [Car SQPFetchAllWhere:@"name = 'Ferrari'"];
-
-NSLog(@"Number of cars: %d", [cars count]);
 ```
+
 License
 ----
 
