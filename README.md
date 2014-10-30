@@ -17,7 +17,7 @@ Language
 
 SQPersist is written in Objective-C with Automatic Reference Counting (ARC) system.
 
-Add an model object into my storage ?
+Add a model object into the storage ?
 ---------------
 
 Simply inherit your object with the class named **SQPObject**.
