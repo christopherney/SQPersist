@@ -53,7 +53,7 @@ The resulting table into the SQLite database will be :
 ```
 The table will be create at the first initialization of your object (if the table not already exists) :
 ```
-Car *car1 = [[Car alloc] init];
+Car *car1 = [Car SQPCreateEntity];
 ```
 
 Every object is identified by a unique identifier named ***objectID***. The ***objectID*** is a UUID (NSString).
@@ -69,6 +69,7 @@ SQPersist is compatible with the following Objective-c types :
 * ***NSDecimalNumber*** -> become ***REAL*** into SQLite database
 * ***NSDate*** -> become ***INTEGER*** into SQLite database (Timestamp Since 1970)
 * ***NSData*** -> become ***BLOB*** into SQLite database
+* ***UIImage*** -> become ***BLOB*** into SQLite database
 * ***int*** -> become ***INTEGER*** into SQLite database
 * ***double*** -> become ***REAL*** into SQLite database
 * ***long*** -> become ***REAL*** into SQLite database
@@ -87,8 +88,8 @@ INSERT an object
 ----------------
 To insert a new object into your database, just call the method named ***SQPSaveEntity*** :
 ```
-// Create Table at the first init (if tbale ne exists) :
-User *userCreated = [[User alloc] init];
+// Create Table at the first init (if the table not exists) :
+User *userCreated = [User SQPCreateEntity];
 userCreated.firstName = @"John";
 userCreated.lastName = @"McClane";
     
@@ -101,7 +102,7 @@ UPDATE an object
 To update an existing object into your database, just call the method named ***SQPSaveEntity*** :
 ```
 // SELECT BY objectID :
-User *existingUser = (User*)[User SQPFetchOneByID:objectID];
+User *existingUser = [User SQPFetchOneByID:objectID];
 existingUser.amount = 10.50f;
     
 // UPDATE Object :
@@ -110,7 +111,7 @@ existingUser.amount = 10.50f;
 
 DELETE an object
 ----------------
-To delete an existing object of your database, set the property ***deleteObject*** to ***YES*** and call the method named ***SQPSaveEntity*** :
+To delete an existing object of your database, set the property ***deleteObject*** to ***YES*** and call the method named ***SQPSaveEntity***.
 
 ```
 // DELETE Object :
@@ -120,20 +121,20 @@ existingUser.deleteObject = YES;
 
 SELECT One object
 --------------------
-To select one objet you can use two methods ***SQPFetchOneByID*** or ***SQPFetchOneWhere***.
+To select one objet you can use two methods ***SQPFetchOneByID*** or ***SQPFetchOneWhere:*** or ***SQPFetchAllWhere:orderBy:***.
 ```
 // SELECT BY objectID :
-User *userSelected = (User*)[User SQPFetchOneByID:userCreated.objectID];
+User *userSelected = [User SQPFetchOneByID:userCreated.objectID];
 ```
 
 ```
 // SELECT BY objectID :
-User *userSelected = (User*)[User SQPFetchOneWhere:@"lastName = 'McClane'"];
+User *userSelected = [User SQPFetchOneWhere:@"lastName = 'McClane'"];
 ```
 
 SELECT collection of objects
 ------------------------
-To select a collection of objets you can use two methods ***SQPFetchAll*** or ***SQPFetchAllWhere***.
+To select a collection of objets you can use two methods ***SQPFetchAll*** or ***SQPFetchAllWhere:***.
 ```
 // SELECT ALL 'Cars' :
 NSMutableArray *allCars = [Car SQPFetchAll];
@@ -156,6 +157,5 @@ License
 ----
 
 MIT
-
 
 **Free Library**
