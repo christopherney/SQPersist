@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import "SQPObject.h"
 
 #import "Car.h"
@@ -30,6 +31,7 @@
 @property (nonatomic, strong) NSArray *parents;
 @property (nonatomic, strong) NSMutableArray *friends;
 @property (nonatomic, strong) NSData *picture;
+@property (nonatomic, strong) UIImage *photo;
 
 @property (nonatomic, strong) Car *myCar;
 

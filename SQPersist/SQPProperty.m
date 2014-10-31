@@ -23,6 +23,7 @@
 #define kAttributeNSData @"T@\"NSData\""
 #define kAttributeNSArray @"T@\"NSArray\""
 #define kAttributeNSMutableArray @"T@\"NSMutableArray\""
+#define kAttributeUIImage @"T@\"UIImage\""
 #define kAttributeObject @"T@"
 
 @interface SQPProperty ()
@@ -35,6 +36,8 @@
 - (void)getPropertyType:(const char *)attributes {
     
     NSString *propertyAttributes = [NSString stringWithFormat:@"%s", attributes];
+    
+    //NSLog(@"%@", propertyAttributes);
     
     // Si c'est un type primitif :
     if ([self string:propertyAttributes containsSubString:@",&,"]) {
@@ -55,6 +58,8 @@
             self.type = kPropertyTypeArray;
         } else if ([self string:propertyAttributes containsSubString:kAttributeNSMutableArray]) {
             self.type = kPropertyTypeMutableArray;
+        } else if ([self string:propertyAttributes containsSubString:kAttributeUIImage]) {
+            self.type = kPropertyTypeImage;
         } else if ([self string:propertyAttributes containsSubString:kAttributeObject]) {
             self.type = kPropertyTypeObject;
         }
@@ -123,6 +128,8 @@
         return @"NSMutableArray";
     } else if (type == kPropertyTypeObject) {
         return @"id";
+    } else if (type == kPropertyTypeImage) {
+        return @"UIImage";
     } else {
         return @"unknown";
     }
@@ -161,6 +168,8 @@
     } else if (self.type == kPropertyTypeMutableArray) {
         return @"BLOB";
     } else if (self.type == kPropertyTypeObject) {
+        return @"BLOB";
+    }  else if (self.type == kPropertyTypeImage) {
         return @"BLOB";
     } else {
         return @"unknown";

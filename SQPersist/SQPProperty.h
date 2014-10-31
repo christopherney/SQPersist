@@ -25,6 +25,7 @@ typedef enum SQPPropertyType : NSUInteger {
     kPropertyTypeData,
     kPropertyTypeArray,
     kPropertyTypeMutableArray,
+    kPropertyTypeImage,
     kPropertyTypeObject
 } SQPPropertyType;
 
@@ -35,6 +36,7 @@ typedef enum SQPPropertyType : NSUInteger {
 @property (nonatomic) SQPPropertyType type;
 @property (nonatomic) BOOL isPrimitive;
 @property (nonatomic) BOOL isNonatomic;
+@property (nonatomic) BOOL isSQPObject;
 
 - (void)getPropertyType:(const char *)attributes;
 

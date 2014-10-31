@@ -20,21 +20,12 @@ SQPersist is written in Objective-C with Automatic Reference Counting (ARC) syst
 How it's work ?
 ---------------
 
-Setup your local storage
-------------------------
-To setup (create the SQLite file), use the following method :
-the table will be create automaticatly.
-```
-[[SQPDatabase sharedInstance] setupDatabaseWithName:@"myDbName.db"];
-```
-> If your start to used the entities without setup the database name, by default the database name will be ***SQPersist.db***.
-
 Add a model object into the storage
 -----------------------------------
 
 Simply inherits your object with the class named **SQPObject**.
 
-At the first initialization of your object, the **SQPersist** will check if the associating table exists in the database. If not, the table will be create automaticatly.
+At the first initialization of your object, the **SQPersist** will check if the associate table exists in the database. If not, the table will be create automaticatly.
 ```
 #import <Foundation/Foundation.h>
 #import "SQPObject.h"
@@ -143,7 +134,7 @@ User *userSelected = [User SQPFetchOneWhere:@"lastName = 'McClane'"];
 
 SELECT collection of objects
 ------------------------
-To select a collection of objets you can use 3 methods ***SQPFetchAll*** or ***SQPFetchAllWhere:***  or ***SQPFetchAllWhere:orderBy:***.
+To select a collection of objets you can use two methods ***SQPFetchAll*** or ***SQPFetchAllWhere:***.
 ```
 // SELECT ALL 'Cars' :
 NSMutableArray *allCars = [Car SQPFetchAll];
@@ -154,48 +145,18 @@ NSMutableArray *allCars = [Car SQPFetchAll];
 NSMutableArray *ferrariCars = [Car SQPFetchAllWhere:@"name = 'Ferrari'"];
 ```
 
-```
-// SELECT ALL 'Ferrari cars' :
-NSMutableArray *ferrariCars = [Car SQPFetchAllWhere:@"name = 'Ferrari' orderBy:@"power DESC"];
-```
-COUNT Entities
---------------
-To count the number of entities you can use 2 methods ***SQPCountAll*** or ***SQPCountAllWhere:***.
-```
-NSLog(@"Total cars : %lld", [Car SQPCountAll]);
-NSLog(@"Total cars 'Ferrari' : %lld", [Car SQPCountAllWhere:@"name = 'Ferrari'"]);
-```
-
-TRUNCATE Entities
------------------
-To remove every entities (truncate), use the method ***SQPTruncateAll***.
-```
-[Car SQPTruncateAll];
-```
-
 Other methods
 -------------
-You can remove the database with the method ***removeDatabase*** :
+You can remove the database with the method ***removeDatabase***.
 ```
 // REMOVE Local Database :
 [[SQPDatabase sharedInstance] removeDatabase];
 ```
-Test if database file exists on local :
-```
-if ([[SQPDatabase sharedInstance] databaseExists]) {
-    // SQLite Db file exists.
-}
-```
-
-Tips
-----
-When you change the structure of your object :
-* Clean your Xcode project before rebuild the solution.
-* Remove the older database with the method ***removeDatabase*** (before changes).
 
 License
 ----
 
 MIT
+
 
 **Free Library**
