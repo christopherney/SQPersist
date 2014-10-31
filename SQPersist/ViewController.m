@@ -100,7 +100,7 @@
     // SELECT ALL 'Ferrari' :
     NSMutableArray *cars = [Car SQPFetchAllWhere:@"name = 'Ferrari'" orderBy:@"power DESC"];
     
-    NSLog(@"Number of cars: %d", [cars count]);
+    NSLog(@"Number of cars: %lu", (unsigned long)[cars count]);
     
     // Truncate all entities :
     [Car SQPTruncateAll];

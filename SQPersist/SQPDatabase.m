@@ -80,7 +80,8 @@
 - (BOOL)databaseExists {
  
     if (_dbPath != nil) {
-        return [[NSFileManager defaultManager] fileExistsAtPath:_dbPath isDirectory:NO];
+        BOOL isDirectory = NO;
+        return [[NSFileManager defaultManager] fileExistsAtPath:_dbPath isDirectory:&isDirectory];
     } else {
         return NO;
     }
