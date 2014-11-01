@@ -17,6 +17,14 @@ Language
 
 SQPersist is written in Objective-C with Automatic Reference Counting (ARC) system.
 
+CocoaPods
+---------
+**SQPersist** can be installed using [CocoaPods](http://cocoapods.org/).
+
+```
+pod 'SQPersist'
+```
+
 How it's work ?
 ---------------
 
