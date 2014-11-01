@@ -42,7 +42,7 @@
     userJohn.firstName = @"John";
     userJohn.lastName = @"McClane";
     userJohn.birthday = [NSDate date];
-    userJohn.photo = [UIImage imageNamed:@"tn_john-mcclane-1.jpg"];
+    userJohn.photo = [UIImage imageNamed:@"Photo"];
     
     // INSERT Object :
     [userJohn SQPSaveEntity];
