@@ -499,7 +499,7 @@
     SEL selector = @selector(alloc);
     
     SQPObject *object = (SQPObject*)[[theClass performSelector:selector] init];
-    
+ 
     return object;
 }
 

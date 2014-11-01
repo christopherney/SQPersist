@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6B292B9C1A04C4A500DBB179"
-               BuildableName = "libSQPersist.a"
-               BlueprintName = "SQPersist"
-               ReferencedContainer = "container:SQPersist.xcodeproj">
+               BlueprintIdentifier = "6B292BCA1A04C68800DBB179"
+               BuildableName = "Example.app"
+               BlueprintName = "Example"
+               ReferencedContainer = "container:Example.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -28,10 +28,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6B292BA71A04C4A500DBB179"
-               BuildableName = "SQPersistTests.xctest"
-               BlueprintName = "SQPersistTests"
-               ReferencedContainer = "container:SQPersist.xcodeproj">
+               BlueprintIdentifier = "6B292BE31A04C68800DBB179"
+               BuildableName = "ExampleTests.xctest"
+               BlueprintName = "ExampleTests"
+               ReferencedContainer = "container:Example.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -46,20 +46,20 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6B292BA71A04C4A500DBB179"
-               BuildableName = "SQPersistTests.xctest"
-               BlueprintName = "SQPersistTests"
-               ReferencedContainer = "container:SQPersist.xcodeproj">
+               BlueprintIdentifier = "6B292BE31A04C68800DBB179"
+               BuildableName = "ExampleTests.xctest"
+               BlueprintName = "ExampleTests"
+               ReferencedContainer = "container:Example.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6B292B9C1A04C4A500DBB179"
-            BuildableName = "libSQPersist.a"
-            BlueprintName = "SQPersist"
-            ReferencedContainer = "container:SQPersist.xcodeproj">
+            BlueprintIdentifier = "6B292BCA1A04C68800DBB179"
+            BuildableName = "Example.app"
+            BlueprintName = "Example"
+            ReferencedContainer = "container:Example.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -72,15 +72,15 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6B292B9C1A04C4A500DBB179"
-            BuildableName = "libSQPersist.a"
-            BlueprintName = "SQPersist"
-            ReferencedContainer = "container:SQPersist.xcodeproj">
+            BlueprintIdentifier = "6B292BCA1A04C68800DBB179"
+            BuildableName = "Example.app"
+            BlueprintName = "Example"
+            ReferencedContainer = "container:Example.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -90,15 +90,15 @@
       useCustomWorkingDirectory = "NO"
       buildConfiguration = "Release"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6B292B9C1A04C4A500DBB179"
-            BuildableName = "libSQPersist.a"
-            BlueprintName = "SQPersist"
-            ReferencedContainer = "container:SQPersist.xcodeproj">
+            BlueprintIdentifier = "6B292BCA1A04C68800DBB179"
+            BuildableName = "Example.app"
+            BlueprintName = "Example"
+            ReferencedContainer = "container:Example.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

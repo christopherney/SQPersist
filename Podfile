@@ -6,12 +6,8 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 
 target "SQPersist" do
-    
+
 pod 'FMDB'
-
-end
-
-target "SQPersistTests" do
 
 end
 
