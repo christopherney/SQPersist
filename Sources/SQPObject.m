@@ -496,9 +496,7 @@
     
     Class theClass = NSClassFromString(className);
     
-    SEL selector = @selector(alloc);
-    
-    SQPObject *object = (SQPObject*)[[theClass performSelector:selector] init];
+    SQPObject *object = (SQPObject*)[[theClass alloc] init];
  
     return object;
 }

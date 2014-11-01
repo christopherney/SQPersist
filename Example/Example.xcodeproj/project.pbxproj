@@ -12,7 +12,6 @@
 		6B292BD71A04C68800DBB179 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B292BD61A04C68800DBB179 /* ViewController.m */; };
 		6B292BDA1A04C68800DBB179 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B292BD81A04C68800DBB179 /* Main.storyboard */; };
 		6B292BDC1A04C68800DBB179 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6B292BDB1A04C68800DBB179 /* Images.xcassets */; };
-		6B292BDF1A04C68800DBB179 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6B292BDD1A04C68800DBB179 /* LaunchScreen.xib */; };
 		6B292BF91A04C69600DBB179 /* Car.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B292BF61A04C69600DBB179 /* Car.m */; };
 		6B292BFA1A04C69600DBB179 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B292BF81A04C69600DBB179 /* User.m */; };
 		6BBB47BA1A04D00200989381 /* libSQPersist.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BBB47B01A04CDC000989381 /* libSQPersist.a */; };
@@ -28,7 +27,6 @@
 		6B292BD61A04C68800DBB179 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		6B292BD91A04C68800DBB179 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		6B292BDB1A04C68800DBB179 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		6B292BDE1A04C68800DBB179 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		6B292BF51A04C69600DBB179 /* Car.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Car.h; sourceTree = "<group>"; };
 		6B292BF61A04C69600DBB179 /* Car.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Car.m; sourceTree = "<group>"; };
 		6B292BF71A04C69600DBB179 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
@@ -75,7 +73,6 @@
 				6B292BD61A04C68800DBB179 /* ViewController.m */,
 				6B292BD81A04C68800DBB179 /* Main.storyboard */,
 				6B292BDB1A04C68800DBB179 /* Images.xcassets */,
-				6B292BDD1A04C68800DBB179 /* LaunchScreen.xib */,
 				6B292BCE1A04C68800DBB179 /* Supporting Files */,
 			);
 			path = Example;
@@ -167,7 +164,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6B292BDA1A04C68800DBB179 /* Main.storyboard in Resources */,
-				6B292BDF1A04C68800DBB179 /* LaunchScreen.xib in Resources */,
 				6B292BDC1A04C68800DBB179 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -196,14 +192,6 @@
 				6B292BD91A04C68800DBB179 /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		6B292BDD1A04C68800DBB179 /* LaunchScreen.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				6B292BDE1A04C68800DBB179 /* Base */,
-			);
-			name = LaunchScreen.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -289,6 +277,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				HEADER_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/../SQPersist",
 					"$(inherited)",
@@ -315,6 +304,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				HEADER_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/../SQPersist",
 					"$(inherited)",
