@@ -14,6 +14,7 @@
 		6B292BDC1A04C68800DBB179 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6B292BDB1A04C68800DBB179 /* Images.xcassets */; };
 		6B292BF91A04C69600DBB179 /* Car.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B292BF61A04C69600DBB179 /* Car.m */; };
 		6B292BFA1A04C69600DBB179 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B292BF81A04C69600DBB179 /* User.m */; };
+		6B94F9211A04FC940009A88D /* libPods-SQPersist-FMDB.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B94F9201A04FC940009A88D /* libPods-SQPersist-FMDB.a */; };
 		6BBB47BA1A04D00200989381 /* libSQPersist.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BBB47B01A04CDC000989381 /* libSQPersist.a */; };
 /* End PBXBuildFile section */
 
@@ -31,6 +32,7 @@
 		6B292BF61A04C69600DBB179 /* Car.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Car.m; sourceTree = "<group>"; };
 		6B292BF71A04C69600DBB179 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		6B292BF81A04C69600DBB179 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		6B94F9201A04FC940009A88D /* libPods-SQPersist-FMDB.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-SQPersist-FMDB.a"; path = "../Pods/build/Debug-iphoneos/libPods-SQPersist-FMDB.a"; sourceTree = "<group>"; };
 		6BBB47B01A04CDC000989381 /* libSQPersist.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSQPersist.a; path = "../../../Library/Developer/Xcode/DerivedData/SQPersist-gnomeysmkvqlwickkpgspuufditj/Build/Products/Debug-iphoneos/libSQPersist.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -39,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6B94F9211A04FC940009A88D /* libPods-SQPersist-FMDB.a in Frameworks */,
 				6BBB47BA1A04D00200989381 /* libSQPersist.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -101,6 +104,7 @@
 		6B292BFF1A04C7D300DBB179 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6B94F9201A04FC940009A88D /* libPods-SQPersist-FMDB.a */,
 				6BBB47B01A04CDC000989381 /* libSQPersist.a */,
 			);
 			name = Frameworks;
@@ -233,8 +237,9 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Debug;
 		};
@@ -270,6 +275,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Release;
 		};
@@ -279,8 +285,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/../SQPersist",
-					"$(inherited)",
+					"$(PROJECT_DIR)/../Sources",
+					"$(PROJECT_DIR)/../Pods/FMDB/src/fmdb",
 				);
 				INFOPLIST_FILE = Example/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
@@ -293,10 +299,11 @@
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
-					"$(inherited)",
+					"-l\"sqlite3\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Debug;
 		};
@@ -306,8 +313,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/../SQPersist",
-					"$(inherited)",
+					"$(PROJECT_DIR)/../Sources",
+					"$(PROJECT_DIR)/../Pods/FMDB/src/fmdb",
 				);
 				INFOPLIST_FILE = Example/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
@@ -320,10 +327,11 @@
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
-					"$(inherited)",
+					"-l\"sqlite3\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Release;
 		};
