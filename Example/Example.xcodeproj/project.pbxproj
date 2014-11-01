@@ -48,7 +48,6 @@
 		6B292BF71A04C69600DBB179 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		6B292BF81A04C69600DBB179 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		6BBB47B01A04CDC000989381 /* libSQPersist.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSQPersist.a; path = "../../../Library/Developer/Xcode/DerivedData/SQPersist-gnomeysmkvqlwickkpgspuufditj/Build/Products/Debug-iphoneos/libSQPersist.a"; sourceTree = "<group>"; };
-		6BBB47B41A04CF8900989381 /* libPods-SQPersist.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-SQPersist.a"; path = "../Pods/build/Debug-iphoneos/libPods-SQPersist.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,7 +144,6 @@
 		6B292BFF1A04C7D300DBB179 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				6BBB47B41A04CF8900989381 /* libPods-SQPersist.a */,
 				6BBB47B01A04CDC000989381 /* libSQPersist.a */,
 			);
 			name = Frameworks;

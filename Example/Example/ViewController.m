@@ -8,6 +8,8 @@
 
 #import "ViewController.h"
 
+#import "SQPersist.h"
+
 #import "User.h"
 #import "Car.h"
 
