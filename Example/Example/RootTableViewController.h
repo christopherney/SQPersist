@@ -8,8 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+@interface RootTableViewController : UITableViewController
 
+@property (nonatomic, strong) NSMutableArray *items;
+
+#pragma mark - Actions
+
+- (IBAction)actionAddEntity:(id)sender;
 
 @end
 

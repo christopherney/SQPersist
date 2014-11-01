@@ -6,17 +6,17 @@
 //  Copyright (c) 2014 Christopher Ney. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "RootTableViewController.h"
 
-//#import "SQPersist.h"
+#import "SQPersist.h"
 
 #import "User.h"
 #import "Car.h"
 
-@interface ViewController ()
+@interface RootTableViewController ()
 @end
 
-@implementation ViewController
+@implementation RootTableViewController
 
 - (void)viewDidLoad {
     
@@ -28,6 +28,9 @@
     
     NSLog(@"DB path: %@ ", [[SQPDatabase sharedInstance] getDdPath]);
     
+    self.items = [Car SQPFetchAll];
+    
+    /*
     // If database exists:
     if ([[SQPDatabase sharedInstance] databaseExists]) {
         
@@ -108,11 +111,69 @@
     [Car SQPTruncateAll];
     
     NSLog(@"Total cars : %lld", [Car SQPCountAll]);
+     */
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+#pragma mark - Actions
+
+- (IBAction)actionAddEntity:(id)sender {
+    
+    Car *car1 = [Car SQPCreateEntity];
+    car1.name = @"Ferrari";
+    car1.color = @"Red";
+    //car1.owner = userJohn;
+    car1.power = 350;
+    [car1 SQPSaveEntity]; // INSERT Object
+
+    if (self.items == nil) self.items = [[NSMutableArray alloc] init];
+    
+    [self.items addObject:car1];
+    
+    [self.tableView reloadData];
+}
+
+- (IBAction)actionClearAll:(id)sender {
+    
+    [Car SQPTruncateAll];
+    
+    self.items = [Car SQPFetchAll];
+    
+    [self.tableView reloadData];
+}
+
+#pragma mark - UITableView Datasource
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return [self.items count];
+}
+
+-(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    static NSString *cellidentifier = @"cellIdentifier";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellidentifier];
+    
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellidentifier];
+    }
+    
+    Car *item = (Car*)[self.items objectAtIndex:indexPath.row];
+    
+    cell.textLabel.text = item.name;
+    cell.detailTextLabel.text = item.color;
+    
+    return cell;
+}
+
+
 
 @end
