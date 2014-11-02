@@ -209,6 +209,10 @@ if ([[SQPDatabase sharedInstance] databaseExists]) {
     // SQLite Db file exists.
 }
 ```
+Add new property into an existing table (use just for update your model - generate many SQL request) :
+```
+[SQPDatabase sharedInstance].addMissingColumns == YES;
+```
 
 Tips
 ----
