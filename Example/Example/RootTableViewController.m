@@ -15,7 +15,9 @@
 #import "Flickr.h"
 
 @interface RootTableViewController ()
--(void)getFlickRandomPhoto;
+- (void)getFlickRandomPhoto;
+- (Car*)getRandomCar;
+- (void)otherExamples;
 @end
 
 @implementation RootTableViewController
@@ -30,18 +32,19 @@
     
     NSLog(@"DB path: %@ ", [[SQPDatabase sharedInstance] getDdPath]);
     
-    self.items = [Car SQPFetchAll];
+    [self otherExamples];
     
-    /*
-    // If database exists:
-    if ([[SQPDatabase sharedInstance] databaseExists]) {
-        
-        // REMOVE Local Database :
-        [[SQPDatabase sharedInstance] removeDatabase];
-        
-        NSLog(@"DB '%@' removed!", [[SQPDatabase sharedInstance] getDdName]);
-    }
-    */
+    self.items = [Car SQPFetchAll];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Example
+
+- (void)otherExamples {
     
     // Create Table at the first init (if tbale ne exists) :
     User *userJohn = [User SQPCreateEntity];
@@ -97,11 +100,6 @@
     NSMutableArray *cars = [Car SQPFetchAllWhere:@"name = 'Ferrari'" orderBy:@"power DESC"];
     
     NSLog(@"Number of cars: %lu", (unsigned long)[cars count]);
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Flickr Example 
@@ -161,12 +159,27 @@
     car.color = (NSString*)[colors objectAtIndex:randomIndexColor];
     car.owner = nil;
     car.power = [[powers objectAtIndex:randomIndexPower] intValue];
-    //car.urlLogo =
-    
+
     return car;
 }
 
 #pragma mark - Actions
+
+- (IBAction)actionRemoveDatabase:(id)sender {
+    
+    // If database exists:
+    if ([[SQPDatabase sharedInstance] databaseExists]) {
+        
+        // REMOVE Local Database :
+        [[SQPDatabase sharedInstance] removeDatabase];
+        
+        NSLog(@"DB '%@' removed!", [[SQPDatabase sharedInstance] getDdName]);
+        
+        self.items = nil;
+        
+        [self.tableView reloadData];
+    }
+}
 
 - (IBAction)actionAddEntity:(id)sender {
     
@@ -264,7 +277,7 @@
     Car *item = (Car*)[self.items objectAtIndex:indexPath.row];
     
     cell.textLabel.text = item.name;
-    cell.detailTextLabel.text = item.color;
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ - %d horses", item.color, item.power];
     cell.imageView.image = [UIImage imageNamed:item.name];
     
     return cell;

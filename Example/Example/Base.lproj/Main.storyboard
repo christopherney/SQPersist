@@ -53,6 +53,14 @@
                             <outlet property="delegate" destination="MO9-LZ-sCd" id="wLJ-H2-SgC"/>
                         </connections>
                     </tableView>
+                    <toolbarItems>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="BMi-IA-I4x"/>
+                        <barButtonItem title="Remove Db" id="rUs-ak-5QZ">
+                            <connections>
+                                <action selector="actionRemoveDatabase:" destination="MO9-LZ-sCd" id="bkc-MY-p30"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
                     <navigationItem key="navigationItem" title="SQPersist Tester" id="0TE-l5-OXX">
                         <barButtonItem key="leftBarButtonItem" systemItem="trash" id="Mjg-8K-CXJ">
                             <connections>
@@ -68,16 +76,19 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dHd-Vs-kb8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="322" y="460"/>
+            <point key="canvasLocation" x="318" y="424"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="iLp-ef-zhb">
             <objects>
-                <navigationController id="YWA-MM-qhn" sceneMemberID="viewController">
+                <navigationController toolbarHidden="NO" id="YWA-MM-qhn" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="x5Q-Qf-9Pv">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="gYc-bf-Mql">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
                         <segue destination="MO9-LZ-sCd" kind="relationship" relationship="rootViewController" id="Msn-BZ-Wze"/>
                     </connections>
