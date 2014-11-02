@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6B00E6851A067D5B00BE4AC6 /* Flickr.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B00E6841A067D5B00BE4AC6 /* Flickr.m */; };
+		6B00E6881A06B11900BE4AC6 /* TestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B00E6871A06B11900BE4AC6 /* TestObject.m */; };
 		6B292BD11A04C68800DBB179 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B292BD01A04C68800DBB179 /* main.m */; };
 		6B292BD41A04C68800DBB179 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B292BD31A04C68800DBB179 /* AppDelegate.m */; };
 		6B292BD71A04C68800DBB179 /* RootTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B292BD61A04C68800DBB179 /* RootTableViewController.m */; };
@@ -22,6 +23,8 @@
 /* Begin PBXFileReference section */
 		6B00E6831A067D5B00BE4AC6 /* Flickr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Flickr.h; sourceTree = "<group>"; };
 		6B00E6841A067D5B00BE4AC6 /* Flickr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Flickr.m; sourceTree = "<group>"; };
+		6B00E6861A06B11900BE4AC6 /* TestObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestObject.h; sourceTree = "<group>"; };
+		6B00E6871A06B11900BE4AC6 /* TestObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestObject.m; sourceTree = "<group>"; };
 		6B292BCB1A04C68800DBB179 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B292BCF1A04C68800DBB179 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6B292BD01A04C68800DBB179 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -102,6 +105,8 @@
 				6B292BF81A04C69600DBB179 /* User.m */,
 				6B00E6831A067D5B00BE4AC6 /* Flickr.h */,
 				6B00E6841A067D5B00BE4AC6 /* Flickr.m */,
+				6B00E6861A06B11900BE4AC6 /* TestObject.h */,
+				6B00E6871A06B11900BE4AC6 /* TestObject.m */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -187,6 +192,7 @@
 				6B292BFA1A04C69600DBB179 /* User.m in Sources */,
 				6B292BD71A04C68800DBB179 /* RootTableViewController.m in Sources */,
 				6B292BD41A04C68800DBB179 /* AppDelegate.m in Sources */,
+				6B00E6881A06B11900BE4AC6 /* TestObject.m in Sources */,
 				6B292BF91A04C69600DBB179 /* Car.m in Sources */,
 				6B00E6851A067D5B00BE4AC6 /* Flickr.m in Sources */,
 				6B292BD11A04C68800DBB179 /* main.m in Sources */,

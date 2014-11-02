@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Example/Example/RootTableViewController.m"
-            timestampString = "436644771.870327"
+            timestampString = "436647503.927331"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "35"
-            endingLineNumber = "35"
+            startingLineNumber = "40"
+            endingLineNumber = "40"
             landmarkName = "-viewDidLoad"
             landmarkType = "5">
          </BreakpointContent>
@@ -122,12 +122,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Example/Example/RootTableViewController.m"
-            timestampString = "436644771.870327"
+            timestampString = "436647979.233134"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "209"
-            endingLineNumber = "209"
-            landmarkName = "-actionClearAll:"
+            startingLineNumber = "327"
+            endingLineNumber = "327"
+            landmarkName = "-testSQLiteTypes"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -186,12 +186,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Example/Example/RootTableViewController.m"
-            timestampString = "436644771.870327"
+            timestampString = "436647979.233134"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "229"
-            endingLineNumber = "229"
-            landmarkName = "-searchBarSearchButtonClicked:"
+            startingLineNumber = "347"
+            endingLineNumber = "347"
+            landmarkName = "-testSQLiteTypes"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -202,12 +202,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Example/Example/RootTableViewController.m"
-            timestampString = "436644771.870327"
+            timestampString = "436647979.233134"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "233"
-            endingLineNumber = "233"
-            landmarkName = "-searchBarSearchButtonClicked:"
+            startingLineNumber = "351"
+            endingLineNumber = "351"
+            landmarkName = "-testSQLiteTypes"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -218,12 +218,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Example/Example/RootTableViewController.m"
-            timestampString = "436644771.870327"
+            timestampString = "436647979.233134"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "234"
-            endingLineNumber = "234"
-            landmarkName = "-searchBarSearchButtonClicked:"
+            startingLineNumber = "352"
+            endingLineNumber = "352"
+            landmarkName = "-testSQLiteTypes"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -234,12 +234,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Example/Example/RootTableViewController.m"
-            timestampString = "436644771.870327"
+            timestampString = "436647979.233134"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "232"
-            endingLineNumber = "232"
-            landmarkName = "-searchBarSearchButtonClicked:"
+            startingLineNumber = "350"
+            endingLineNumber = "350"
+            landmarkName = "-testSQLiteTypes"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -368,6 +368,38 @@
             startingLineNumber = "198"
             endingLineNumber = "198"
             landmarkName = "-SQPAddColumn:intoTable:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Example/Example/RootTableViewController.m"
+            timestampString = "436647503.927331"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "62"
+            endingLineNumber = "62"
+            landmarkName = "-testSQLiteTypes"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Example/Example/RootTableViewController.m"
+            timestampString = "436647979.233134"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "167"
+            endingLineNumber = "167"
+            landmarkName = "-testSQLiteTypes"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

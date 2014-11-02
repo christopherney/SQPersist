@@ -13,11 +13,16 @@
 #import "User.h"
 #import "Car.h"
 #import "Flickr.h"
+#import "TestObject.h"
+
+#import "limits.h"
 
 @interface RootTableViewController ()
 - (void)getFlickRandomPhoto;
 - (Car*)getRandomCar;
 - (void)otherExamples;
+- (void)testSQLiteTypes;
+- (BOOL)image:(UIImage *)image1 isEqualTo:(UIImage *)image2;
 @end
 
 @implementation RootTableViewController
@@ -41,6 +46,8 @@
     [self otherExamples];
     
     self.items = [Car SQPFetchAll];
+    
+    [self testSQLiteTypes];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -50,7 +57,118 @@
 
 #pragma mark - Example
 
+- (void)testSQLiteTypes {
+    
+    NSString *text = @"Objective-C Persistence framework wrapper around SQLite";
+    
+    TestObject *testObject = [TestObject SQPCreateEntity];
+    testObject.testString = text; // NSString -> become TEXT into SQLite database
+    testObject.testNumber = [NSNumber numberWithFloat:FLT_MAX] ; // NSNumber -> become REAL into SQLite database
+    testObject.testDecimalNumber = [NSDecimalNumber decimalNumberWithString:@"3467374639467936.3746374639"]; // NSDecimalNumber -> become REAL into SQLite database
+    testObject.testDate = [NSDate date]; // NSDate -> become INTEGER into SQLite database (Timestamp Since 1970)
+    testObject.testData = [text dataUsingEncoding:NSUTF8StringEncoding];; // NSData -> become BLOB into SQLite database
+    testObject.testImage = [UIImage imageNamed:@"Ferrari"]; // UIImage -> become BLOB into SQLite database
+    testObject.testURL = [NSURL URLWithString:@"https://github.com/christopherney/SQPersist"]; // NSURL -> become TEXT into SQLite database
+    testObject.testInt = INT32_MAX; // int -> become INTEGER into SQLite database
+    testObject.testDouble = DBL_MAX; // double -> become REAL into SQLite database
+    testObject.testLong = LDBL_MAX; // long -> become REAL into SQLite database
+    testObject.testLongLong = LDBL_MAX; // long long -> become REAL into SQLite database
+    testObject.testShort = INT16_MAX; // short -> become INTEGER into SQLite database
+    testObject.testFloat = FLT_MAX; // float -> become REAL into SQLite database
+    
+    [testObject SQPSaveEntity];
+    
+    TestObject *testResult = [TestObject SQPFetchOneByID:testObject.objectID];
+    
+    if ([testResult.testString isEqualToString:testObject.testString]) {
+        NSLog(@"NSString OK - (%@)", testResult.testString);
+    } else {
+        NSLog(@"NSString KO!");
+    }
+    
+    if ([testResult.testNumber isEqualToNumber:testObject.testNumber]) {
+        NSLog(@"NSNumber OK - (%@)", testResult.testNumber);
+    } else {
+        NSLog(@"NSNumber KO!");
+    }
+    
+    if ([testResult.testDecimalNumber isEqualToNumber:testObject.testDecimalNumber]) {
+        NSLog(@"NSDecimalNumber OK - (%@)", testResult.testDecimalNumber);
+    } else {
+        NSLog(@"NSDecimalNumber KO!");
+    }
+    
+    if ([[testResult.testDate description] isEqualToString:[testObject.testDate description]]) {
+        NSLog(@"NSDate OK - (%@)", testResult.testDate);
+    } else {
+        NSLog(@"NSDate KO! %@ != %@", testObject.testDate, testResult.testDate);
+    }
+
+    if ([testResult.testData isEqualToData:testObject.testData]) {
+        NSLog(@"NSData OK - (%lu)", (unsigned long)testResult.testData.length);
+    } else {
+        NSLog(@"NSData KO!");
+    }
+
+    if (CGSizeEqualToSize(testResult.testImage.size, testObject.testImage.size)) {
+        NSLog(@"UIImage OK - (width: %f, height: %f)", testResult.testImage.size.width, testResult.testImage.size.height);
+    } else {
+        NSLog(@"UIImage KO!- (width: %f, height: %f) != (width: %f, height: %f)", testResult.testImage.size.width, testResult.testImage.size.height, testObject.testImage.size.width, testObject.testImage.size.height);
+    }
+    
+    if ([testResult.testURL isEqual:testObject.testURL]) {
+        NSLog(@"NSURL OK - (%@)", [testResult.testURL absoluteString]);
+    } else {
+        NSLog(@"NSURL KO!");
+    }
+    
+    if (testResult.testInt == testObject.testInt) {
+        NSLog(@"int OK - (%d)", testResult.testInt);
+    } else {
+        NSLog(@"int KO!");
+    }
+    
+    if (testResult.testDouble == testObject.testDouble) {
+        NSLog(@"double OK - (%f)", testResult.testDouble);
+    } else {
+        NSLog(@"double KO!");
+    }
+    
+    if (testResult.testLong == testObject.testLong) {
+        NSLog(@"long OK - (%ld)", testResult.testLong);
+    } else {
+        NSLog(@"long KO!");
+    }
+    
+    if (testResult.testLongLong == testObject.testLongLong) {
+        NSLog(@"long long OK - (%lld)", testResult.testLongLong);
+    } else {
+        NSLog(@"long long KO!");
+    }
+    
+    if (testResult.testShort == testObject.testShort) {
+        NSLog(@"short OK - (%d)", testResult.testShort);
+    } else {
+        NSLog(@"short KO!");
+    }
+    
+    if (testResult.testFloat == testObject.testFloat) {
+        NSLog(@"float OK - (%f)", testResult.testFloat);
+    } else {
+        NSLog(@"float KO!");
+    }
+}
+
+- (BOOL)image:(UIImage *)image1 isEqualTo:(UIImage *)image2
+{
+    NSData *data1 = UIImagePNGRepresentation(image1);
+    NSData *data2 = UIImagePNGRepresentation(image2);
+    
+    return [data1 isEqual:data2];
+}
+
 - (void)otherExamples {
+    
     
     // Create Table at the first init (if tbale ne exists) :
     User *userJohn = [User SQPCreateEntity];
