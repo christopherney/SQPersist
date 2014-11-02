@@ -87,6 +87,7 @@ SQPersist is compatible with the following Objective-C types :
 * ***NSDate*** -> become ***INTEGER*** into SQLite database (Timestamp Since 1970)
 * ***NSData*** -> become ***BLOB*** into SQLite database
 * ***UIImage*** -> become ***BLOB*** into SQLite database
+* ***NSURL*** -> become ***TEXT*** into SQLite database
 * ***int*** -> become ***INTEGER*** into SQLite database
 * ***double*** -> become ***REAL*** into SQLite database
 * ***long*** -> become ***REAL*** into SQLite database
