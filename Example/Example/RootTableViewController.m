@@ -28,7 +28,7 @@
     
     NSLog(@"DB path: %@ ", [[SQPDatabase sharedInstance] getDdPath]);
     
-    self.items = [Car SQPFetchAllWhere:nil orderBy:nil];
+    self.items = [Car SQPFetchAll];
     
     /*
     // If database exists:
@@ -142,6 +142,48 @@
     [Car SQPTruncateAll];
     
     self.items = [Car SQPFetchAll];
+    
+    [self.tableView reloadData];
+}
+
+#pragma mark - UISearchBar Delagete
+
+-(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    [searchBar resignFirstResponder];
+}
+
+-(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    
+    NSString *searchText = searchBar.text;
+    
+    self.where = [NSString stringWithFormat:@"name LIKE '%%%@%%'", searchText];
+    
+    self.items = [Car SQPFetchAllWhere:self.where orderBy:self.orderProperty];
+    
+    [self.tableView reloadData];
+}
+
+-(void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope {
+    
+    if (self.orderLastIndex == selectedScope) {
+        self.orderDirection = !self.orderDirection;
+    }
+    
+    if (selectedScope == 0) {
+        self.orderProperty = @"name";
+    } else if (selectedScope == 1) {
+        self.orderProperty = @"color";
+    } else {
+        self.orderProperty = @"power";
+    }
+    
+    if (self.orderDirection == YES) {
+        self.orderProperty = [NSString stringWithFormat:@"%@ DESC", self.orderProperty];
+    }
+    
+    self.orderLastIndex = selectedScope;
+    
+    self.items = [Car SQPFetchAllWhere:self.where orderBy:self.orderProperty];
     
     [self.tableView reloadData];
 }

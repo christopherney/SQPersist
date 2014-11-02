@@ -8,9 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
-@interface RootTableViewController : UITableViewController
+@interface RootTableViewController : UITableViewController <UISearchBarDelegate>
 
 @property (nonatomic, strong) NSMutableArray *items;
+
+@property (nonatomic) NSInteger orderLastIndex;
+@property (nonatomic, strong) NSString *orderProperty;
+@property (nonatomic) BOOL orderDirection;
+
+@property (nonatomic, strong) NSString *where;
 
 #pragma mark - Actions
 

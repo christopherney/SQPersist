@@ -22,6 +22,9 @@
                                 <string>Color</string>
                                 <string>Power</string>
                             </scopeButtonTitles>
+                            <connections>
+                                <outlet property="delegate" destination="MO9-LZ-sCd" id="ZnA-LM-wJL"/>
+                            </connections>
                         </searchBar>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellIdentifier" textLabel="axc-oX-wmy" detailTextLabel="HJ2-O9-Jii" style="IBUITableViewCellStyleSubtitle" id="loa-MX-U9a">

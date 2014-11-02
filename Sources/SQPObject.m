@@ -26,7 +26,7 @@
 - (BOOL)SQPUpdateObject;
 - (BOOL)SQPDeleteObject;
 - (void)SQPSaveChildren;
-+ (NSMutableArray*)SQPFetchAllForTable:(NSString*)tableName andClassName:(NSString*)className Where:(NSString*)queryOptions orderBy:(NSString*)orderOptions;
++ (NSMutableArray*)SQPFetchAllForTable:(NSString*)tableName andClassName:(NSString*)className Where:(NSString*)queryOptions orderBy:(NSString*)orderOptions pageIndex:(NSInteger)pageIndex itemsPerPage:(NSInteger)itemsPerPage;
 @end
 
 @implementation SQPObject
@@ -313,7 +313,7 @@
     NSString *className = NSStringFromClass([self class]);
     NSString *tableName = [NSString stringWithFormat:@"%@%@", kSQPTablePrefix, className];
     
-    return [SQPObject SQPFetchAllForTable:tableName andClassName:className Where:nil orderBy:nil];
+    return [SQPObject SQPFetchAllForTable:tableName andClassName:className Where:nil orderBy:nil pageIndex:0 itemsPerPage:0];
 }
 
 + (NSMutableArray*)SQPFetchAllWhere:(NSString*)queryOption {
@@ -321,7 +321,7 @@
     NSString *className = NSStringFromClass([self class]);
     NSString *tableName = [NSString stringWithFormat:@"%@%@", kSQPTablePrefix, className];
     
-    return [SQPObject SQPFetchAllForTable:tableName andClassName:className Where:queryOption orderBy:nil];
+    return [SQPObject SQPFetchAllForTable:tableName andClassName:className Where:queryOption orderBy:nil pageIndex:0 itemsPerPage:0];
 }
 
 + (NSMutableArray*)SQPFetchAllWhere:(NSString*)queryOptions orderBy:(NSString*)orderOptions {
@@ -329,10 +329,18 @@
     NSString *className = NSStringFromClass([self class]);
     NSString *tableName = [NSString stringWithFormat:@"%@%@", kSQPTablePrefix, className];
 
-    return [SQPObject SQPFetchAllForTable:tableName andClassName:className Where:queryOptions orderBy:orderOptions];
+    return [SQPObject SQPFetchAllForTable:tableName andClassName:className Where:queryOptions orderBy:orderOptions pageIndex:0 itemsPerPage:0];
 }
 
-+ (NSMutableArray*)SQPFetchAllForTable:(NSString*)tableName andClassName:(NSString*)className Where:(NSString*)queryOptions orderBy:(NSString*)orderOptions {
++ (NSMutableArray*)SQPFetchAllWhere:(NSString*)queryOptions orderBy:(NSString*)orderOptions pageIndex:(NSInteger)pageIndex itemsPerPage:(NSInteger)itemsPerPage {
+    
+    NSString *className = NSStringFromClass([self class]);
+    NSString *tableName = [NSString stringWithFormat:@"%@%@", kSQPTablePrefix, className];
+    
+    return [SQPObject SQPFetchAllForTable:tableName andClassName:className Where:queryOptions orderBy:orderOptions pageIndex:pageIndex itemsPerPage:itemsPerPage];
+}
+
++ (NSMutableArray*)SQPFetchAllForTable:(NSString*)tableName andClassName:(NSString*)className Where:(NSString*)queryOptions orderBy:(NSString*)orderOptions pageIndex:(NSInteger)pageIndex itemsPerPage:(NSInteger)itemsPerPage {
     
     NSMutableArray *items = [[NSMutableArray alloc] init];
     
@@ -343,6 +351,11 @@
     if (queryOptions != nil) [sql appendFormat:@" WHERE %@", queryOptions];
     
     if (orderOptions != nil) [sql appendFormat:@" ORDER BY %@", orderOptions];
+   
+    if (itemsPerPage > 0) {
+        NSInteger offset = (pageIndex) * itemsPerPage;
+        [sql appendFormat:@" LIMIT %d, %d", offset, itemsPerPage];
+    }
     
     FMResultSet *s = [db executeQuery:sql];
     
