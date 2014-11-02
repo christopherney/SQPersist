@@ -59,6 +59,13 @@
 - (BOOL)SQPSaveEntity;
 
 /**
+ *  Delete the entity into the database.
+ *
+ *  @return Return YES if the changes apply with succes.
+ */
+- (BOOL)SQPDeleteEntity;
+
+/**
  *  Return every entities save of table.
  *
  *  @return Array of entities.
@@ -113,6 +120,16 @@
  *  @return The resulting entity object.
  */
 + (id)SQPFetchOneByID:(NSString*)objectID;
+
+/**
+ *  Return one entity object where the attrbute is equal to the value.
+ *
+ *  @param attribut Attribut name (entity object property name).
+ *  @param value    Value of attribut.
+ *
+ *  @return The resulting entity object.
+ */
++ (id)SQPFetchOneByAttribut:(NSString*)attribut withValue:(NSString*)value;
 
 /**
  *  Return the number of entities save into the associated table.

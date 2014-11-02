@@ -26,6 +26,7 @@ typedef enum SQPPropertyType : NSUInteger {
     kPropertyTypeArray,
     kPropertyTypeMutableArray,
     kPropertyTypeImage,
+    kPropertyTypeURL,
     kPropertyTypeObject
 } SQPPropertyType;
 

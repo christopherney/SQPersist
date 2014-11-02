@@ -12,6 +12,7 @@
 
 #import "User.h"
 #import "Car.h"
+#import "Flickr.h"
 
 @interface RootTableViewController ()
 @end
@@ -39,6 +40,7 @@
         
         NSLog(@"DB '%@' removed!", [[SQPDatabase sharedInstance] getDdName]);
     }
+    */
     
     // Create Table at the first init (if tbale ne exists) :
     User *userJohn = [User SQPCreateEntity];
@@ -106,7 +108,8 @@
     NSMutableArray *cars = [Car SQPFetchAllWhere:@"name = 'Ferrari'" orderBy:@"power DESC"];
     
     NSLog(@"Number of cars: %lu", (unsigned long)[cars count]);
-    
+  
+    /*
     // Truncate all entities :
     [Car SQPTruncateAll];
     
@@ -123,10 +126,45 @@
 
 - (IBAction)actionAddEntity:(id)sender {
     
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://api.flickr.com/services/feeds/photos_public.gne?format=json&nojsoncallback=1"]];
+    
+    NSOperationQueue *operationQueue = [[NSOperationQueue alloc] init];
+    
+    [NSURLConnection sendAsynchronousRequest:request queue:operationQueue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+       
+        if (connectionError == nil) {
+            
+            NSError *JSONError;
+            NSDictionary *JSONDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&JSONError];
+            
+            if (JSONError == nil) {
+
+                NSArray *items = [JSONDictionary objectForKey:@"items"];
+                NSDictionary *item = [items objectAtIndex:0];
+                
+                Flickr *flickrItem = [Flickr SQPCreateEntity];
+                flickrItem.author = [item objectForKey:@"author"];
+                flickrItem.descriptionPhoto = [item objectForKey:@"description"];
+                flickrItem.link = [NSURL URLWithString:[item objectForKey:@"link"]];
+                flickrItem.photoURL = [NSURL URLWithString:[[item objectForKey:@"media"] objectForKey:@"m"]];
+                flickrItem.title = [item objectForKey:@"title"];
+                
+                [flickrItem SQPSaveEntity];
+                
+            } else {
+                NSLog(@"%@", [JSONError localizedDescription]);
+            }
+
+            
+        } else {
+            NSLog(@"%@", [connectionError localizedDescription]);
+        }
+    }];
+    
     Car *car1 = [Car SQPCreateEntity];
     car1.name = @"Ferrari";
     car1.color = @"Red";
-    //car1.owner = userJohn;
+    car1.owner = nil;
     car1.power = 350;
     [car1 SQPSaveEntity]; // INSERT Object
 
@@ -141,6 +179,8 @@
     
     [Car SQPTruncateAll];
     
+    self.where = nil;
+    
     self.items = [Car SQPFetchAll];
     
     [self.tableView reloadData];
@@ -149,6 +189,13 @@
 #pragma mark - UISearchBar Delagete
 
 -(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    
+    self.items = [Car SQPFetchAll];
+    
+    self.where = nil;
+    
+    [self.tableView reloadData];
+    
     [searchBar resignFirstResponder];
 }
 

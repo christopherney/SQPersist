@@ -27,6 +27,7 @@
 - (BOOL)SQPDeleteObject;
 - (void)SQPSaveChildren;
 + (NSMutableArray*)SQPFetchAllForTable:(NSString*)tableName andClassName:(NSString*)className Where:(NSString*)queryOptions orderBy:(NSString*)orderOptions pageIndex:(NSInteger)pageIndex itemsPerPage:(NSInteger)itemsPerPage;
++ (id)SQPFetchOneForTable:(NSString*)tableName andClassName:(NSString*)className Where:(NSString*)queryOptions;
 @end
 
 @implementation SQPObject
@@ -175,6 +176,18 @@
 }
 
 /**
+ *  Delete the entity into the database.
+ *
+ *  @return Return YES if the changes apply with succes.
+ */
+- (BOOL)SQPDeleteEntity {
+
+    self.deleteObject = YES;
+    
+    return [self SQPSaveEntity];
+}
+
+/**
  *  Save children entities of current entity object (private method - call by method named SQPSaveEntity).
  */
 - (void)SQPSaveChildren {
@@ -253,6 +266,13 @@
             }
             
             return imageData;
+            
+        } else if ([value isKindOfClass:[NSURL class]]) {
+            
+            NSURL *url = (NSURL*)value;
+            NSString *urlString = [url absoluteString];
+
+            return urlString;
             
         } else {
             
@@ -481,21 +501,7 @@
     NSString *className = NSStringFromClass([self class]);
     NSString *tableName = [NSString stringWithFormat:@"%@%@", kSQPTablePrefix, className];
     
-    FMDatabase *db = [[SQPDatabase sharedInstance] database];
-    
-    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@", tableName, queryOptions];
-    
-    FMResultSet *s = [db executeQuery:sql];
-    
-    SQPObject *object;
-    
-    while ([s next]) {
-        object = [SQPObject SQPObjectFromClassName:className];
-        [object completeWithResultSet:s];
-        break;
-    }
-    
-    return object;
+    return [SQPObject SQPFetchOneForTable:tableName andClassName:className Where:queryOptions];
 }
 
 /**
@@ -510,9 +516,43 @@
     NSString *className = NSStringFromClass([self class]);
     NSString *tableName = [NSString stringWithFormat:@"%@%@", kSQPTablePrefix, className];
     
+    NSString *queryOptions = [NSString stringWithFormat:@"%@ = '%@'", kSQPObjectIDName, objectID];
+    
+    return [SQPObject SQPFetchOneForTable:tableName andClassName:className Where:queryOptions];
+}
+
+/**
+ *  Return one entity object where the attribute is equal to the value.
+ *
+ *  @param attribut Attribut name (entity object property name).
+ *  @param value    Value of attribut.
+ *
+ *  @return The resulting entity object.
+ */
++ (id)SQPFetchOneByAttribut:(NSString*)attribut withValue:(NSString*)value {
+    
+    NSString *className = NSStringFromClass([self class]);
+    NSString *tableName = [NSString stringWithFormat:@"%@%@", kSQPTablePrefix, className];
+    
+    NSString *queryOptions = [NSString stringWithFormat:@"%@ = '%@'", attribut, value];
+    
+    return [SQPObject SQPFetchOneForTable:tableName andClassName:className Where:queryOptions];
+}
+
+/**
+ *  Return one entity object by filtering conditions (private method).
+ *
+ *  @param tableName    Table name.
+ *  @param className    Entity object class name.
+ *  @param queryOptions Filtering conditions (clause SQL WHERE).
+ *
+ *  @return The resulting entity object.
+ */
++ (id)SQPFetchOneForTable:(NSString*)tableName andClassName:(NSString*)className Where:(NSString*)queryOptions {
+    
     FMDatabase *db = [[SQPDatabase sharedInstance] database];
     
-    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ = '%@'", tableName, kSQPObjectIDName, objectID];
+    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@", tableName, queryOptions];
     
     FMResultSet *s = [db executeQuery:sql];
     
@@ -627,6 +667,13 @@
                 UIImage *image = [UIImage imageWithData:imageData];
                 
                 [self setValue:image forKey:property.name];
+                
+            } else if (property.type == kPropertyTypeURL) {
+                
+                NSString *urlString = (NSString*)value;
+                NSURL *url = [NSURL URLWithString:urlString];
+                
+                [self setValue:url forKey:property.name];
                 
             } else {
                 

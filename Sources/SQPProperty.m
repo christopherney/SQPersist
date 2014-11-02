@@ -24,6 +24,7 @@
 #define kAttributeNSArray @"T@\"NSArray\""
 #define kAttributeNSMutableArray @"T@\"NSMutableArray\""
 #define kAttributeUIImage @"T@\"UIImage\""
+#define kAttributeNSURL @"T@\"NSURL\""
 #define kAttributeObject @"T@"
 
 @interface SQPProperty ()
@@ -60,6 +61,8 @@
             self.type = kPropertyTypeMutableArray;
         } else if ([self string:propertyAttributes containsSubString:kAttributeUIImage]) {
             self.type = kPropertyTypeImage;
+        } else if ([self string:propertyAttributes containsSubString:kAttributeNSURL]) {
+            self.type = kPropertyTypeURL;
         } else if ([self string:propertyAttributes containsSubString:kAttributeObject]) {
             self.type = kPropertyTypeObject;
         }
@@ -126,10 +129,12 @@
         return @"NSArray";
     } else if (type == kPropertyTypeMutableArray) {
         return @"NSMutableArray";
-    } else if (type == kPropertyTypeObject) {
-        return @"id";
     } else if (type == kPropertyTypeImage) {
         return @"UIImage";
+    } else if (type == kPropertyTypeURL) {
+        return @"NSURL";
+    } else if (type == kPropertyTypeObject) {
+        return @"id";
     } else {
         return @"unknown";
     }
@@ -169,8 +174,10 @@
         return @"BLOB";
     } else if (self.type == kPropertyTypeObject) {
         return @"BLOB";
-    }  else if (self.type == kPropertyTypeImage) {
+    } else if (self.type == kPropertyTypeImage) {
         return @"BLOB";
+    } else if (self.type == kPropertyTypeURL) {
+        return @"TEXT";
     } else {
         return @"unknown";
     }
