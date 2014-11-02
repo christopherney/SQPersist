@@ -354,7 +354,7 @@
    
     if (itemsPerPage > 0) {
         NSInteger offset = (pageIndex) * itemsPerPage;
-        [sql appendFormat:@" LIMIT %d, %d", offset, itemsPerPage];
+        [sql appendFormat:@" LIMIT %li, %li", (long)offset, (long)itemsPerPage];
     }
     
     FMResultSet *s = [db executeQuery:sql];
