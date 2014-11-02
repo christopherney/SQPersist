@@ -87,6 +87,7 @@ SQPersist is compatible with the following Objective-C types :
 * ***NSDate*** -> become ***INTEGER*** into SQLite database (Timestamp Since 1970)
 * ***NSData*** -> become ***BLOB*** into SQLite database
 * ***UIImage*** -> become ***BLOB*** into SQLite database
+* ***NSURL*** -> become ***TEXT*** into SQLite database
 * ***int*** -> become ***INTEGER*** into SQLite database
 * ***double*** -> become ***REAL*** into SQLite database
 * ***long*** -> become ***REAL*** into SQLite database
@@ -128,30 +129,39 @@ existingUser.amount = 10.50f;
 
 DELETE an object
 ----------------
-To delete an existing object of your database, set the property ***deleteObject*** to ***YES*** and call the method named ***SQPSaveEntity***.
+To delete an existing object of your database, set the property ***deleteObject*** to ***YES*** and call the method named ***SQPSaveEntity***. Or diretcly call the method named ***SQPDeleteEntity***.
 
 ```
 // DELETE Object :
 existingUser.deleteObject = YES;
-[existingUser SQPSaveEntity];
+[existingUser SQPSaveEntity]; // Commit the delete command.
+```
+```
+// DELETE Object :
+[existingUser SQPDeleteEntity]; // Commit the delete command.
 ```
 
 SELECT One object
 --------------------
-To select one objet you can use two methods ***SQPFetchOneByID*** or ***SQPFetchOneWhere:*** or ***SQPFetchAllWhere:orderBy:***.
+To select one objet you can use 3 methods ***SQPFetchOneByID*** or ***SQPFetchOneWhere:*** or ***SQPFetchOneByAttribut:withValue:***.
 ```
 // SELECT BY objectID :
 User *userSelected = [User SQPFetchOneByID:userCreated.objectID];
 ```
 
 ```
-// SELECT BY objectID :
+// SELECT by condition :
 User *userSelected = [User SQPFetchOneWhere:@"lastName = 'McClane'"];
+```
+
+```
+// SELECT by attribute with value :
+User *userSelected = [User SQPFetchOneByAttribut:@"lastName" withValue:@"McClane"];
 ```
 
 SELECT collection of objects
 ------------------------
-To select a collection of objets you can use 3 methods ***SQPFetchAll*** or ***SQPFetchAllWhere:***  or ***SQPFetchAllWhere:orderBy:***.
+To select a collection of objets you can use 4 methods ***SQPFetchAll***, ***SQPFetchAllWhere:***,  ***SQPFetchAllWhere:orderBy:*** and ***SQPFetchAllWhere:orderBy:pageIndex:itemsPerPage:*** :
 ```
 // SELECT ALL 'Cars' :
 NSMutableArray *allCars = [Car SQPFetchAll];
@@ -163,9 +173,14 @@ NSMutableArray *ferrariCars = [Car SQPFetchAllWhere:@"name = 'Ferrari'"];
 ```
 
 ```
-// SELECT ALL 'Ferrari cars' :
+// SELECT ALL 'Ferrari cars' ordering by 'power' :
 NSMutableArray *ferrariCars = [Car SQPFetchAllWhere:@"name = 'Ferrari' orderBy:@"power DESC"];
 ```
+```
+// SELECT ALL 'Ferrari cars' ordering by 'power' (first page - with 20 items per page) :
+NSMutableArray *ferrariCars = [Car SQPFetchAllWhere:@"name = 'Ferrari' orderBy:@"power DESC" pageIndex:0 itemsPerPage:20];
+```
+
 COUNT Entities
 --------------
 To count the number of entities you can use 2 methods ***SQPCountAll*** or ***SQPCountAllWhere:***.
