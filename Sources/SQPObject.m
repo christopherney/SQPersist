@@ -31,6 +31,11 @@
 
 @implementation SQPObject
 
+/**
+ *  Initiliazation.
+ *
+ *  @return Entity object.
+ */
 -(id)init {
     
     if ([super init]) {
@@ -39,6 +44,11 @@
     return self;
 }
 
+/**
+ *  Create an entity of your object.
+ *
+ *  @return Entity object
+ */
 + (id)SQPCreateEntity {
     
     NSString *className = NSStringFromClass([self class]);
@@ -48,6 +58,11 @@
     return entity;
 }
 
+/**
+ *  Initiliazation (private method).
+ *
+ *  @return Entity object.
+ */
 - (void)SQPInitialization {
     
     [self SQPClassOfObject:self];
@@ -57,12 +72,22 @@
     [self SQPCreateTable];
 }
 
+/**
+ *  Set the class name and table name of the object (private method).
+ *
+ *  @param object Entity object.
+ */
 - (void)SQPClassOfObject:(SQPObject*)object {
     
     object.SQPClassName = NSStringFromClass([object class]);
     object.SQPTableName = [NSString stringWithFormat:@"%@%@", kSQPTablePrefix, object.SQPClassName];
 }
 
+/**
+ *  Get all Objective-C properties of entity object (private method).
+ *
+ *  @return Objective-C properties array.
+ */
 - (NSMutableArray *)SQPAnalyseProperties {
     
     NSMutableArray *props = [NSMutableArray array];
@@ -94,6 +119,9 @@
     return props;
 }
 
+/**
+ *  Create the associed table of entity object into the database (private method).
+ */
 - (void)SQPCreateTable {
     
     if ([self.SQPProperties count] > 0) {
@@ -119,6 +147,11 @@
     }
 }
 
+/**
+ *  Save the modification of the entity object.
+ *
+ *  @return Return YES if the changes apply with succes.
+ */
 - (BOOL)SQPSaveEntity {
     
     BOOL result = NO;
@@ -141,6 +174,9 @@
     return result;
 }
 
+/**
+ *  Save children entities of current entity object (private method - call by method named SQPSaveEntity).
+ */
 - (void)SQPSaveChildren {
     
     if (self.SQPProperties != nil) {
@@ -186,6 +222,13 @@
     }
 }
 
+/**
+ *  Cast the Objective-C value to SQLite compatible type (private method).
+ *
+ *  @param value Objective-C value.
+ *
+ *  @return SQLite Compatible type.
+ */
 - (id)objcObjectToSQLite:(id)value {
     
     if (value == nil) {
@@ -219,6 +262,11 @@
     }
 }
 
+/**
+ *  Insert an entity object into the associated table (private method).
+ *
+ *  @return Insert of insert (YES = succes).
+ */
 - (BOOL)SQPInsertObject {
     
     FMDatabase *db = [[SQPDatabase sharedInstance] database];
@@ -265,6 +313,11 @@
     return result;
 }
 
+/**
+ *  Update an entity object into the associated table (private method).
+ *
+ *  @return Result of Update (YES = succes).
+ */
 - (BOOL)SQPUpdateObject {
 
     FMDatabase *db = [[SQPDatabase sharedInstance] database];
@@ -297,6 +350,11 @@
     return result;
 }
 
+/**
+ *  Delete an entity object into the associated table (private method).
+ *
+ *  @return Result of Delete (YES = succes).
+ */
 - (BOOL)SQPDeleteObject {
     
     FMDatabase *db = [[SQPDatabase sharedInstance] database];
@@ -308,6 +366,11 @@
     return result;
 }
 
+/**
+ *  Return every entities save of table.
+ *
+ *  @return Array of entities.
+ */
 + (NSMutableArray*)SQPFetchAll {
     
     NSString *className = NSStringFromClass([self class]);
@@ -316,6 +379,13 @@
     return [SQPObject SQPFetchAllForTable:tableName andClassName:className Where:nil orderBy:nil pageIndex:0 itemsPerPage:0];
 }
 
+/**
+ *  Return every entities save of table, with filtering conditions.
+ *
+ *  @param queryOptions Filtering conditions (clause SQL WHERE).
+ *
+ *  @return Array of entities.
+ */
 + (NSMutableArray*)SQPFetchAllWhere:(NSString*)queryOption {
     
     NSString *className = NSStringFromClass([self class]);
@@ -324,6 +394,14 @@
     return [SQPObject SQPFetchAllForTable:tableName andClassName:className Where:queryOption orderBy:nil pageIndex:0 itemsPerPage:0];
 }
 
+/**
+ *  Return every entities save of table, with filtering conditions and order.
+ *
+ *  @param queryOptions Filtering conditions (clause SQL WHERE).
+ *  @param orderOptions Ordering conditions (clause SQL ORDER BY).
+ *
+ *  @return Array of entities.
+ */
 + (NSMutableArray*)SQPFetchAllWhere:(NSString*)queryOptions orderBy:(NSString*)orderOptions {
   
     NSString *className = NSStringFromClass([self class]);
@@ -332,6 +410,16 @@
     return [SQPObject SQPFetchAllForTable:tableName andClassName:className Where:queryOptions orderBy:orderOptions pageIndex:0 itemsPerPage:0];
 }
 
+/**
+ *  Return every entities save of table, with filtering conditions and order, and pagination system.
+ *
+ *  @param queryOptions Filtering conditions (clause SQL WHERE).
+ *  @param orderOptions Ordering conditions (clause SQL ORDER BY).
+ *  @param pageIndex    Page index (start at 0 value).
+ *  @param itemsPerPage Number of items per page.
+ *
+ *  @return Array of entities.
+ */
 + (NSMutableArray*)SQPFetchAllWhere:(NSString*)queryOptions orderBy:(NSString*)orderOptions pageIndex:(NSInteger)pageIndex itemsPerPage:(NSInteger)itemsPerPage {
     
     NSString *className = NSStringFromClass([self class]);
@@ -340,6 +428,18 @@
     return [SQPObject SQPFetchAllForTable:tableName andClassName:className Where:queryOptions orderBy:orderOptions pageIndex:pageIndex itemsPerPage:itemsPerPage];
 }
 
+/**
+ *  Return every entities save of table, with filtering conditions and order, and pagination system (private method).
+ *
+ *  @param tableName    Table name
+ *  @param className    Objective-C class name (entity).
+ *  @param queryOptions Filtering conditions (clause SQL WHERE).
+ *  @param orderOptions Ordering conditions (clause SQL ORDER BY).
+ *  @param pageIndex    Page index (start at 0 value).
+ *  @param itemsPerPage Number of items per page.
+ *
+ *  @return Array of entities.
+ */
 + (NSMutableArray*)SQPFetchAllForTable:(NSString*)tableName andClassName:(NSString*)className Where:(NSString*)queryOptions orderBy:(NSString*)orderOptions pageIndex:(NSInteger)pageIndex itemsPerPage:(NSInteger)itemsPerPage {
     
     NSMutableArray *items = [[NSMutableArray alloc] init];
@@ -369,6 +469,13 @@
     return items;
 }
 
+/**
+ *  Return one entity object by filtering conditions.
+ *
+ *  @param queryOptions Filtering conditions (clause SQL WHERE).
+ *
+ *  @return The resulting entity object.
+ */
 + (id)SQPFetchOneWhere:(NSString*)queryOptions {
     
     NSString *className = NSStringFromClass([self class]);
@@ -391,6 +498,13 @@
     return object;
 }
 
+/**
+ *  Return one entity object.
+ *
+ *  @param objectID Unique entity object identifier.
+ *
+ *  @return The resulting entity object.
+ */
 + (id)SQPFetchOneByID:(NSString*)objectID {
     
     NSString *className = NSStringFromClass([self class]);
@@ -413,6 +527,11 @@
     return object;
 }
 
+/**
+ *  Return the number of entities save into the associated table.
+ *
+ *  @return Number of entities.
+ */
 + (long long)SQPCountAll {
     
     NSString *className = NSStringFromClass([self class]);
@@ -434,6 +553,13 @@
     return numberEntities;
 }
 
+/**
+ *  Return the number of entities save into the associated table, with filtering conditions.
+ *
+ *  @param queryOptions Filtering conditions (clause SQL WHERE).
+ *
+ *  @return Number of entities.
+ */
 + (long long)SQPCountAllWhere:(NSString*)queryOptions {
     
     NSString *className = NSStringFromClass([self class]);
@@ -455,6 +581,11 @@
     return numberEntities;
 }
 
+/**
+ *  Remove all entities of the table (TRUNCATE).
+ *
+ *  @return Return YES when the table is truncate.
+ */
 + (BOOL)SQPTruncateAll {
     
     NSString *className = NSStringFromClass([self class]);
@@ -469,6 +600,11 @@
     return result;
 }
 
+/**
+ *  Set all entity properties with ResultSet of SQL query (private method).
+ *
+ *  @param resultSet ResultSet of SQL query.
+ */
 - (void)completeWithResultSet:(FMResultSet*)resultSet {
     
     for (SQPProperty *property in self.SQPProperties) {
@@ -496,18 +632,29 @@
                 
                 [self setValue:value forKey:property.name];
             }
-  
+            
         }
     }
     
     self.objectID = [resultSet stringForColumn:kSQPObjectIDName];
 }
 
+/**
+ *  Set all entity properties with ResultSet of SQL query (private method).
+ *
+ *  @param object    Entity object to set.
+ *  @param resultSet ResultSet of SQL query.
+ */
 - (void)completeObject:(SQPObject*)object withResultSet:(FMResultSet*)resultSet {
     
     [object completeWithResultSet:resultSet];
 }
 
+/**
+ *  Generate un unique identifier (private method).
+ *
+ *  @return Unique identifier.
+ */
 - (NSString *)uuidString {
 
     CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);
@@ -517,6 +664,13 @@
     return uuidString;
 }
 
+/**
+ *  Allocate an initialize an entity object from class name (private method).
+ *
+ *  @param className Class name.
+ *
+ *  @return Entity object allocated and initialized.
+ */
 + (SQPObject*)SQPObjectFromClassName:(NSString*)className {
     
     Class theClass = NSClassFromString(className);
@@ -525,7 +679,5 @@
  
     return object;
 }
-
-
 
 @end

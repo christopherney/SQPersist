@@ -16,6 +16,11 @@
 
 @implementation SQPDatabase
 
+/**
+ *  Get the main instance of the database manager.
+ *
+ *  @return Instance.
+ */
 + (id)sharedInstance
 {
     static dispatch_once_t pred = 0;
@@ -26,28 +31,40 @@
     return _sharedObject;
 }
 
+/**
+ *  Setup the database.
+ *
+ *  @param dbName Name of the database.
+ */
 - (void)setupDatabaseWithName:(NSString*)dbName {
  
     _dbName = dbName;
     _database = [self createDatabase];
 }
 
+/**
+ *  Return the name of the database.
+ *
+ *  @return Database name.
+ */
 - (NSString*)getDdName {
     return _dbName;
 }
 
+/**
+ *  Return the path of the database.
+ *
+ *  @return Path of the database.
+ */
 - (NSString*)getDdPath {
     return _dbPath;
 }
 
-- (id)init {
-    
-    if ([super init]) {
-       
-    }
-    return self;
-}
-
+/**
+ *  Create the local SQLite database file (private method).
+ *
+ *  @return Database connector.
+ */
 - (FMDatabase*)createDatabase {
     
     if (_dbName == nil) _dbName = kSQPDefaultDdName;
@@ -68,6 +85,11 @@
     }
 }
 
+/**
+ *  Database connector.
+ *
+ *  @return Database connector.
+ */
 - (FMDatabase*)database {
     
     if (_database == nil) {
@@ -77,6 +99,11 @@
     return _database;
 }
 
+/**
+ *  Check if the database file exists.
+ *
+ *  @return Return YES if the database exists.
+ */
 - (BOOL)databaseExists {
  
     if (_dbPath != nil) {
@@ -87,6 +114,11 @@
     }
 }
 
+/**
+ *  Remove the database.
+ *
+ *  @return Remove the database.
+ */
 - (BOOL)removeDatabase {
     
     if (_dbPath != nil) {
