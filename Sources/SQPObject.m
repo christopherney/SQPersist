@@ -15,6 +15,7 @@
 @interface SQPObject ()
 - (void)completeWithResultSet:(FMResultSet*)resultSet;
 - (void)SQPCreateTable;
+- (void)SQPAddColumn:(SQPProperty*)column intoTable:(NSString*)tableName;
 - (void)SQPInitialization;
 - (NSMutableArray *)SQPAnalyseProperties;
 - (void)SQPClassOfObject:(SQPObject*)object;
@@ -129,6 +130,7 @@
         
         FMDatabase *db = [[SQPDatabase sharedInstance] database];
         
+        // If table not exists :
         if ([db tableExists:self.SQPTableName] == NO) {
  
             NSMutableString *sqlColumns = [[NSMutableString alloc] initWithFormat:@"%@ TEXT", kSQPObjectIDName];
@@ -140,10 +142,63 @@
             
             NSMutableString *sqlCreateTable = [[NSMutableString alloc] initWithFormat:@"CREATE TABLE %@ (%@)", self.SQPTableName, sqlColumns];
             
-            if ([db executeUpdate:sqlCreateTable]) {
-                
+            if ([db executeUpdate:sqlCreateTable] == NO) {
+                NSLog(@"%@", [db lastErrorMessage]);
             }
             
+        } else if ([SQPDatabase sharedInstance].addMissingColumns == YES) {
+            
+            // Table current schema :
+            FMResultSet *s = [db getTableSchema:self.SQPTableName];
+            NSMutableArray *existingColumns = [[NSMutableArray alloc] init];
+            
+            while ([s next]) {
+                NSString *columnName = [s stringForColumn:@"name"];
+                [existingColumns addObject:columnName];
+            }
+            
+            for (SQPProperty *property in self.SQPProperties) {
+                
+                if (property.isCompatibleType == YES) {
+                    
+                    BOOL exists = NO;
+                    
+                    for (NSString *columnName in existingColumns) {
+                        
+                        if ([columnName isEqualToString:property.name]) {
+                            exists = YES;
+                            break;
+                        }
+                    }
+                    
+                    if (exists == NO) {
+                        [self SQPAddColumn:property intoTable:self.SQPTableName];
+                    }
+                }
+            }
+        }
+    }
+}
+
+/**
+ *  Add new column to the table (private method).
+ *
+ *  @param column    Column (entity property) to add.
+ *  @param tableName Table name to edit (ALTER TABLE)
+ */
+- (void)SQPAddColumn:(SQPProperty *)column intoTable:(NSString *)tableName {
+    
+    if (column != nil && [tableName length] > 0) {
+        
+        FMDatabase *db = [[SQPDatabase sharedInstance] database];
+        
+        if ([db tableExists:self.SQPTableName] == YES) {
+        
+            NSMutableString *sql = [[NSMutableString alloc] initWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ %@", tableName, column.name, [column getSQLiteType]];
+            
+            if ([db executeUpdate:sql] == NO) {
+                NSLog(@"%@", [db lastErrorMessage]);
+            }
         }
     }
 }
@@ -664,16 +719,22 @@
             } else if (property.type == kPropertyTypeImage) {
                 
                 NSData *imageData = (NSData*)value;
-                UIImage *image = [UIImage imageWithData:imageData];
                 
-                [self setValue:image forKey:property.name];
-                
+                if (imageData != nil) {
+                    
+                    UIImage *image = [UIImage imageWithData:imageData];
+                    [self setValue:image forKey:property.name];
+                }
+          
             } else if (property.type == kPropertyTypeURL) {
-                
-                NSString *urlString = (NSString*)value;
-                NSURL *url = [NSURL URLWithString:urlString];
-                
-                [self setValue:url forKey:property.name];
+
+                if ([value isKindOfClass:[NSString class]]) {
+                    
+                    NSString *urlString = (NSString*)value;
+                    NSURL *url = [NSURL URLWithString:urlString];
+                    
+                    [self setValue:url forKey:property.name];
+                }
                 
             } else {
                 

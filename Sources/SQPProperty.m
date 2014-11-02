@@ -47,24 +47,34 @@
         
         if ([self string:propertyAttributes containsSubString:kAttributeNSNumber]) {
             self.type = kPropertyTypeNumber;
+            self.isCompatibleType = YES;
         } else if ([self string:propertyAttributes containsSubString:kAttributeNSDecimalNumber]) {
             self.type = kPropertyTypeDecimalNumber;
+            self.isCompatibleType = YES;
         } else if ([self string:propertyAttributes containsSubString:kAttributeNSString]) {
             self.type = kPropertyTypeString;
+            self.isCompatibleType = YES;
         } else if ([self string:propertyAttributes containsSubString:kAttributeNSDate]) {
             self.type = kPropertyTypeDate;
+            self.isCompatibleType = YES;
         } else if ([self string:propertyAttributes containsSubString:kAttributeNSData]) {
             self.type = kPropertyTypeData;
+            self.isCompatibleType = YES;
         } else if ([self string:propertyAttributes containsSubString:kAttributeNSArray]) {
             self.type = kPropertyTypeArray;
+            self.isCompatibleType = NO;
         } else if ([self string:propertyAttributes containsSubString:kAttributeNSMutableArray]) {
             self.type = kPropertyTypeMutableArray;
+            self.isCompatibleType = NO;
         } else if ([self string:propertyAttributes containsSubString:kAttributeUIImage]) {
             self.type = kPropertyTypeImage;
+            self.isCompatibleType = YES;
         } else if ([self string:propertyAttributes containsSubString:kAttributeNSURL]) {
             self.type = kPropertyTypeURL;
+            self.isCompatibleType = YES;
         } else if ([self string:propertyAttributes containsSubString:kAttributeObject]) {
             self.type = kPropertyTypeObject;
+            self.isCompatibleType = NO;
         }
         
     } else {
@@ -73,18 +83,25 @@
         
         if ([self string:propertyAttributes containsSubString:kAttributeInt]) {
             self.type = kPropertyTypeInt;
+            self.isCompatibleType = YES;
         } else if ([self string:propertyAttributes containsSubString:kAttributeBool]) {
             self.type = kPropertyTypeBool;
+            self.isCompatibleType = YES;
         } else if ([self string:propertyAttributes containsSubString:kAttributeChar]) {
             self.type = kPropertyTypeChar;
+            self.isCompatibleType = NO;
         } else if ([self string:propertyAttributes containsSubString:kAttributeShort]) {
             self.type = kPropertyTypeShort;
+            self.isCompatibleType = YES;
         } else if ([self string:propertyAttributes containsSubString:kAttributeLong]) {
             self.type = kPropertyTypeLong;
+            self.isCompatibleType = YES;
         } else if ([self string:propertyAttributes containsSubString:kAttributeLongLong]) {
             self.type = kPropertyTypeLongLong;
+            self.isCompatibleType = YES;
         } else if ([self string:propertyAttributes containsSubString:kAttributeFloat]) {
             self.type = kPropertyTypeFloat;
+            self.isCompatibleType = YES;
         }
         
     }

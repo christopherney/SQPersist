@@ -38,6 +38,7 @@ typedef enum SQPPropertyType : NSUInteger {
 @property (nonatomic) BOOL isPrimitive;
 @property (nonatomic) BOOL isNonatomic;
 @property (nonatomic) BOOL isSQPObject;
+@property (nonatomic) BOOL isCompatibleType;
 
 - (void)getPropertyType:(const char *)attributes;
 

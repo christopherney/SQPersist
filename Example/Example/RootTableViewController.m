@@ -15,6 +15,7 @@
 #import "Flickr.h"
 
 @interface RootTableViewController ()
+-(void)getFlickRandomPhoto;
 @end
 
 @implementation RootTableViewController
@@ -72,33 +73,21 @@
     
     NSLog(@"Name user : %@", userJohn2.firstName);
     
-    Car *car1 = [Car SQPCreateEntity];
-    car1.name = @"Ferrari";
-    car1.color = @"Red";
+    Car *car1 = [self getRandomCar];
     car1.owner = userJohn;
-    car1.power = 350;
     [car1 SQPSaveEntity]; // INSERT Object
     
-    Car *car2 = [Car SQPCreateEntity];
-    car2.name = @"BMW";
-    car2.color = @"Black";
-    car2.power = 220;
+    Car *car2 = [self getRandomCar];
     [car2 SQPSaveEntity]; // INSERT Object
     
-    Car *car3 = [Car SQPCreateEntity];
-    car3.name = @"Ferrari";
-    car3.color = @"Yellow";
-    car3.power = 150;
+    Car *car3 = [self getRandomCar];
     [car3 SQPSaveEntity]; // INSERT Object
     
     // DELETE Object :
     car3.deleteObject = YES;
     [car3 SQPSaveEntity];
     
-    Car *car4 = [Car SQPCreateEntity];
-    car4.name = @"Ferrari";
-    car4.color = @"Green";
-    car4.power = 152;
+    Car *car4 = [self getRandomCar];
     [car4 SQPSaveEntity]; // INSERT Object
     
     NSLog(@"Total cars : %lld", [Car SQPCountAll]);
@@ -108,13 +97,6 @@
     NSMutableArray *cars = [Car SQPFetchAllWhere:@"name = 'Ferrari'" orderBy:@"power DESC"];
     
     NSLog(@"Number of cars: %lu", (unsigned long)[cars count]);
-  
-    /*
-    // Truncate all entities :
-    [Car SQPTruncateAll];
-    
-    NSLog(@"Total cars : %lld", [Car SQPCountAll]);
-     */
 }
 
 - (void)didReceiveMemoryWarning {
@@ -122,23 +104,23 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Actions
+#pragma mark - Flickr Example 
 
-- (IBAction)actionAddEntity:(id)sender {
+-(void)getFlickRandomPhoto {
     
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://api.flickr.com/services/feeds/photos_public.gne?format=json&nojsoncallback=1"]];
     
     NSOperationQueue *operationQueue = [[NSOperationQueue alloc] init];
     
     [NSURLConnection sendAsynchronousRequest:request queue:operationQueue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-       
+        
         if (connectionError == nil) {
             
             NSError *JSONError;
             NSDictionary *JSONDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&JSONError];
             
             if (JSONError == nil) {
-
+                
                 NSArray *items = [JSONDictionary objectForKey:@"items"];
                 NSDictionary *item = [items objectAtIndex:0];
                 
@@ -154,23 +136,47 @@
             } else {
                 NSLog(@"%@", [JSONError localizedDescription]);
             }
-
+            
             
         } else {
             NSLog(@"%@", [connectionError localizedDescription]);
         }
     }];
+}
+
+#pragma mark - Random Car
+
+-(Car*)getRandomCar {
     
-    Car *car1 = [Car SQPCreateEntity];
-    car1.name = @"Ferrari";
-    car1.color = @"Red";
-    car1.owner = nil;
-    car1.power = 350;
-    [car1 SQPSaveEntity]; // INSERT Object
+    NSMutableArray *constructors = [[NSMutableArray alloc] initWithObjects:@"Ferrari", @"Porsche", @"BMW", @"Lamborghini", @"Mercedes", nil];
+    NSMutableArray *colors = [[NSMutableArray alloc] initWithObjects:@"Red", @"Grey", @"Black", @"White", @"Yellow", @"Green", @"Blue", nil];
+    NSMutableArray *powers = [[NSMutableArray alloc] initWithObjects:@350, @410, @380, @290, @475, @397, nil];
+    
+    NSUInteger randomIndexConstructor = arc4random() % [constructors count];
+    NSUInteger randomIndexColor = arc4random() % [colors count];
+    NSUInteger randomIndexPower = arc4random() % [powers count];
+    
+    Car *car = [Car SQPCreateEntity];
+    car.name = (NSString*)[constructors objectAtIndex:randomIndexConstructor];
+    car.color = (NSString*)[colors objectAtIndex:randomIndexColor];
+    car.owner = nil;
+    car.power = [[powers objectAtIndex:randomIndexPower] intValue];
+    //car.urlLogo =
+    
+    return car;
+}
+
+#pragma mark - Actions
+
+- (IBAction)actionAddEntity:(id)sender {
+    
+    Car *newCar = [self getRandomCar];
+    
+    [newCar SQPSaveEntity]; // INSERT Object
 
     if (self.items == nil) self.items = [[NSMutableArray alloc] init];
     
-    [self.items addObject:car1];
+    [self.items addObject:newCar];
     
     [self.tableView reloadData];
 }

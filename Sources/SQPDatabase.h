@@ -19,11 +19,17 @@
 }
 
 /**
+ *  If enable to YES, the system will check and add missing columns into the database table.
+ *  Warning : execute may queries. Please desactive this option after your tables updates.
+ */
+@property (nonatomic) BOOL addMissingColumns;
+
+/**
  *  Get the main instance of the database manager.
  *
  *  @return Instance.
  */
-+ (id)sharedInstance;
++ (SQPDatabase*)sharedInstance;
 
 /**
  *  Setup the database.
