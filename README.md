@@ -3,14 +3,14 @@ SQPersist
 
 Objective-C Persistence framework wrapper around SQLite.
 
-```!!! Development in progress !!!```
+```Version Beta 0.0.2 !!! Development in progress !!!```
 
 What is it?
 -----------
 
 **SQPersist** is a Objective-C Persistence framework wrapper around **SQLite** based on FMDB (https://github.com/ccgus/fmdb).
 
-With **SQPersist** you can store your custom objects in **SQLite** database without creating a database and without using Core Data Framework.
+With **SQPersist** you can store your custom objects in **SQLite** database without creating manually your database and using Core Data Framework.
 
 Language
 --------
