@@ -13,6 +13,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <searchBar key="tableHeaderView" contentMode="redraw" placeholder="Search value..." showsCancelButton="YES" showsScopeBar="YES" id="Ynk-02-iig">
+                            <rect key="frame" x="0.0" y="64" width="600" height="88"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <textInputTraits key="textInputTraits"/>
+                            <scopeButtonTitles>
+                                <string>Name</string>
+                                <string>Color</string>
+                                <string>Power</string>
+                            </scopeButtonTitles>
+                        </searchBar>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellIdentifier" textLabel="axc-oX-wmy" detailTextLabel="HJ2-O9-Jii" style="IBUITableViewCellStyleSubtitle" id="loa-MX-U9a">
                                 <autoresizingMask key="autoresizingMask"/>

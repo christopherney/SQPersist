@@ -26,6 +26,7 @@
 - (BOOL)SQPUpdateObject;
 - (BOOL)SQPDeleteObject;
 - (void)SQPSaveChildren;
++ (NSMutableArray*)SQPFetchAllForTable:(NSString*)tableName andClassName:(NSString*)className Where:(NSString*)queryOptions orderBy:(NSString*)orderOptions;
 @end
 
 @implementation SQPObject
@@ -309,18 +310,29 @@
 
 + (NSMutableArray*)SQPFetchAll {
     
-    return [SQPObject SQPFetchAllWhere:nil];
+    NSString *className = NSStringFromClass([self class]);
+    NSString *tableName = [NSString stringWithFormat:@"%@%@", kSQPTablePrefix, className];
+    
+    return [SQPObject SQPFetchAllForTable:tableName andClassName:className Where:nil orderBy:nil];
 }
 
 + (NSMutableArray*)SQPFetchAllWhere:(NSString*)queryOption {
- 
-    return [SQPObject SQPFetchAllWhere:nil orderBy:nil];
-}
-
-+ (NSMutableArray*)SQPFetchAllWhere:(NSString*)queryOptions orderBy:(NSString*)orderOptions {
     
     NSString *className = NSStringFromClass([self class]);
     NSString *tableName = [NSString stringWithFormat:@"%@%@", kSQPTablePrefix, className];
+    
+    return [SQPObject SQPFetchAllForTable:tableName andClassName:className Where:queryOption orderBy:nil];
+}
+
++ (NSMutableArray*)SQPFetchAllWhere:(NSString*)queryOptions orderBy:(NSString*)orderOptions {
+  
+    NSString *className = NSStringFromClass([self class]);
+    NSString *tableName = [NSString stringWithFormat:@"%@%@", kSQPTablePrefix, className];
+
+    return [SQPObject SQPFetchAllForTable:tableName andClassName:className Where:queryOptions orderBy:orderOptions];
+}
+
++ (NSMutableArray*)SQPFetchAllForTable:(NSString*)tableName andClassName:(NSString*)className Where:(NSString*)queryOptions orderBy:(NSString*)orderOptions {
     
     NSMutableArray *items = [[NSMutableArray alloc] init];
     
@@ -335,7 +347,7 @@
     FMResultSet *s = [db executeQuery:sql];
     
     while ([s next]) {
-    
+        
         SQPObject *object = [self SQPObjectFromClassName:className];
         [object completeWithResultSet:s];
         [items addObject:object];

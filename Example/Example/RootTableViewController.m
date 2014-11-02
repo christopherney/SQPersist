@@ -28,7 +28,7 @@
     
     NSLog(@"DB path: %@ ", [[SQPDatabase sharedInstance] getDdPath]);
     
-    self.items = [Car SQPFetchAll];
+    self.items = [Car SQPFetchAllWhere:nil orderBy:nil];
     
     /*
     // If database exists:
