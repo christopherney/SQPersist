@@ -21,6 +21,10 @@ CocoaPods
 ---------
 **SQPersist** can be installed using [CocoaPods](http://cocoapods.org/).
 
+[![Dependency Status](https://www.versioneye.com/objective-c/SQPersist/1.0.0/badge.svg?style=flat)](https://www.versioneye.com/objective-c/SQPersist/1.0.0)
+[![Reference Status](https://www.versioneye.com/objective-c/SQPersist/reference_badge.svg?style=flat)](https://www.versioneye.com/objective-c/SQPersist/references)
+
+
 ```
 pod 'SQPersist'
 ```
