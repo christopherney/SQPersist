@@ -31,18 +31,18 @@ How it's work ?
 Setup your local storage
 ------------------------
 To setup (create the SQLite file), use the following method :
-the table will be create automaticatly.
+the table will be created automaticatly.
 ```
 [[SQPDatabase sharedInstance] setupDatabaseWithName:@"myDbName.db"];
 ```
-> If your start to used the entities without setup the database name, by default the database name will be ***SQPersist.db***.
+> If your start to use the entities without setup the database name, the database name will be ***SQPersist.db*** by default.
 
 Add a model object into the storage
 -----------------------------------
 
 Simply inherits your object with the class named **SQPObject**.
 
-At the first initialization of your object, the **SQPersist** will check if the associating table exists in the database. If not, the table will be create automaticatly.
+The **SQPersist** will check if the associating table exists into the database during the first initialization of your object. If not, the table will be created automaticatly.
 ```
 #import <Foundation/Foundation.h>
 #import "SQPObject.h"
@@ -68,19 +68,19 @@ The resulting table into the SQLite database will be :
 | -------- | ---- | ----- | ----- |
 +----------+------+-------+-------+
 ```
-The table will be create at the first initialization of your object (if the table not already exists) :
+The table will be created during the first initialization of your object (if the table not already exists) :
 ```
 Car *car1 = [Car SQPCreateEntity];
 ```
 
-Every object is identified by a unique identifier named ***objectID***. The ***objectID*** is a UUID (NSString).
+All objects are identified by an unique identifier named ***objectID***. The ***objectID*** is a UUID (NSString).
 ```
 NSLog(@"Object identifier : %@", car1.objectID);
 ```
 
-Compatible Objective-C Types
+Compatibility with Objective-C Types
 -----------------------------
-SQPersist is compatible with the following Objective-c types :
+SQPersist is compatible with the following Objective-C types :
 * ***NSString*** -> become ***TEXT*** into SQLite database
 * ***NSNumber*** -> become ***REAL*** into SQLite database
 * ***NSDecimalNumber*** -> become ***REAL*** into SQLite database
