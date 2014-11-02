@@ -265,6 +265,7 @@
     
     cell.textLabel.text = item.name;
     cell.detailTextLabel.text = item.color;
+    cell.imageView.image = [UIImage imageNamed:item.name];
     
     return cell;
 }
