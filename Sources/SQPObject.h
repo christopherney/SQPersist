@@ -16,6 +16,9 @@
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 
+/**
+ *  Entity object.
+ */
 @interface SQPObject : NSObject
 
 /**

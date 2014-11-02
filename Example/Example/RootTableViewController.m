@@ -27,8 +27,14 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
+    // Log all SQL requests :
+    [SQPDatabase sharedInstance].logRequests = YES;
+    
     // Create Database :
     [[SQPDatabase sharedInstance] setupDatabaseWithName:@"SQPersist.db"];
+    
+    // Check if table missing a property. If yes add automaticatly the associated column into the table :
+    [SQPDatabase sharedInstance].addMissingColumns = YES;
     
     NSLog(@"DB path: %@ ", [[SQPDatabase sharedInstance] getDdPath]);
     

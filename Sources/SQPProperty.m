@@ -32,8 +32,16 @@
 - (NSString*)propertyTypeToString:(SQPPropertyType)type;
 @end
 
+/**
+ *  Informations of one property of an entity object.
+ */
 @implementation SQPProperty
 
+/**
+ *  Build the SQPProperty with the attribute informations.
+ *
+ *  @param attributes Attribut informations.
+ */
 - (void)getPropertyType:(const char *)attributes {
     
     NSString *propertyAttributes = [NSString stringWithFormat:@"%s", attributes];
@@ -114,6 +122,13 @@
     }
 }
 
+/**
+ *  Return the name of Objective-C type (enum) - private method.
+ *
+ *  @param type Type of property.
+ *
+ *  @return Name of the type (NSString).
+ */
 - (NSString*)propertyTypeToString:(SQPPropertyType)type {
     
     if (type == kPropertyTypeInt) {
@@ -157,6 +172,11 @@
     }
 }
 
+/**
+ *  Return the SQLite type equal to the Objective-C type.
+ *
+ *  @return SQLite Type (INTEGER|REAL|TEXT|BLOB).
+ */
 - (NSString*)getSQLiteType {
     
     if (self.type == kPropertyTypeInt) {
@@ -200,6 +220,11 @@
     }
 }
 
+/**
+ *  Description of the property.
+ *
+ *  @return Description. Example : @property (nonatomic) BOOL isExample;
+ */
 - (NSString *)description {
     
     NSMutableString *propertyLine = [[NSMutableString alloc] initWithString:@"@property"];

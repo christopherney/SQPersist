@@ -11,10 +11,24 @@
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 
+/**
+ *  Database manager.
+ */
 @interface SQPDatabase : NSObject {
     
+    /**
+     *  FMDB Database connector.
+     */
     FMDatabase *_database;
+    
+    /**
+     *  Database name.
+     */
     NSString *_dbName;
+    
+    /**
+     *  Database filepath.
+     */
     NSString *_dbPath;
 }
 
@@ -23,6 +37,11 @@
  *  Warning : execute may queries. Please desactive this option after your tables updates.
  */
 @property (nonatomic) BOOL addMissingColumns;
+
+/**
+ *  Indication if the genrated SQL requests are logged.
+ */
+@property (nonatomic) BOOL logRequests;
 
 /**
  *  Get the main instance of the database manager.

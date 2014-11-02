@@ -14,6 +14,9 @@
 - (FMDatabase*)createDatabase;
 @end
 
+/**
+ *  Database manager.
+ */
 @implementation SQPDatabase
 
 /**

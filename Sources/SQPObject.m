@@ -29,8 +29,12 @@
 - (void)SQPSaveChildren;
 + (NSMutableArray*)SQPFetchAllForTable:(NSString*)tableName andClassName:(NSString*)className Where:(NSString*)queryOptions orderBy:(NSString*)orderOptions pageIndex:(NSInteger)pageIndex itemsPerPage:(NSInteger)itemsPerPage;
 + (id)SQPFetchOneForTable:(NSString*)tableName andClassName:(NSString*)className Where:(NSString*)queryOptions;
++ (void)logRequest:(NSString*)request;
 @end
 
+/**
+ *  Entity object.
+ */
 @implementation SQPObject
 
 /**
@@ -112,8 +116,6 @@
         prop.value = propertyValue;
         
         [props addObject:prop];
-        
-        //NSLog(@"%@", [prop description]);
     }
     
     free(properties);
@@ -141,6 +143,11 @@
             }
             
             NSMutableString *sqlCreateTable = [[NSMutableString alloc] initWithFormat:@"CREATE TABLE %@ (%@)", self.SQPTableName, sqlColumns];
+            
+            // Log SQL request :
+            if ([SQPDatabase sharedInstance].logRequests) {
+                [SQPObject logRequest:sqlCreateTable];
+            }
             
             if ([db executeUpdate:sqlCreateTable] == NO) {
                 NSLog(@"%@", [db lastErrorMessage]);
@@ -195,6 +202,11 @@
         if ([db tableExists:self.SQPTableName] == YES) {
         
             NSMutableString *sql = [[NSMutableString alloc] initWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ %@", tableName, column.name, [column getSQLiteType]];
+            
+            // Log SQL request :
+            if ([SQPDatabase sharedInstance].logRequests) {
+                [SQPObject logRequest:sql];
+            }
             
             if ([db executeUpdate:sql] == NO) {
                 NSLog(@"%@", [db lastErrorMessage]);
@@ -348,7 +360,7 @@
     
     NSMutableDictionary *argsDict = [[NSMutableDictionary alloc] init];
     
-    NSMutableString *sql = [[NSMutableString alloc] initWithFormat:@"INSERT INTO %@", self.SQPTableName];
+    NSMutableString *sql = [[NSMutableString alloc] initWithFormat:@"INSERT INTO %@ ", self.SQPTableName];
     
     NSMutableString *sqlColumns = [[NSMutableString alloc] init];
     NSMutableString *sqlArgs = [[NSMutableString alloc] init];
@@ -378,6 +390,11 @@
     
     
     [sql appendFormat:@"(%@) VALUES (%@)", sqlColumns, sqlArgs];
+    
+    // Log SQL request :
+    if ([SQPDatabase sharedInstance].logRequests) {
+        [SQPObject logRequest:sql];
+    }
     
     BOOL result = [db executeUpdate:sql withParameterDictionary:argsDict];
     
@@ -420,6 +437,11 @@
 
     [sql appendFormat:@"%@ WHERE %@ = '%@'", sqlArgs, kSQPObjectIDName, self.objectID];
     
+    // Log SQL request :
+    if ([SQPDatabase sharedInstance].logRequests) {
+        [SQPObject logRequest:sql];
+    }
+    
     BOOL result = [db executeUpdate:sql withParameterDictionary:argsDict];
     
     return result;
@@ -435,6 +457,11 @@
     FMDatabase *db = [[SQPDatabase sharedInstance] database];
     
     NSString *sql = [NSString stringWithFormat:@"DELETE FROM %@ WHERE %@ = '%@'", self.SQPTableName, kSQPObjectIDName, self.objectID];
+    
+    // Log SQL request :
+    if ([SQPDatabase sharedInstance].logRequests) {
+        [SQPObject logRequest:sql];
+    }
     
     BOOL result = [db executeUpdate:sql];
     
@@ -532,6 +559,11 @@
         [sql appendFormat:@" LIMIT %li, %li", (long)offset, (long)itemsPerPage];
     }
     
+    // Log SQL request :
+    if ([SQPDatabase sharedInstance].logRequests) {
+        [SQPObject logRequest:sql];
+    }
+    
     FMResultSet *s = [db executeQuery:sql];
     
     while ([s next]) {
@@ -609,6 +641,11 @@
     
     NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@", tableName, queryOptions];
     
+    // Log SQL request :
+    if ([SQPDatabase sharedInstance].logRequests) {
+        [SQPObject logRequest:sql];
+    }
+    
     FMResultSet *s = [db executeQuery:sql];
     
     SQPObject *object;
@@ -635,6 +672,11 @@
     FMDatabase *db = [[SQPDatabase sharedInstance] database];
     
     NSString *sql = [NSString stringWithFormat:@"SELECT COUNT(*) AS total_entities FROM %@", tableName];
+    
+    // Log SQL request :
+    if ([SQPDatabase sharedInstance].logRequests) {
+        [SQPObject logRequest:sql];
+    }
     
     FMResultSet *s = [db executeQuery:sql];
     
@@ -663,6 +705,11 @@
     FMDatabase *db = [[SQPDatabase sharedInstance] database];
     
     NSString *sql = [NSString stringWithFormat:@"SELECT COUNT(*) AS total_entities FROM %@ WHERE %@", tableName, queryOptions];
+  
+    // Log SQL request :
+    if ([SQPDatabase sharedInstance].logRequests) {
+        [SQPObject logRequest:sql];
+    }
     
     FMResultSet *s = [db executeQuery:sql];
     
@@ -689,6 +736,11 @@
     FMDatabase *db = [[SQPDatabase sharedInstance] database];
     
     NSString *sql = [NSString stringWithFormat:@"DELETE FROM %@", tableName];
+    
+    // Log SQL request :
+    if ([SQPDatabase sharedInstance].logRequests) {
+        [SQPObject logRequest:sql];
+    }
     
     BOOL result = [db executeUpdate:sql];
     
@@ -786,6 +838,15 @@
     SQPObject *object = (SQPObject*)[[theClass alloc] init];
  
     return object;
+}
+
+/**
+ *  Log the SQL request in Xcode output console.
+ *
+ *  @param request SQL request.
+ */
++ (void)logRequest:(NSString*)request {
+    NSLog(@"SQPersist : %@", request);
 }
 
 @end
