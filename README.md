@@ -3,7 +3,7 @@ SQPersist
 
 Objective-C Persistence framework wrapper around SQLite.
 
-```Version 1.0.0```
+```Version 1.0.1```
 
 What is it?
 -----------
