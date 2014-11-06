@@ -147,4 +147,39 @@
     }
 }
 
+/**
+ *  Remember scanned entity.
+ *
+ *  @param className  Entity class name
+ *  @param properties Properties of entity.
+ */
+- (void)addScannedEntity:(NSString*)className andProperties:(NSArray*)properties {
+    
+    if (_entities == nil) _entities = [[NSMutableDictionary alloc] init];
+    
+    if (className != nil && properties != nil) {
+        
+        if ([self getExistingEntity:className] == nil) {
+            [_entities setObject:properties forKey:className];
+        }
+    }
+}
+
+/**
+ *  Return YES if the entity is already scanned.
+ *
+ *  @param entity Entity class name
+ *
+ *  @return Return YES if the entity is already scanned.
+ */
+- (NSArray*)getExistingEntity:(NSString*)className {
+    
+    if (_entities != nil && className != nil) {
+        NSArray *properties = (NSArray*)[_entities valueForKey:className];
+        return properties;
+    } else {
+        return nil;
+    }
+}
+
 @end

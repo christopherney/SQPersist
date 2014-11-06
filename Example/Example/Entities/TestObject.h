@@ -10,6 +10,8 @@
 
 @interface TestObject : SQPObject
 
+@property (nonatomic) NSString *testIgnoredProperty; // Property ignored.
+
 @property (nonatomic, strong) NSString* testString; // NSString -> become TEXT into SQLite database
 @property (nonatomic, strong) NSNumber* testNumber; // NSNumber -> become REAL into SQLite database
 @property (nonatomic, strong) NSDecimalNumber* testDecimalNumber; // NSDecimalNumber -> become REAL into SQLite database
@@ -23,5 +25,7 @@
 @property (nonatomic) long long testLongLong; // long long -> become REAL into SQLite database
 @property (nonatomic) short testShort; // short -> become INTEGER into SQLite database
 @property (nonatomic) float testFloat; // float -> become REAL into SQLite database
+
+@property (nonatomic) BOOL testBool;
 
 @end

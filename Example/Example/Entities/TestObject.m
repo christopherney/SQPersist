@@ -10,4 +10,13 @@
 
 @implementation TestObject
 
+- (BOOL)ignoredProperty:(SQPProperty*)property {
+    
+    if ([property.name isEqualToString:@"testIgnoredProperty"]) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
 @end

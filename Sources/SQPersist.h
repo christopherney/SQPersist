@@ -9,8 +9,8 @@
 #ifndef SQPersist_SQPersist_h
 #define SQPersist_SQPersist_h
 
-#import "SQPDatabase.h"
 #import "SQPObject.h"
 #import "SQPProperty.h"
+#import "SQPDatabase.h"
 
 #endif

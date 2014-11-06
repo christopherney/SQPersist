@@ -73,8 +73,20 @@
     
     [self SQPClassOfObject:self];
     
-    self.SQPProperties = [NSArray arrayWithArray:[self SQPAnalyseProperties]];
+    // Check id entity already scanned :
+    self.SQPProperties = [[SQPDatabase sharedInstance] getExistingEntity:self.SQPClassName];
     
+    // If not, scan the entity :
+    if (self.SQPProperties == nil) {
+        
+        // Properties analyse :
+        self.SQPProperties = [NSArray arrayWithArray:[self SQPAnalyseProperties]];
+        
+        // Save the entity model :
+        [[SQPDatabase sharedInstance] addScannedEntity:self.SQPClassName andProperties:self.SQPProperties];
+    }
+
+    // Create table into database :
     [self SQPCreateTable];
 }
 
@@ -115,6 +127,10 @@
         prop.name = propertyName;
         prop.value = propertyValue;
         
+        if ([SQPDatabase sharedInstance].logPropertyScan == YES) {
+            [SQPObject logRequest:[prop description]];
+        }
+        
         [props addObject:prop];
     }
     
@@ -137,9 +153,13 @@
  
             NSMutableString *sqlColumns = [[NSMutableString alloc] initWithFormat:@"%@ TEXT", kSQPObjectIDName];
             
+            // for each property :
             for (SQPProperty *property in self.SQPProperties) {
-
-                [sqlColumns appendFormat:@", %@ %@", property.name, [property getSQLiteType]];
+                
+                // is not ignored :
+                if ([self ignoredProperty:property] == NO) {
+                    [sqlColumns appendFormat:@", %@ %@", property.name, [property getSQLiteType]];
+                }
             }
             
             NSMutableString *sqlCreateTable = [[NSMutableString alloc] initWithFormat:@"CREATE TABLE %@ (%@)", self.SQPTableName, sqlColumns];
@@ -577,6 +597,19 @@
 }
 
 /**
+ *  Return the first entity object.
+ *
+ *  @return The resulting entity object.
+ */
++ (id)SQPFetchOne {
+    
+    NSString *className = NSStringFromClass([self class]);
+    NSString *tableName = [NSString stringWithFormat:@"%@%@", kSQPTablePrefix, className];
+    
+    return [SQPObject SQPFetchOneForTable:tableName andClassName:className Where:nil];
+}
+
+/**
  *  Return one entity object by filtering conditions.
  *
  *  @param queryOptions Filtering conditions (clause SQL WHERE).
@@ -639,7 +672,13 @@
     
     FMDatabase *db = [[SQPDatabase sharedInstance] database];
     
-    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@", tableName, queryOptions];
+    NSString *sql = nil;
+    
+    if (queryOptions != nil) {
+        sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@", tableName, queryOptions];
+    } else {
+        sql = [NSString stringWithFormat:@"SELECT * FROM %@ LIMIT 1", tableName];
+    }
     
     // Log SQL request :
     if ([SQPDatabase sharedInstance].logRequests) {
@@ -847,6 +886,86 @@
  */
 + (void)logRequest:(NSString*)request {
     NSLog(@"SQPersist : %@", request);
+}
+
+/**
+ *  Indicate to the system if a property can be stored or not into the database.
+ *
+ *  @param property Property of the persist object.
+ *
+ *  @return YES to store the property / NO to ignored (by default all properties are stored | value NO).
+ */
+- (BOOL)ignoredProperty:(SQPProperty*)property {
+    
+    return NO;
+}
+
+/**
+ *  Serialized the object to Dictionary.
+ *
+ *  @return Dictionary
+ */
+- (NSMutableDictionary*)toDictionary {
+    
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    
+    for (SQPProperty *property in self.SQPProperties) {
+        
+        id value = [self valueForKey:property.name];
+        
+        if (value != nil) {
+            [dict setObject:value forKey:property.name];
+        } else {
+            [dict setObject:[NSNull null] forKey:property.name];
+        }
+    }
+    
+    return dict;
+}
+
+/**
+ *  Populate the object from Dictionary.
+ *
+ *  @param dictionary Dictionary
+ *
+ *  @return Return YES if all properties are set.
+ */
+- (BOOL)populateWithDictionary:(NSDictionary*)dictionary {
+    
+    BOOL result = YES;
+    
+    if (dictionary != nil) {
+        
+        for (SQPProperty *property in self.SQPProperties) {
+            
+            id value = [dictionary objectForKey:property.name];
+            
+            if (value == nil) {
+                return NO;
+            } else {
+                
+                if (property.type == kPropertyTypeURL) {
+                    
+                    if ([value isKindOfClass:[NSString class]]) {
+                        
+                        NSString *urlString = (NSString*)value;
+                        NSURL *url = [NSURL URLWithString:urlString];
+                        
+                        [self setValue:url forKey:property.name];
+                    }
+                    
+                } else {
+                    [self setValue:value forKey:property.name];
+                }
+                
+            }
+        }
+        
+    } else {
+        result = NO;
+    }
+    
+    return result;
 }
 
 @end

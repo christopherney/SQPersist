@@ -35,6 +35,9 @@
     // Log all SQL requests :
     [SQPDatabase sharedInstance].logRequests = YES;
     
+    // Log all properties scanned :
+    [SQPDatabase sharedInstance].logPropertyScan = YES;
+    
     // Create Database :
     [[SQPDatabase sharedInstance] setupDatabaseWithName:@"SQPersist.db"];
     
@@ -47,7 +50,11 @@
     
     self.items = [Car SQPFetchAll];
     
+    // Test all properties types :
     [self testSQLiteTypes];
+
+    // JSON Response exemple :
+    [self getFlickRandomPhoto];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -75,6 +82,7 @@
     testObject.testLongLong = LDBL_MAX; // long long -> become REAL into SQLite database
     testObject.testShort = INT16_MAX; // short -> become INTEGER into SQLite database
     testObject.testFloat = FLT_MAX; // float -> become REAL into SQLite database
+    testObject.testBool = YES; // BOOL -> become INTEGER into SQLite database
     
     [testObject SQPSaveEntity];
     
@@ -157,6 +165,19 @@
     } else {
         NSLog(@"float KO!");
     }
+    
+    if (testResult.testBool == testObject.testBool) {
+        NSLog(@"BOOL OK - (%hhd)", testResult.testBool);
+    } else {
+        NSLog(@"BOOL KO!");
+    }
+    
+    // Convertion to Dictionary (for JSON request for example) :
+    NSMutableDictionary *dictionary = [testResult toDictionary];
+    NSLog(@"Dicionary : %@", [dictionary description]);
+    
+    // Clear test table :
+    [TestObject SQPTruncateAll];
 }
 
 - (BOOL)image:(UIImage *)image1 isEqualTo:(UIImage *)image2
@@ -247,6 +268,9 @@
                 NSDictionary *item = [items objectAtIndex:0];
                 
                 Flickr *flickrItem = [Flickr SQPCreateEntity];
+                
+                [flickrItem populateWithDictionary:item];
+                
                 flickrItem.author = [item objectForKey:@"author"];
                 flickrItem.descriptionPhoto = [item objectForKey:@"description"];
                 flickrItem.link = [NSURL URLWithString:[item objectForKey:@"link"]];
@@ -406,5 +430,6 @@
     
     return cell;
 }
+
 
 @end

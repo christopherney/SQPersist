@@ -13,13 +13,22 @@
 #import <UIKit/UIKit.h>
 
 #import "SQPDatabase.h"
+#import "SQPProperty.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 
 /**
+ *  Protocole of SQPObject
+ */
+@protocol SQPObjectDelegate
+@optional
+- (BOOL)ignoredProperty:(SQPProperty*)property;
+@end
+
+/**
  *  Entity object.
  */
-@interface SQPObject : NSObject
+@interface SQPObject : NSObject <SQPObjectDelegate>
 
 /**
  *  The name of the entity class.
@@ -107,6 +116,13 @@
 + (NSMutableArray*)SQPFetchAllWhere:(NSString*)queryOptions orderBy:(NSString*)orderOptions pageIndex:(NSInteger)pageIndex itemsPerPage:(NSInteger)itemsPerPage;
 
 /**
+ *  Return the first entity object.
+ *
+ *  @return The resulting entity object.
+ */
++ (id)SQPFetchOne;
+
+/**
  *  Return one entity object by filtering conditions.
  *
  *  @param queryOptions Filtering conditions (clause SQL WHERE).
@@ -156,5 +172,30 @@
  *  @return Return YES when the table is truncate.
  */
 + (BOOL)SQPTruncateAll;
+
+/**
+ *  Indicate to the system if a property can be stored or not into the database.
+ *
+ *  @param property Property of the persist object.
+ *
+ *  @return YES to store the property / NO to ignored (by default all properties are stored).
+ */
+- (BOOL)ignoredProperty:(SQPProperty*)property;
+
+/**
+ *  Serialized the object to Dictionary.
+ *
+ *  @return Dictionary
+ */
+- (NSMutableDictionary*)toDictionary;
+
+/**
+ *  Populate the object from Dictionary.
+ *
+ *  @param dictionary Dictionary
+ *
+ *  @return Return YES if all properties are set.
+ */
+- (BOOL)populateWithDictionary:(NSDictionary*)dictionary;
 
 @end

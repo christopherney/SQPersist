@@ -8,13 +8,14 @@
 
 #import "SQPProperty.h"
 
-#define kAttributeInt @"Tq"
+#define kAttributeInt @"Ti"
 #define kAttributeBool @"TB"
 #define kAttributeChar @"Tc"
 #define kAttributeShort @"Ts"
-#define kAttributeLong @"Tq"
+#define kAttributeLong @"Tl"
 #define kAttributeLongLong @"Tq"
 #define kAttributeFloat @"Tf"
+#define kAttributeDouble @"Td"
 
 #define kAttributeNSNumber @"T@\"NSNumber\""
 #define kAttributeNSDecimalNumber @"T@\"NSDecimalNumber\""
@@ -110,6 +111,9 @@
         } else if ([self string:propertyAttributes containsSubString:kAttributeFloat]) {
             self.type = kPropertyTypeFloat;
             self.isCompatibleType = YES;
+        } else if ([self string:propertyAttributes containsSubString:kAttributeDouble]) {
+            self.type = kPropertyTypeDouble;
+            self.isCompatibleType = YES;
         }
         
     }
@@ -182,9 +186,9 @@
     if (self.type == kPropertyTypeInt) {
         return @"INTEGER";
     } else if (self.type == kPropertyTypeLong) {
-        return @"INTEGER";
+        return @"REAL";
     } else if (self.type == kPropertyTypeLongLong) {
-        return @"INTEGER";
+        return @"REAL";
     } else if (self.type == kPropertyTypeBool) {
         return @"INTEGER";
     } else if (self.type == kPropertyTypeDouble) {
@@ -246,6 +250,14 @@
     return propertyLine;
 }
 
+/**
+ *  Check if string contains substring.
+ *
+ *  @param s  String chere search
+ *  @param ss Substring to search
+ *
+ *  @return Return YES if the string contains substring.
+ */
 - (BOOL)string:(NSString*)s containsSubString:(NSString*)ss {
     if ([s rangeOfString:ss].location == NSNotFound) {
         return NO;

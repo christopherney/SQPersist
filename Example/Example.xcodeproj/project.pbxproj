@@ -18,6 +18,7 @@
 		6B292BFA1A04C69600DBB179 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B292BF81A04C69600DBB179 /* User.m */; };
 		6B94F9211A04FC940009A88D /* libPods-SQPersist-FMDB.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B94F9201A04FC940009A88D /* libPods-SQPersist-FMDB.a */; };
 		6BBB47BA1A04D00200989381 /* libSQPersist.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BBB47B01A04CDC000989381 /* libSQPersist.a */; };
+		6BC6A5351A0C065A0036A8FE /* Icon-Test.png in Resources */ = {isa = PBXBuildFile; fileRef = 6BC6A5341A0C065A0036A8FE /* Icon-Test.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		6B292BF81A04C69600DBB179 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		6B94F9201A04FC940009A88D /* libPods-SQPersist-FMDB.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-SQPersist-FMDB.a"; path = "../Pods/build/Debug-iphoneos/libPods-SQPersist-FMDB.a"; sourceTree = "<group>"; };
 		6BBB47B01A04CDC000989381 /* libSQPersist.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSQPersist.a; path = "../../../Library/Developer/Xcode/DerivedData/SQPersist-gnomeysmkvqlwickkpgspuufditj/Build/Products/Debug-iphoneos/libSQPersist.a"; sourceTree = "<group>"; };
+		6BC6A5341A0C065A0036A8FE /* Icon-Test.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Test.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +92,7 @@
 		6B292BCE1A04C68800DBB179 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				6BC6A5341A0C065A0036A8FE /* Icon-Test.png */,
 				6B292BCF1A04C68800DBB179 /* Info.plist */,
 				6B292BD01A04C68800DBB179 /* main.m */,
 			);
@@ -179,6 +182,7 @@
 			files = (
 				6B292BDA1A04C68800DBB179 /* Main.storyboard in Resources */,
 				6B292BDC1A04C68800DBB179 /* Images.xcassets in Resources */,
+				6BC6A5351A0C065A0036A8FE /* Icon-Test.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -305,8 +309,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/christopherney/XCode/SQPersist/build/Debug-iphoneos",
-					"/Users/christopherney/XCode/SQPersist/Pods/build/Debug-iphoneos",
 					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/SQPersist-gnomeysmkvqlwickkpgspuufditj/Build/Products/Debug-iphoneos",
 				);
 				OTHER_LDFLAGS = (
@@ -333,8 +335,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/christopherney/XCode/SQPersist/build/Debug-iphoneos",
-					"/Users/christopherney/XCode/SQPersist/Pods/build/Debug-iphoneos",
 					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/SQPersist-gnomeysmkvqlwickkpgspuufditj/Build/Products/Debug-iphoneos",
 				);
 				OTHER_LDFLAGS = (

@@ -30,6 +30,11 @@
      *  Database filepath.
      */
     NSString *_dbPath;
+    
+    /**
+     * Saves known entities System.
+     */
+    NSMutableDictionary *_entities;
 }
 
 /**
@@ -39,9 +44,14 @@
 @property (nonatomic) BOOL addMissingColumns;
 
 /**
- *  Indication if the genrated SQL requests are logged.
+ *  Indicate if the generated SQL requests are logged.
  */
 @property (nonatomic) BOOL logRequests;
+
+/**
+ *  Indicate if the information of scanning properties are logged.
+ */
+@property (nonatomic) BOOL logPropertyScan;
 
 /**
  *  Get the main instance of the database manager.
@@ -91,5 +101,22 @@
  *  @return Remove the database.
  */
 - (BOOL)removeDatabase;
+
+/**
+ *  Remember scanned entity.
+ *
+ *  @param className  Entity class name
+ *  @param properties Properties of entity.
+ */
+- (void)addScannedEntity:(NSString*)className andProperties:(NSArray*)properties;
+
+/**
+ *  Return YES if the entity is already scanned.
+ *
+ *  @param entity Entity class name
+ *
+ *  @return Return YES if the entity is already scanned.
+ */
+- (NSArray*)getExistingEntity:(NSString*)className;
 
 @end
