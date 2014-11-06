@@ -101,7 +101,7 @@ SQPersist is compatible with the following Objective-C types :
  
 Each property of entities objects are analysed with Objective-C methods : ***property_getAttributes()***.
 
-***Apple documentaiton :***
+***Apple documentation :***
 > https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html
 
 Children entities
