@@ -431,5 +431,19 @@
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        
+        Car *item = (Car*)[self.items objectAtIndex:indexPath.row];
+        
+        if ([item SQPDeleteEntity]) {
+            
+            [self.items removeObjectAtIndex:indexPath.row];
+            
+            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
+        }
+    }
+}
 
 @end
