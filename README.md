@@ -224,6 +224,22 @@ To remove every entities (truncate), use the method ***SQPTruncateAll***.
 [Car SQPTruncateAll];
 ```
 
+Transactions
+------------
+Manage your transactions with 3 methods : ***beginTransaction***, ***commitTransaction*** or ***rollbackTransaction***.
+
+```
+[[SQPDatabase sharedInstance] beginTransaction];
+
+// Your objects manipulation...
+
+if (result == YES) {
+    [[SQPDatabase sharedInstance] commitTransaction];
+} else {
+    [[SQPDatabase sharedInstance] rollbackTransaction];
+}
+```
+
 Other methods
 -------------
 You can remove the database with the method ***removeDatabase*** :
