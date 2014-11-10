@@ -94,8 +94,8 @@ SQPersist is compatible with the following Objective-C types :
 * ***NSURL*** -> become ***TEXT*** into SQLite database
 * ***int*** -> become ***INTEGER*** into SQLite database
 * ***double*** -> become ***REAL*** into SQLite database
-* ***long*** -> become ***REAL*** into SQLite database
-* ***long long*** -> become ***REAL*** into SQLite database
+* ***long*** -> become ***INTEGER*** into SQLite database
+* ***long long*** -> become ***INTEGER*** into SQLite database
 * ***short*** -> become ***INTEGER*** into SQLite database
 * ***float*** -> become ***REAL*** into SQLite database
  
