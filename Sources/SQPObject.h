@@ -64,18 +64,36 @@
 + (id)SQPCreateEntity;
 
 /**
- *  Save the modification of the entity object.
+ *  Save the modification of the entity object (by default save children objects with cascade option).
  *
  *  @return Return YES if the changes apply with succes.
  */
 - (BOOL)SQPSaveEntity;
 
 /**
- *  Delete the entity into the database.
+  *  Save the modification of the entity object.
+ *
+ *  @param cascade Save children object in cascade.
+ *
+ *  @return Return YES if the changes apply with succes.
+ */
+- (BOOL)SQPSaveEntityWithCascade:(BOOL)cascade;
+
+/**
+ *  Delete the entity into the database (by default remove children objects with cascade option).
  *
  *  @return Return YES if the changes apply with succes.
  */
 - (BOOL)SQPDeleteEntity;
+
+/**
+ *  Delete the entity into the database.
+ *
+ *  @param cascade Remove children object in cascade.
+ *
+ *  @return Return YES if the changes apply with succes.
+ */
+- (BOOL)SQPDeleteEntityWithCascade:(BOOL)cascade;
 
 /**
  *  Return every entities save of table.

@@ -19,20 +19,9 @@
 @property (nonatomic) NSInteger gender;
 @property (nonatomic, strong) NSDate *birthday;
 @property (nonatomic) BOOL isEnable;
-@property (nonatomic, strong) NSNumber *numberFriends;
-@property (nonatomic) char letter;
-@property (nonatomic) short smallNumber;
-@property (nonatomic) long longNumber;
-@property (nonatomic) long long veryLongNumber;
-@property (nonatomic) float amount;
-@property (nonatomic, strong) NSDecimalNumber *decimalNumber;
-
-@property (nonatomic) id unknowObject;
-@property (nonatomic, strong) NSArray *parents;
 @property (nonatomic, strong) NSMutableArray *friends;
-@property (nonatomic, strong) NSData *picture;
 @property (nonatomic, strong) UIImage *photo;
-
 @property (nonatomic, strong) Car *myCar;
+@property (nonatomic) CGFloat amount;
 
 @end

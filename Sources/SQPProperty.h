@@ -74,6 +74,11 @@ typedef enum SQPPropertyType : NSUInteger {
 @property (nonatomic) BOOL isCompatibleType;
 
 /**
+ *  If property if complex type, this member return the name of the complex type.
+ */
+@property (nonatomic, strong) NSString *complexTypeName;
+
+/**
  *  Build the SQPProperty with the attribute informations.
  *
  *  @param attributes Attribut informations.

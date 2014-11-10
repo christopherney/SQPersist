@@ -26,7 +26,7 @@
 - (BOOL)SQPInsertObject;
 - (BOOL)SQPUpdateObject;
 - (BOOL)SQPDeleteObject;
-- (void)SQPSaveChildren;
+- (void)SQPSaveChildrenWithCascade:(BOOL)cascade;
 + (NSMutableArray*)SQPFetchAllForTable:(NSString*)tableName andClassName:(NSString*)className Where:(NSString*)queryOptions orderBy:(NSString*)orderOptions pageIndex:(NSInteger)pageIndex itemsPerPage:(NSInteger)itemsPerPage;
 + (id)SQPFetchOneForTable:(NSString*)tableName andClassName:(NSString*)className Where:(NSString*)queryOptions;
 + (void)logRequest:(NSString*)request;
@@ -45,7 +45,6 @@
 -(id)init {
     
     if ([super init]) {
-        [self SQPInitialization];
     }
     return self;
 }
@@ -71,21 +70,26 @@
  */
 - (void)SQPInitialization {
     
-    [self SQPClassOfObject:self];
-    
-    // Check id entity already scanned :
-    self.SQPProperties = [[SQPDatabase sharedInstance] getExistingEntity:self.SQPClassName];
-    
-    // If not, scan the entity :
-    if (self.SQPProperties == nil) {
+    // If not initialized :
+    if (self.SQPClassName == nil) {
         
-        // Properties analyse :
-        self.SQPProperties = [NSArray arrayWithArray:[self SQPAnalyseProperties]];
+        // get class name and table name :
+        [self SQPClassOfObject:self];
         
-        // Save the entity model :
-        [[SQPDatabase sharedInstance] addScannedEntity:self.SQPClassName andProperties:self.SQPProperties];
+        // Check id entity already scanned :
+        self.SQPProperties = [[SQPDatabase sharedInstance] getExistingEntity:self.SQPClassName];
+        
+        // If not, scan the entity :
+        if (self.SQPProperties == nil) {
+            
+            // Properties analyse :
+            self.SQPProperties = [NSArray arrayWithArray:[self SQPAnalyseProperties]];
+            
+            // Save the entity model :
+            [[SQPDatabase sharedInstance] addScannedEntity:self.SQPClassName andProperties:self.SQPProperties];
+        }
     }
-
+    
     // Create table into database :
     [self SQPCreateTable];
 }
@@ -126,6 +130,21 @@
         [prop getPropertyType:property_getAttributes(property)];
         prop.name = propertyName;
         prop.value = propertyValue;
+        
+        // If complex class name is know :
+        if (prop.complexTypeName != nil) {
+            
+            if ([[SQPDatabase sharedInstance] isEntityObject:prop.complexTypeName]) {
+                prop.isSQPObject = YES;
+            } else {
+                id testObject = [SQPObject SQPObjectFromClassName:prop.complexTypeName];
+                if ([testObject isKindOfClass:[SQPObject class]]) {
+                    prop.isSQPObject = YES;
+                    [[SQPDatabase sharedInstance] addEntityObjectName:prop.complexTypeName];
+                }
+            }
+     
+        }
         
         if ([SQPDatabase sharedInstance].logPropertyScan == YES) {
             [SQPObject logRequest:[prop description]];
@@ -173,6 +192,7 @@
                 NSLog(@"%@", [db lastErrorMessage]);
             }
             
+        // Add missing column (if option enable) :
         } else if ([SQPDatabase sharedInstance].addMissingColumns == YES) {
             
             // Table current schema :
@@ -186,7 +206,7 @@
             
             for (SQPProperty *property in self.SQPProperties) {
                 
-                if (property.isCompatibleType == YES) {
+                if (property.isCompatibleType == YES && [self ignoredProperty:property] == NO) {
                     
                     BOOL exists = NO;
                     
@@ -242,6 +262,20 @@
  */
 - (BOOL)SQPSaveEntity {
     
+    return [self SQPSaveEntityWithCascade:YES];
+}
+
+/**
+ *  Save the modification of the entity object.
+ *
+ *  @param cascade Save children object in cascade.
+ *
+ *  @return Return YES if the changes apply with succes.
+ */
+- (BOOL)SQPSaveEntityWithCascade:(BOOL)cascade {
+    
+    [self SQPInitialization];
+    
     BOOL result = NO;
     
     if (self.deleteObject == YES) {
@@ -254,11 +288,11 @@
             result = [self SQPInsertObject];
         }
     }
-
-    if (result == YES) {
-        [self SQPSaveChildren];
+    
+    if (result == YES && cascade == YES) {
+        [self SQPSaveChildrenWithCascade:cascade];
     }
- 
+    
     return result;
 }
 
@@ -269,15 +303,27 @@
  */
 - (BOOL)SQPDeleteEntity {
 
+    return [self SQPDeleteEntityWithCascade:YES];
+}
+
+/**
+ *  Delete the entity into the database.
+ *
+ *  @param cascade Remove children object in cascade.
+ *
+ *  @return Return YES if the changes apply with succes.
+ */
+- (BOOL)SQPDeleteEntityWithCascade:(BOOL)cascade {
+    
     self.deleteObject = YES;
     
-    return [self SQPSaveEntity];
+    return [self SQPSaveEntityWithCascade:cascade];
 }
 
 /**
  *  Save children entities of current entity object (private method - call by method named SQPSaveEntity).
  */
-- (void)SQPSaveChildren {
+- (void)SQPSaveChildrenWithCascade:(BOOL)cascade {
     
     if (self.SQPProperties != nil) {
         
@@ -297,7 +343,7 @@
                             if ([item isKindOfClass:[SQPObject class]]) {
                                 
                                 SQPObject *sqpObject = (SQPObject*)item;
-                                [sqpObject SQPSaveEntity];
+                                [sqpObject SQPSaveEntityWithCascade:cascade];
                             }
                         }
                     }
@@ -313,7 +359,7 @@
                     if ([item isKindOfClass:[SQPObject class]]) {
                         
                         SQPObject *sqpObject = (SQPObject*)item;
-                        [sqpObject SQPSaveEntity];
+                        [sqpObject SQPSaveEntityWithCascade:cascade];
                     }
                 }
                 
@@ -361,6 +407,16 @@
 
             return urlString;
             
+        } else if ([value isKindOfClass:[SQPObject class]]) {
+
+            SQPObject *sqpObject = (SQPObject*)value;
+            
+            if (sqpObject.objectID == nil) [sqpObject SQPSaveEntity];
+
+            NSString *objectID = sqpObject.objectID;
+            
+            return objectID;
+            
         } else {
             
             // No cast :
@@ -387,19 +443,22 @@
     
     for (SQPProperty *property in self.SQPProperties) {
         
-        if ([sqlArgs length] == 0) {
-            [sqlArgs appendFormat:@":%@", property.name];
-            [sqlColumns appendString:property.name];
-        } else {
-            [sqlColumns appendFormat:@", %@", property.name];
-            [sqlArgs appendFormat:@", :%@", property.name];
+        if ((property.isCompatibleType == YES || property.isSQPObject == YES) && [self ignoredProperty:property] == NO) {
+            
+            if ([sqlArgs length] == 0) {
+                [sqlArgs appendFormat:@":%@", property.name];
+                [sqlColumns appendString:property.name];
+            } else {
+                [sqlColumns appendFormat:@", %@", property.name];
+                [sqlArgs appendFormat:@", :%@", property.name];
+            }
+            
+            id propertyValue = [self valueForKey:property.name];
+            
+            id sqliteValue = [self objcObjectToSQLite:propertyValue];
+            
+            [argsDict setObject:sqliteValue forKey:property.name];
         }
-        
-        id propertyValue = [self valueForKey:property.name];
-        
-        id sqliteValue = [self objcObjectToSQLite:propertyValue];
-        
-        [argsDict setObject:sqliteValue forKey:property.name];
     }
     
     // Object ID (UUID) :
@@ -442,17 +501,20 @@
     
     for (SQPProperty *property in self.SQPProperties) {
         
-        if ([sqlArgs length] == 0) {
-            [sqlArgs appendFormat:@"%@ = :%@", property.name, property.name];
-        } else {
-            [sqlArgs appendFormat:@", %@ = :%@", property.name, property.name];
+        if ((property.isCompatibleType == YES || property.isSQPObject == YES) && [self ignoredProperty:property] == NO) {
+            
+            if ([sqlArgs length] == 0) {
+                [sqlArgs appendFormat:@"%@ = :%@", property.name, property.name];
+            } else {
+                [sqlArgs appendFormat:@", %@ = :%@", property.name, property.name];
+            }
+            
+            id propertyValue = [self valueForKey:property.name];
+            
+            id sqliteValue = [self objcObjectToSQLite:propertyValue];
+            
+            [argsDict setObject:sqliteValue forKey:property.name];
         }
-
-        id propertyValue = [self valueForKey:property.name];
-        
-        id sqliteValue = [self objcObjectToSQLite:propertyValue];
-        
-        [argsDict setObject:sqliteValue forKey:property.name];
     }
 
     [sql appendFormat:@"%@ WHERE %@ = '%@'", sqlArgs, kSQPObjectIDName, self.objectID];
@@ -793,46 +855,65 @@
  */
 - (void)completeWithResultSet:(FMResultSet*)resultSet {
     
+    [self SQPInitialization];
+    
     for (SQPProperty *property in self.SQPProperties) {
         
-        id value = [resultSet objectForColumnName:property.name];
-        
-        if (value != nil && property.type != kPropertyTypeChar) {
+        if ((property.isCompatibleType == YES || property.isSQPObject == YES) && [self ignoredProperty:property] == NO) {
             
-            // Convert Date to timestamp :
-            if (property.type == kPropertyTypeDate) {
+            id value = [resultSet objectForColumnName:property.name];
+            
+            if (value != nil && property.type != kPropertyTypeChar) {
                 
-                NSNumber *interval = (NSNumber*)value;
-                NSDate *dateValue = [[NSDate alloc] initWithTimeIntervalSince1970:[interval integerValue]];
-                
-                [self setValue:dateValue forKey:property.name];
-                
-            } else if (property.type == kPropertyTypeImage) {
-                
-                NSData *imageData = (NSData*)value;
-                
-                if (imageData != nil) {
+                // Convert Date to timestamp :
+                if (property.type == kPropertyTypeDate) {
                     
-                    UIImage *image = [UIImage imageWithData:imageData];
-                    [self setValue:image forKey:property.name];
+                    NSNumber *interval = (NSNumber*)value;
+                    NSDate *dateValue = [[NSDate alloc] initWithTimeIntervalSince1970:[interval integerValue]];
+                    
+                    [self setValue:dateValue forKey:property.name];
+                    
+                } else if (property.type == kPropertyTypeImage) {
+                    
+                    NSData *imageData = (NSData*)value;
+                    
+                    if (imageData != nil) {
+                        
+                        UIImage *image = [UIImage imageWithData:imageData];
+                        [self setValue:image forKey:property.name];
+                    }
+                    
+                } else if (property.type == kPropertyTypeURL) {
+                    
+                    if ([value isKindOfClass:[NSString class]]) {
+                        
+                        NSString *urlString = (NSString*)value;
+                        NSURL *url = [NSURL URLWithString:urlString];
+                        
+                        [self setValue:url forKey:property.name];
+                    }
+                    
+                } else if (property.isSQPObject == YES && value != nil && [value isKindOfClass:[NSNull class]] == NO) {
+                    
+                    SQPObject *obj = [SQPObject SQPObjectFromClassName:property.complexTypeName];
+                    
+                    Class className = [obj class];
+                    
+                    NSString *objectID = (NSString*)value;
+                    
+                    id finalObject = [className SQPFetchOneByID:objectID];
+                    
+                    [self setValue:finalObject forKey:property.name];
+                    
+                } else {
+                    
+                    [self setValue:value forKey:property.name];
                 }
-          
-            } else if (property.type == kPropertyTypeURL) {
-
-                if ([value isKindOfClass:[NSString class]]) {
-                    
-                    NSString *urlString = (NSString*)value;
-                    NSURL *url = [NSURL URLWithString:urlString];
-                    
-                    [self setValue:url forKey:property.name];
-                }
                 
-            } else {
-                
-                [self setValue:value forKey:property.name];
             }
             
         }
+     
     }
     
     self.objectID = [resultSet stringForColumn:kSQPObjectIDName];
@@ -966,6 +1047,21 @@
     }
     
     return result;
+}
+
+- (NSString*)description {
+    
+    NSMutableString *interface = [[NSMutableString alloc] initWithFormat:@"\r@interface %@ : SQPObject\r\r", self.SQPClassName];
+    
+    [interface appendFormat:@"@property (nonatomic) NSString * objectID; // value = %@\r", self.objectID];
+    
+    for (SQPProperty *property in self.SQPProperties) {
+        [interface appendFormat:@"%@\r", [property description]];
+    }
+    
+    [interface appendString:@"\r@end"];
+    
+    return interface;
 }
 
 @end

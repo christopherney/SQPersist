@@ -25,7 +25,9 @@
 - (BOOL)image:(UIImage *)image1 isEqualTo:(UIImage *)image2;
 @end
 
-@implementation RootTableViewController
+@implementation RootTableViewController {
+    User *_userJohn;
+}
 
 - (void)viewDidLoad {
     
@@ -74,7 +76,7 @@
     testObject.testDecimalNumber = [NSDecimalNumber decimalNumberWithString:@"3467374639467936.3746374639"]; // NSDecimalNumber -> become REAL into SQLite database
     testObject.testDate = [NSDate date]; // NSDate -> become INTEGER into SQLite database (Timestamp Since 1970)
     testObject.testData = [text dataUsingEncoding:NSUTF8StringEncoding];; // NSData -> become BLOB into SQLite database
-    testObject.testImage = [UIImage imageNamed:@"Ferrari"]; // UIImage -> become BLOB into SQLite database
+    testObject.testImage = [UIImage imageNamed:@"Icon-Test.png"]; // UIImage -> become BLOB into SQLite database
     testObject.testURL = [NSURL URLWithString:@"https://github.com/christopherney/SQPersist"]; // NSURL -> become TEXT into SQLite database
     testObject.testInt = INT32_MAX; // int -> become INTEGER into SQLite database
     testObject.testDouble = DBL_MAX; // double -> become REAL into SQLite database
@@ -192,18 +194,18 @@
     
     
     // Create Table at the first init (if tbale ne exists) :
-    User *userJohn = [User SQPCreateEntity];
-    userJohn.firstName = @"John";
-    userJohn.lastName = @"McClane";
-    userJohn.birthday = [NSDate date];
-    userJohn.photo = [UIImage imageNamed:@"Photo"];
+    _userJohn = [User SQPCreateEntity];
+    _userJohn.firstName = @"John";
+    _userJohn.lastName = @"McClane";
+    _userJohn.birthday = [NSDate date];
+    _userJohn.photo = [UIImage imageNamed:@"Photo"];
     
     // INSERT Object :
-    [userJohn SQPSaveEntity];
+    [_userJohn SQPSaveEntity];
     
     // SELECT BY objectID (John McClane) :
-    User *userSelected = [User SQPFetchOneByID:userJohn.objectID];
-    userSelected.amount = 10.50f;
+    User *userSelected = [User SQPFetchOneByID:_userJohn.objectID];
+    userSelected.amount = 139203000.50f;
     
     // UPDATE Object :
     [userSelected SQPSaveEntity];
@@ -212,17 +214,20 @@
     friendJohn.firstName = @"Hans";
     friendJohn.lastName = @"Gruber";
     
-    userJohn.friends = [[NSMutableArray alloc] initWithObjects:friendJohn, nil];
+    _userJohn.friends = [[NSMutableArray alloc] initWithObjects:friendJohn, nil];
     
     // UPDATE Object :
-    [userJohn SQPSaveEntity];
+    [_userJohn SQPSaveEntity];
     
     User *userJohn2 = [User SQPFetchOneWhere:@"lastname = 'McClane'"];
+    userJohn2.myCar = [self getRandomCar];
+    
+    [userJohn2 SQPSaveEntity];
     
     NSLog(@"Name user : %@", userJohn2.firstName);
     
     Car *car1 = [self getRandomCar];
-    car1.owner = userJohn;
+    car1.owner = _userJohn;
     [car1 SQPSaveEntity]; // INSERT Object
     
     Car *car2 = [self getRandomCar];
@@ -245,6 +250,13 @@
     NSMutableArray *cars = [Car SQPFetchAllWhere:@"name = 'Ferrari'" orderBy:@"power DESC"];
     
     NSLog(@"Number of cars: %lu", (unsigned long)[cars count]);
+    
+    for (Car *car in cars) {
+        
+        if (car.owner != nil) {
+            NSLog(@"Car's owner : %@ %@", car.owner.firstName, car.owner.lastName);
+        }
+    }
 }
 
 #pragma mark - Flickr Example 
@@ -305,9 +317,10 @@
     Car *car = [Car SQPCreateEntity];
     car.name = (NSString*)[constructors objectAtIndex:randomIndexConstructor];
     car.color = (NSString*)[colors objectAtIndex:randomIndexColor];
-    car.owner = nil;
+    car.owner = _userJohn;
     car.power = [[powers objectAtIndex:randomIndexPower] intValue];
-
+    car.urlLogo = [NSURL URLWithString:@"https://github.com/christopherney/SQPersist"];
+    
     return car;
 }
 

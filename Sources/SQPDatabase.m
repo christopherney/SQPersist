@@ -155,12 +155,12 @@
  */
 - (void)addScannedEntity:(NSString*)className andProperties:(NSArray*)properties {
     
-    if (_entities == nil) _entities = [[NSMutableDictionary alloc] init];
+    if (_properties == nil) _properties = [[NSMutableDictionary alloc] init];
     
     if (className != nil && properties != nil) {
         
         if ([self getExistingEntity:className] == nil) {
-            [_entities setObject:properties forKey:className];
+            [_properties setObject:properties forKey:className];
         }
     }
 }
@@ -174,11 +174,43 @@
  */
 - (NSArray*)getExistingEntity:(NSString*)className {
     
-    if (_entities != nil && className != nil) {
-        NSArray *properties = (NSArray*)[_entities valueForKey:className];
+    if (_properties != nil && className != nil) {
+        NSArray *properties = (NSArray*)[_properties valueForKey:className];
         return properties;
     } else {
         return nil;
+    }
+}
+
+/**
+ *  Remember the the class is a entity system.
+ *
+ *  @param className Class name.
+ */
+- (void)addEntityObjectName:(NSString*)className {
+    
+    if (_entities == nil) _entities = [[NSMutableSet alloc] init];
+    
+    if (className != nil) {
+        if ([self isEntityObject:className] == NO) {
+            [_entities addObject:className];
+        }
+    }
+}
+
+/**
+ *  Indique if a class name is know as an entity system.
+ *
+ *  @param className Class name.
+ *
+ *  @return Return YES if is an entity.
+ */
+- (BOOL)isEntityObject:(NSString*)className {
+    
+    if (_entities != nil && className != nil) {
+        return [_entities containsObject:className];
+    } else {
+        return NO;
     }
 }
 

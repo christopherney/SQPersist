@@ -32,9 +32,14 @@
     NSString *_dbPath;
     
     /**
+     * Saves known properties of entities System.
+     */
+    NSMutableDictionary *_properties;
+
+    /**
      * Saves known entities System.
      */
-    NSMutableDictionary *_entities;
+    NSMutableSet *_entities;
 }
 
 /**
@@ -118,5 +123,21 @@
  *  @return Return YES if the entity is already scanned.
  */
 - (NSArray*)getExistingEntity:(NSString*)className;
+
+/**
+ *  Remember the the class is a entity system.
+ *
+ *  @param className Class name.
+ */
+- (void)addEntityObjectName:(NSString*)className;
+
+/**
+ *  Indique if a class name is know as an entity system.
+ *
+ *  @param className Class name.
+ *
+ *  @return Return YES if is an entity.
+ */
+- (BOOL)isEntityObject:(NSString*)className;
 
 @end

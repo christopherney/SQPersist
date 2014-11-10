@@ -31,6 +31,7 @@
 @interface SQPProperty ()
 - (BOOL)string:(NSString*)s containsSubString:(NSString*)ss;
 - (NSString*)propertyTypeToString:(SQPPropertyType)type;
+- (NSString*)getComplexTypeNameFromPropertyAttributes:(NSString*)propertyAttributes;
 @end
 
 /**
@@ -47,7 +48,7 @@
     
     NSString *propertyAttributes = [NSString stringWithFormat:@"%s", attributes];
     
-    //NSLog(@"%@", propertyAttributes);
+    // NSLog(@"%@", propertyAttributes);
     
     // Si c'est un type primitif :
     if ([self string:propertyAttributes containsSubString:@",&,"]) {
@@ -84,6 +85,7 @@
         } else if ([self string:propertyAttributes containsSubString:kAttributeObject]) {
             self.type = kPropertyTypeObject;
             self.isCompatibleType = NO;
+            self.complexTypeName = [self getComplexTypeNameFromPropertyAttributes:propertyAttributes];
         }
         
     } else {
@@ -124,6 +126,30 @@
     } else {
         self.isNonatomic = NO;
     }
+}
+
+/**
+ *  Method extract the Class name of complex preperty attributes.
+ *
+ *  @param propertyAttributes Complex preperty attributes.
+ *
+ *  @return Class name.
+ */
+- (NSString*)getComplexTypeNameFromPropertyAttributes:(NSString*)propertyAttributes {
+    
+    NSString *typeName = nil;
+    
+    NSString *pattern = @"\\T@\"(.*?)\\\"";
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionCaseInsensitive error:NULL];
+    NSArray *results = [regex matchesInString:propertyAttributes options:0 range:NSMakeRange(0, [propertyAttributes length])];
+    
+    if ([results count]) {
+        NSTextCheckingResult *match = [results firstObject];
+        NSRange matchRange = [match rangeAtIndex:1];
+        typeName = [propertyAttributes substringWithRange:matchRange];
+    }
+
+    return typeName;
 }
 
 /**
@@ -170,7 +196,13 @@
     } else if (type == kPropertyTypeURL) {
         return @"NSURL";
     } else if (type == kPropertyTypeObject) {
-        return @"id";
+        
+        if (self.isSQPObject == YES) {
+            return @"SQPObject";
+        } else {
+            return @"id";
+        }
+ 
     } else {
         return @"unknown";
     }
@@ -186,9 +218,9 @@
     if (self.type == kPropertyTypeInt) {
         return @"INTEGER";
     } else if (self.type == kPropertyTypeLong) {
-        return @"REAL";
+        return @"INTEGER";
     } else if (self.type == kPropertyTypeLongLong) {
-        return @"REAL";
+        return @"INTEGER";
     } else if (self.type == kPropertyTypeBool) {
         return @"INTEGER";
     } else if (self.type == kPropertyTypeDouble) {
@@ -214,7 +246,13 @@
     } else if (self.type == kPropertyTypeMutableArray) {
         return @"BLOB";
     } else if (self.type == kPropertyTypeObject) {
-        return @"BLOB";
+        
+        if (self.isSQPObject == YES) {
+            return @"TEXT";
+        } else {
+            return @"BLOB";
+        }
+        
     } else if (self.type == kPropertyTypeImage) {
         return @"BLOB";
     } else if (self.type == kPropertyTypeURL) {
