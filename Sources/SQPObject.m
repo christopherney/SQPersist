@@ -297,13 +297,13 @@
 }
 
 /**
- *  Delete the entity into the database.
+ *  Delete the entity into the database (by default the cascade option is set to NO).
  *
  *  @return Return YES if the changes apply with succes.
  */
 - (BOOL)SQPDeleteEntity {
 
-    return [self SQPDeleteEntityWithCascade:YES];
+    return [self SQPDeleteEntityWithCascade:NO];
 }
 
 /**
@@ -315,9 +315,15 @@
  */
 - (BOOL)SQPDeleteEntityWithCascade:(BOOL)cascade {
     
+    _deleteInCascade = cascade;
+    
     self.deleteObject = YES;
     
-    return [self SQPSaveEntityWithCascade:cascade];
+    BOOL result = [self SQPSaveEntityWithCascade:cascade];
+    
+    _deleteInCascade = NO;
+    
+    return result;
 }
 
 /**
@@ -343,6 +349,9 @@
                             if ([item isKindOfClass:[SQPObject class]]) {
                                 
                                 SQPObject *sqpObject = (SQPObject*)item;
+                                
+                                if (_deleteInCascade == YES) sqpObject.deleteObject = YES;
+                                
                                 [sqpObject SQPSaveEntityWithCascade:cascade];
                             }
                         }
@@ -359,6 +368,9 @@
                     if ([item isKindOfClass:[SQPObject class]]) {
                         
                         SQPObject *sqpObject = (SQPObject*)item;
+                        
+                        if (_deleteInCascade == YES) sqpObject.deleteObject = YES;
+                        
                         [sqpObject SQPSaveEntityWithCascade:cascade];
                     }
                 }

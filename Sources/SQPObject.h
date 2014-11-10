@@ -28,7 +28,13 @@
 /**
  *  Entity object.
  */
-@interface SQPObject : NSObject <SQPObjectDelegate>
+@interface SQPObject : NSObject <SQPObjectDelegate> {
+    
+    /**
+     *  Flag delete in cascade.
+     */
+    BOOL _deleteInCascade;
+}
 
 /**
  *  The name of the entity class.
