@@ -126,19 +126,24 @@ userCreated.lastName = @"McClane";
 
 UPDATE an object
 ----------------
-To update an existing object into your database, just call the method named ***SQPSaveEntity*** :
+To update an existing object into your database, just call the method named ***SQPSaveEntity*** or ***SQPSaveEntityWithCascade:*** :
 ```
 // SELECT BY objectID :
 User *existingUser = [User SQPFetchOneByID:objectID];
 existingUser.amount = 10.50f;
-    
+ 
 // UPDATE Object :
+[existingUser SQPSaveEntity];
+
+// UPDATE Object (with cascade) :
 [existingUser SQPSaveEntity];
 ```
 
+The ***cascade*** option update (or insert) all sub-objects (childrens) contains by the main entity object.
+
 DELETE an object
 ----------------
-To delete an existing object of your database, set the property ***deleteObject*** to ***YES*** and call the method named ***SQPSaveEntity***. Or diretcly call the method named ***SQPDeleteEntity***.
+To delete an existing object of your database, set the property ***deleteObject*** to ***YES*** and call the method named ***SQPSaveEntity***. Or diretcly call the method named ***SQPDeleteEntity*** or ***SQPDeleteEntityWithCascade:***.
 
 ```
 // DELETE Object :
@@ -146,9 +151,16 @@ existingUser.deleteObject = YES;
 [existingUser SQPSaveEntity]; // Commit the delete command.
 ```
 ```
-// DELETE Object :
+// DELETE Object (without cascade option) :
 [existingUser SQPDeleteEntity]; // Commit the delete command.
 ```
+
+```
+// DELETE Object (with cascade option) :
+[existingUser SQPDeleteEntityWithCascade:YES]; // Commit the delete cascade command.
+```
+
+The ***cascade*** option delete all sub-objects (childrens) contains by the main entity object.
 
 SELECT One object
 --------------------
@@ -166,6 +178,13 @@ User *userSelected = [User SQPFetchOneWhere:@"lastName = 'McClane'"];
 ```
 // SELECT by attribute with value :
 User *userSelected = [User SQPFetchOneByAttribut:@"lastName" withValue:@"McClane"];
+```
+
+Tips : with ***SQPFetchOne*** you can get one object without know de objectID. For example for paramters table :
+
+```
+// SELECT a single row :
+AppParameters *params = [AppParameters SQPFetchOne];
 ```
 
 SELECT collection of objects
@@ -221,6 +240,21 @@ if ([[SQPDatabase sharedInstance] databaseExists]) {
 Add new property into an existing table (use just for update your model - generate many SQL request) :
 ```
 [SQPDatabase sharedInstance].addMissingColumns == YES;
+```
+
+Serialize/Deserialize
+---------------------
+To simply manipulate entity object with JSON requests and responses, all entities have two methods : ***toDictionary*** and ***populateWithDictionary:***.
+
+```
+NSDictionary *response = [JSONDictionary objectForKey:@"items"];
+Flickr *flickrItem = [Flickr SQPCreateEntity];
+[flickrItem populateWithDictionary:response];
+```
+
+```
+User *userCreated = [User SQPCreateEntity];
+NSMutableDictionary *requestJson = [userCreated toDictionary];
 ```
 
 Tips
