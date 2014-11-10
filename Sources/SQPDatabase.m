@@ -214,4 +214,52 @@
     }
 }
 
+/**
+ *  Begin a SQL Transaction.
+ *
+ *  @return Result of begin.
+ */
+- (BOOL)beginTransaction {
+
+    FMDatabase *db = [[SQPDatabase sharedInstance] database];
+    
+    NSString *sql = @"BEGIN TRANSACTION";
+    
+    BOOL result = [db executeUpdate:sql];
+    
+    return result;
+}
+
+/**
+ *  Commi a SQL Transaction.
+ *
+ *  @return Result of commit.
+ */
+- (BOOL)commitTransaction {
+    
+    FMDatabase *db = [[SQPDatabase sharedInstance] database];
+    
+    NSString *sql = @"COMMIT";
+    
+    BOOL result = [db executeUpdate:sql];
+    
+    return result;
+}
+
+/**
+ *  Rollback a SQL Transaction.
+ *
+ *  @return Result of rollback.
+ */
+- (BOOL)rollbackTransaction {
+    
+    FMDatabase *db = [[SQPDatabase sharedInstance] database];
+    
+    NSString *sql = @"ROLLBACK";
+    
+    BOOL result = [db executeUpdate:sql];
+    
+    return result;
+}
+
 @end

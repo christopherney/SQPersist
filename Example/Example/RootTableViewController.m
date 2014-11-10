@@ -192,6 +192,7 @@
 
 - (void)otherExamples {
     
+    [[SQPDatabase sharedInstance] beginTransaction];
     
     // Create Table at the first init (if tbale ne exists) :
     _userJohn = [User SQPCreateEntity];
@@ -257,6 +258,8 @@
             NSLog(@"Car's owner : %@ %@", car.owner.firstName, car.owner.lastName);
         }
     }
+    
+    [[SQPDatabase sharedInstance] commitTransaction];
 }
 
 #pragma mark - Flickr Example 

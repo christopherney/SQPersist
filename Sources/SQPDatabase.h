@@ -140,4 +140,25 @@
  */
 - (BOOL)isEntityObject:(NSString*)className;
 
+/**
+ *  Begin a SQL Transaction.
+ *
+ *  @return Result of begin.
+ */
+- (BOOL)beginTransaction;
+
+/**
+ *  Commi a SQL Transaction.
+ *
+ *  @return Result of commit.
+ */
+- (BOOL)commitTransaction;
+
+/**
+ *  Rollback a SQL Transaction.
+ *
+ *  @return Result of rollback.
+ */
+- (BOOL)rollbackTransaction;
+
 @end

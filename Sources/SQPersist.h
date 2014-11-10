@@ -6,11 +6,6 @@
 //  Copyright (c) 2014 Christopher Ney. All rights reserved.
 //
 
-#ifndef SQPersist_SQPersist_h
-#define SQPersist_SQPersist_h
-
 #import "SQPObject.h"
 #import "SQPProperty.h"
 #import "SQPDatabase.h"
-
-#endif
