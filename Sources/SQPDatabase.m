@@ -223,9 +223,7 @@
 
     FMDatabase *db = [[SQPDatabase sharedInstance] database];
     
-    NSString *sql = @"BEGIN TRANSACTION";
-    
-    BOOL result = [db executeUpdate:sql];
+    BOOL result = [db beginTransaction];
     
     return result;
 }
@@ -238,10 +236,8 @@
 - (BOOL)commitTransaction {
     
     FMDatabase *db = [[SQPDatabase sharedInstance] database];
-    
-    NSString *sql = @"COMMIT";
-    
-    BOOL result = [db executeUpdate:sql];
+
+    BOOL result = [db commit];
     
     return result;
 }
@@ -254,10 +250,8 @@
 - (BOOL)rollbackTransaction {
     
     FMDatabase *db = [[SQPDatabase sharedInstance] database];
-    
-    NSString *sql = @"ROLLBACK";
-    
-    BOOL result = [db executeUpdate:sql];
+   
+    BOOL result = [db rollback];
     
     return result;
 }
