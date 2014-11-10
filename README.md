@@ -180,7 +180,7 @@ User *userSelected = [User SQPFetchOneWhere:@"lastName = 'McClane'"];
 User *userSelected = [User SQPFetchOneByAttribut:@"lastName" withValue:@"McClane"];
 ```
 
-Tips : with ***SQPFetchOne*** you can get one object without know de objectID. For example for paramters table :
+Tips : with ***SQPFetchOne*** you can get one object without know the objectID. For example for parameters table :
 
 ```
 // SELECT a single row :
