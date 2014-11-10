@@ -136,7 +136,7 @@ existingUser.amount = 10.50f;
 [existingUser SQPSaveEntity];
 
 // UPDATE Object (with cascade) :
-[existingUser SQPSaveEntity];
+[existingUser SQPSaveEntityWithCascade:YES];
 ```
 
 The ***cascade*** option update (or insert) all sub-objects (childrens) contains by the main entity object.
