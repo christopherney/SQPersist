@@ -390,7 +390,7 @@
 - (id)objcObjectToSQLite:(id)value {
     
     if (value == nil) {
-        
+    
         return [NSNull null];
         
     } else {
@@ -465,10 +465,19 @@
                 [sqlArgs appendFormat:@", :%@", property.name];
             }
             
+            // get property value :
             id propertyValue = [self valueForKey:property.name];
             
+            // Convert ObjC value to SQLite :
             id sqliteValue = [self objcObjectToSQLite:propertyValue];
             
+            // Default value, if null :
+            if ([sqliteValue isKindOfClass:[NSNull class]]) {
+                sqliteValue = [self defaultValueForProperty:property];
+                if (sqliteValue == nil) sqliteValue = [NSNull null];
+            }
+            
+            // Add to dictionary :
             [argsDict setObject:sqliteValue forKey:property.name];
         }
     }
@@ -521,10 +530,19 @@
                 [sqlArgs appendFormat:@", %@ = :%@", property.name, property.name];
             }
             
+            // get property value :
             id propertyValue = [self valueForKey:property.name];
             
+            // Convert ObjC value to SQLite :
             id sqliteValue = [self objcObjectToSQLite:propertyValue];
             
+            // Default value, if null :
+            if ([sqliteValue isKindOfClass:[NSNull class]]) {
+                sqliteValue = [self defaultValueForProperty:property];
+                if (sqliteValue == nil) sqliteValue = [NSNull null];
+            }
+            
+            // Add to dictionary :
             [argsDict setObject:sqliteValue forKey:property.name];
         }
     }
@@ -982,7 +1000,7 @@
 }
 
 /**
- *  Indicate to the system if a property can be stored or not into the database.
+ *  Can be override : Indicate to the system if a property can be stored or not into the database.
  *
  *  @param property Property of the persist object.
  *
@@ -991,6 +1009,17 @@
 - (BOOL)ignoredProperty:(SQPProperty*)property {
     
     return NO;
+}
+
+/**
+ *  Can be override to define a default value for a property.
+ *
+ *  @param property Property of the persist object.
+ *
+ *  @return Return the default value (if property not set).
+ */
+- (id)defaultValueForProperty:(SQPProperty*)property {
+    return nil;
 }
 
 /**

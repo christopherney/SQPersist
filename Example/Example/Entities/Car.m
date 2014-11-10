@@ -10,4 +10,13 @@
 
 @implementation Car
 
+- (id)defaultValueForProperty:(SQPProperty *)property {
+    
+    if ([property.name isEqualToString:@"urlLogo"]) {
+        return @"http://www.gogole.fr/";
+    } else {
+        return nil;
+    }
+}
+
 @end

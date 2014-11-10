@@ -23,6 +23,7 @@
 @protocol SQPObjectDelegate
 @optional
 - (BOOL)ignoredProperty:(SQPProperty*)property;
+- (id)defaultValueForProperty:(SQPProperty*)property;
 @end
 
 /**
