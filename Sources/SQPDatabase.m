@@ -34,6 +34,8 @@
     return _sharedObject;
 }
 
+#pragma mark - Manage Database
+
 /**
  *  Setup the database.
  *
@@ -147,6 +149,8 @@
     }
 }
 
+#pragma mark - Structure memorization
+
 /**
  *  Remember scanned entity.
  *
@@ -213,6 +217,8 @@
         return NO;
     }
 }
+
+#pragma mark - Transactions
 
 /**
  *  Begin a SQL Transaction.

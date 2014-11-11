@@ -65,6 +65,8 @@
  */
 + (SQPDatabase*)sharedInstance;
 
+#pragma mark - Manage Database
+
 /**
  *  Setup the database.
  *
@@ -107,6 +109,8 @@
  */
 - (BOOL)removeDatabase;
 
+#pragma mark - Structure memorization
+
 /**
  *  Remember scanned entity.
  *
@@ -139,6 +143,8 @@
  *  @return Return YES if is an entity.
  */
 - (BOOL)isEntityObject:(NSString*)className;
+
+#pragma mark - Transactions
 
 /**
  *  Begin a SQL Transaction.

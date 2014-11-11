@@ -37,8 +37,10 @@
  */
 @implementation SQPObject
 
+#pragma mark - Initialization
+
 /**
- *  Initiliazation.
+ *  Initialization.
  *
  *  @return Entity object.
  */
@@ -158,6 +160,8 @@
     return props;
 }
 
+#pragma mark - Create table
+
 /**
  *  Create the associed table of entity object into the database (private method).
  */
@@ -254,6 +258,8 @@
         }
     }
 }
+
+#pragma mark - Save
 
 /**
  *  Save the modification of the entity object.
@@ -580,6 +586,8 @@
     return result;
 }
 
+#pragma mark - Fetch
+
 /**
  *  Return every entities save of table.
  *
@@ -790,6 +798,8 @@
     return object;
 }
 
+#pragma mark - Count
+
 /**
  *  Return the number of entities save into the associated table.
  *
@@ -854,6 +864,8 @@
     return numberEntities;
 }
 
+#pragma mark - Truncate
+
 /**
  *  Remove all entities of the table (TRUNCATE).
  *
@@ -877,6 +889,8 @@
     
     return result;
 }
+
+#pragma mark - Internal functions
 
 /**
  *  Set all entity properties with ResultSet of SQL query (private method).
@@ -1022,6 +1036,23 @@
     return nil;
 }
 
+- (NSString*)description {
+    
+    NSMutableString *interface = [[NSMutableString alloc] initWithFormat:@"\r@interface %@ : SQPObject\r\r", self.SQPClassName];
+    
+    [interface appendFormat:@"@property (nonatomic) NSString * objectID; // value = %@\r", self.objectID];
+    
+    for (SQPProperty *property in self.SQPProperties) {
+        [interface appendFormat:@"%@\r", [property description]];
+    }
+    
+    [interface appendString:@"\r@end"];
+    
+    return interface;
+}
+
+#pragma mark - JSON
+
 /**
  *  Serialized the object to Dictionary.
  *
@@ -1088,21 +1119,6 @@
     }
     
     return result;
-}
-
-- (NSString*)description {
-    
-    NSMutableString *interface = [[NSMutableString alloc] initWithFormat:@"\r@interface %@ : SQPObject\r\r", self.SQPClassName];
-    
-    [interface appendFormat:@"@property (nonatomic) NSString * objectID; // value = %@\r", self.objectID];
-    
-    for (SQPProperty *property in self.SQPProperties) {
-        [interface appendFormat:@"%@\r", [property description]];
-    }
-    
-    [interface appendString:@"\r@end"];
-    
-    return interface;
 }
 
 @end

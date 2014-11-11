@@ -70,6 +70,8 @@
  */
 + (id)SQPCreateEntity;
 
+#pragma mark - Save
+
 /**
  *  Save the modification of the entity object (by default save children objects with cascade option).
  *
@@ -101,6 +103,8 @@
  *  @return Return YES if the changes apply with succes.
  */
 - (BOOL)SQPDeleteEntityWithCascade:(BOOL)cascade;
+
+#pragma mark - Fetch
 
 /**
  *  Return every entities save of table.
@@ -175,6 +179,8 @@
  */
 + (id)SQPFetchOneByAttribut:(NSString*)attribut withValue:(NSString*)value;
 
+#pragma mark - Count
+
 /**
  *  Return the number of entities save into the associated table.
  *
@@ -191,6 +197,8 @@
  */
 + (long long)SQPCountAllWhere:(NSString*)queryOptions;
 
+#pragma mark - Truncate
+
 /**
  *  Remove all entities of the table (TRUNCATE).
  *
@@ -198,14 +206,7 @@
  */
 + (BOOL)SQPTruncateAll;
 
-/**
- *  Indicate to the system if a property can be stored or not into the database.
- *
- *  @param property Property of the persist object.
- *
- *  @return YES to store the property / NO to ignored (by default all properties are stored).
- */
-- (BOOL)ignoredProperty:(SQPProperty*)property;
+#pragma mark - JSON
 
 /**
  *  Serialized the object to Dictionary.
