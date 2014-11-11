@@ -100,7 +100,7 @@ SQPersist is compatible with the following Objective-C types :
 * ***float*** -> become ***REAL*** into SQLite database
 * ***bool*** -> become ***INTEGER*** into SQLite database
 
-> Warning: the ***BOOL*** type are analysed like ***char***, please use ***bool*** (lower case).
+> Warning: the ***BOOL*** type is analysed like ***char***, please use ***bool*** (lower case).
 
 Each property of entities objects are analysed with Objective-C methods : ***property_getAttributes()***.
 
