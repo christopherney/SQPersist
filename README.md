@@ -98,7 +98,10 @@ SQPersist is compatible with the following Objective-C types :
 * ***long long*** -> become ***INTEGER*** into SQLite database
 * ***short*** -> become ***INTEGER*** into SQLite database
 * ***float*** -> become ***REAL*** into SQLite database
- 
+* ***bool*** -> become ***INTEGER*** into SQLite database
+
+> Warning: the ***BOOL*** type is analysed like ***char***, please use ***bool*** (lower case).
+
 Each property of entities objects are analysed with Objective-C methods : ***property_getAttributes()***.
 
 ***Apple documentation :***
