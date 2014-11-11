@@ -19,4 +19,5 @@
 @property (nonatomic) int power;
 @property (nonatomic) User *owner;
 @property (nonatomic, strong) NSURL *urlLogo;
+
 @end
