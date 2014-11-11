@@ -896,14 +896,14 @@
             if (value != nil && property.type != kPropertyTypeChar) {
                 
                 // Convert Date to timestamp :
-                if (property.type == kPropertyTypeDate) {
+                if (property.type == kPropertyTypeDate && [value isKindOfClass:[NSNull class]] == NO) {
                     
                     NSNumber *interval = (NSNumber*)value;
                     NSDate *dateValue = [[NSDate alloc] initWithTimeIntervalSince1970:[interval integerValue]];
                     
                     [self setValue:dateValue forKey:property.name];
                     
-                } else if (property.type == kPropertyTypeImage) {
+                } else if (property.type == kPropertyTypeImage && [value isKindOfClass:[NSNull class]] == NO) {
                     
                     NSData *imageData = (NSData*)value;
                     
@@ -913,7 +913,7 @@
                         [self setValue:image forKey:property.name];
                     }
                     
-                } else if (property.type == kPropertyTypeURL) {
+                } else if (property.type == kPropertyTypeURL && [value isKindOfClass:[NSNull class]] == NO) {
                     
                     if ([value isKindOfClass:[NSString class]]) {
                         

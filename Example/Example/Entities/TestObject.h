@@ -25,7 +25,6 @@
 @property (nonatomic) long long testLongLong; // long long -> become REAL into SQLite database
 @property (nonatomic) short testShort; // short -> become INTEGER into SQLite database
 @property (nonatomic) float testFloat; // float -> become REAL into SQLite database
-
-@property (nonatomic) BOOL testBool;
+@property (nonatomic) bool testBool; // bool -> become INTEGER into SQLite database
 
 @end

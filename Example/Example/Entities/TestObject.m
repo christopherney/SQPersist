@@ -19,4 +19,13 @@
     }
 }
 
+- (id)defaultValueForProperty:(SQPProperty *)property {
+    
+    if ([property.name isEqualToString:@"testNumber"]) {
+        return @13;
+    } else {
+        return nil;
+    }
+}
+
 @end

@@ -22,6 +22,7 @@
 - (Car*)getRandomCar;
 - (void)otherExamples;
 - (void)testSQLiteTypes;
+- (void)testTransactions;
 - (BOOL)image:(UIImage *)image1 isEqualTo:(UIImage *)image2;
 @end
 
@@ -57,6 +58,9 @@
 
     // JSON Response exemple :
     [self getFlickRandomPhoto];
+    
+    // Test transactions :
+    [self testTransactions];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -65,6 +69,36 @@
 }
 
 #pragma mark - Example
+
+- (void)testTransactions {
+    
+    // Commit :
+    
+    [[SQPDatabase sharedInstance] beginTransaction];
+    
+    TestObject *testObject = [TestObject SQPCreateEntity];
+    testObject.testString = @"Test transaction";
+    
+    [testObject SQPSaveEntity];
+    
+    [[SQPDatabase sharedInstance] commitTransaction];
+
+    // Rollback :
+    
+    [[SQPDatabase sharedInstance] beginTransaction];
+    
+    testObject.testString = @"Test Rollabck";
+    
+    [testObject SQPSaveEntity];
+    
+    [[SQPDatabase sharedInstance] rollbackTransaction];
+    
+    TestObject *testFinal = [TestObject SQPFetchOneByID:testObject.objectID];
+    
+    NSLog(@"testObject.testString: %@", testFinal.testString);
+    
+    NSLog(@"testObject.testNumber: %@ (default value)", testFinal.testNumber);
+}
 
 - (void)testSQLiteTypes {
     
