@@ -203,7 +203,7 @@
     }
     
     if (testResult.testBool == testObject.testBool) {
-        NSLog(@"BOOL OK - (%hhd)", testResult.testBool);
+        NSLog(@"BOOL OK - (%d)", testResult.testBool);
     } else {
         NSLog(@"BOOL KO!");
     }
