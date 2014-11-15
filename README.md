@@ -15,7 +15,7 @@ With **SQPersist** you can store your custom objects in **SQLite** database with
 Video
 -----
 
-[![ScreenShot](https://github.com/christopherney/SQPersist/Screens/Youtube-Video-Screen.png)](https://www.youtube.com/watch?v=rfRvdAUB6js)
+[![ScreenShot](https://raw.githubusercontent.com/christopherney/SQPersist/master/Screens/Youtube-Video-Screen.png)](https://www.youtube.com/watch?v=rfRvdAUB6js)
 
 Language
 --------
