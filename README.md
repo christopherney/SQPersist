@@ -12,6 +12,11 @@ What is it?
 
 With **SQPersist** you can store your custom objects in **SQLite** database without creating manually your database and using Core Data Framework.
 
+Video
+-----
+
+[![ScreenShot](https://github.com/christopherney/SQPersist/Screens/Youtube-Video-Screen.png)](https://www.youtube.com/watch?v=rfRvdAUB6js)
+
 Language
 --------
 
