@@ -53,6 +53,8 @@
  *  @return Database name.
  */
 - (NSString*)getDdName {
+    
+    if (_dbName == nil) [self createDatabase];
     return _dbName;
 }
 
@@ -62,6 +64,7 @@
  *  @return Path of the database.
  */
 - (NSString*)getDdPath {
+     if (_dbPath == nil) [self createDatabase];
     return _dbPath;
 }
 
@@ -79,14 +82,14 @@
     
     //NSLog(@"%@", _dbPath);
     
-    FMDatabase *db = [FMDatabase databaseWithPath:_dbPath];
-    db.logsErrors = YES;
-    db.traceExecution = NO;
+    _database = [FMDatabase databaseWithPath:_dbPath];
+    _database.logsErrors = YES;
+    _database.traceExecution = NO;
     
-    if (![db open]) {
+    if (![_database open]) {
         return nil;
     } else {
-        return db;
+        return _database;
     }
 }
 
