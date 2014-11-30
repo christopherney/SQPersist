@@ -949,8 +949,8 @@
                     
                     [self setValue:finalObject forKey:property.name];
                     
-                } else {
-                    
+                } else if ([value isKindOfClass:[NSNull class]] == NO) {
+
                     [self setValue:value forKey:property.name];
                 }
                 
