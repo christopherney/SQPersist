@@ -398,7 +398,7 @@
     
     self.where = nil;
     
-    self.items = [Car SQPFetchAll];
+    self.items = [Car SQPFetchAllOrderBy:@"name"];
     
     [self.tableView reloadData];
 }

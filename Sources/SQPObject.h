@@ -114,6 +114,15 @@
 + (NSMutableArray*)SQPFetchAll;
 
 /**
+ *  Return every entities save of table.
+ *
+ *  @param orderOptions Ordering conditions (clause SQL ORDER BY).
+ *
+ *  @return Array of entities.
+ */
++ (NSMutableArray*)SQPFetchAllOrderBy:(NSString*)orderOptions;
+
+/**
  *  Return every entities save of table, with filtering conditions.
  *
  *  @param queryOptions Filtering conditions (clause SQL WHERE).
@@ -143,6 +152,19 @@
  *  @return Array of entities.
  */
 + (NSMutableArray*)SQPFetchAllWhere:(NSString*)queryOptions orderBy:(NSString*)orderOptions pageIndex:(NSInteger)pageIndex itemsPerPage:(NSInteger)itemsPerPage;
+
+/**
+ *  Return every entities save of table, with filtering conditions and order, and pagination system.
+ *
+ *  @param queryOptions Filtering conditions (clause SQL WHERE).
+ *  @param groupOptions Gouping conditions (clause SQL GROUP BY).
+ *  @param orderOptions Ordering conditions (clause SQL ORDER BY).
+ *  @param pageIndex    Page index (start at 0 value).
+ *  @param itemsPerPage Number of items per page.
+ *
+ *  @return Array of entities.
+ */
++ (NSMutableArray*)SQPFetchAllWhere:(NSString*)queryOptions groupBy:(NSString*)groupOptions orderBy:(NSString*)orderOptions pageIndex:(NSInteger)pageIndex itemsPerPage:(NSInteger)itemsPerPage;
 
 /**
  *  Return the first entity object.

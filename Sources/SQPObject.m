@@ -27,7 +27,7 @@
 - (BOOL)SQPUpdateObject;
 - (BOOL)SQPDeleteObject;
 - (void)SQPSaveChildrenWithCascade:(BOOL)cascade;
-+ (NSMutableArray*)SQPFetchAllForTable:(NSString*)tableName andClassName:(NSString*)className Where:(NSString*)queryOptions orderBy:(NSString*)orderOptions pageIndex:(NSInteger)pageIndex itemsPerPage:(NSInteger)itemsPerPage;
++ (NSMutableArray*)SQPFetchAllForTable:(NSString*)tableName andClassName:(NSString*)className Where:(NSString*)queryOptions groupBy:(NSString*)groupOptions orderBy:(NSString*)orderOptions pageIndex:(NSInteger)pageIndex itemsPerPage:(NSInteger)itemsPerPage;
 + (id)SQPFetchOneForTable:(NSString*)tableName andClassName:(NSString*)className Where:(NSString*)queryOptions;
 + (void)logRequest:(NSString*)request;
 @end
@@ -598,7 +598,22 @@
     NSString *className = NSStringFromClass([self class]);
     NSString *tableName = [NSString stringWithFormat:@"%@%@", kSQPTablePrefix, className];
     
-    return [SQPObject SQPFetchAllForTable:tableName andClassName:className Where:nil orderBy:nil pageIndex:0 itemsPerPage:0];
+    return [SQPObject SQPFetchAllForTable:tableName andClassName:className Where:nil groupBy:nil orderBy:nil pageIndex:0 itemsPerPage:0];
+}
+
+/**
+ *  Return every entities save of table.
+ *
+ *  @param orderOptions Ordering conditions (clause SQL ORDER BY).
+ *
+ *  @return Array of entities.
+ */
++ (NSMutableArray*)SQPFetchAllOrderBy:(NSString*)orderOptions {
+    
+    NSString *className = NSStringFromClass([self class]);
+    NSString *tableName = [NSString stringWithFormat:@"%@%@", kSQPTablePrefix, className];
+    
+    return [SQPObject SQPFetchAllForTable:tableName andClassName:className Where:nil groupBy:nil orderBy:orderOptions pageIndex:0 itemsPerPage:0];
 }
 
 /**
@@ -613,7 +628,7 @@
     NSString *className = NSStringFromClass([self class]);
     NSString *tableName = [NSString stringWithFormat:@"%@%@", kSQPTablePrefix, className];
     
-    return [SQPObject SQPFetchAllForTable:tableName andClassName:className Where:queryOption orderBy:nil pageIndex:0 itemsPerPage:0];
+    return [SQPObject SQPFetchAllForTable:tableName andClassName:className Where:queryOption groupBy:nil orderBy:nil pageIndex:0 itemsPerPage:0];
 }
 
 /**
@@ -629,7 +644,7 @@
     NSString *className = NSStringFromClass([self class]);
     NSString *tableName = [NSString stringWithFormat:@"%@%@", kSQPTablePrefix, className];
 
-    return [SQPObject SQPFetchAllForTable:tableName andClassName:className Where:queryOptions orderBy:orderOptions pageIndex:0 itemsPerPage:0];
+    return [SQPObject SQPFetchAllForTable:tableName andClassName:className Where:queryOptions groupBy:nil orderBy:orderOptions pageIndex:0 itemsPerPage:0];
 }
 
 /**
@@ -647,7 +662,26 @@
     NSString *className = NSStringFromClass([self class]);
     NSString *tableName = [NSString stringWithFormat:@"%@%@", kSQPTablePrefix, className];
     
-    return [SQPObject SQPFetchAllForTable:tableName andClassName:className Where:queryOptions orderBy:orderOptions pageIndex:pageIndex itemsPerPage:itemsPerPage];
+    return [SQPObject SQPFetchAllForTable:tableName andClassName:className Where:queryOptions groupBy:nil orderBy:orderOptions pageIndex:pageIndex itemsPerPage:itemsPerPage];
+}
+
+/**
+ *  Return every entities save of table, with filtering conditions and order, and pagination system.
+ *
+ *  @param queryOptions Filtering conditions (clause SQL WHERE).
+ *  @param groupOptions Gouping conditions (clause SQL GROUP BY).
+ *  @param orderOptions Ordering conditions (clause SQL ORDER BY).
+ *  @param pageIndex    Page index (start at 0 value).
+ *  @param itemsPerPage Number of items per page.
+ *
+ *  @return Array of entities.
+ */
++ (NSMutableArray*)SQPFetchAllWhere:(NSString*)queryOptions groupBy:(NSString*)groupOptions orderBy:(NSString*)orderOptions pageIndex:(NSInteger)pageIndex itemsPerPage:(NSInteger)itemsPerPage {
+    
+    NSString *className = NSStringFromClass([self class]);
+    NSString *tableName = [NSString stringWithFormat:@"%@%@", kSQPTablePrefix, className];
+    
+    return [SQPObject SQPFetchAllForTable:tableName andClassName:className Where:queryOptions groupBy:groupOptions orderBy:orderOptions pageIndex:pageIndex itemsPerPage:itemsPerPage];
 }
 
 /**
@@ -656,13 +690,14 @@
  *  @param tableName    Table name
  *  @param className    Objective-C class name (entity).
  *  @param queryOptions Filtering conditions (clause SQL WHERE).
+ *  @param groupOptions Gouping conditions (clause SQL GROUP BY).
  *  @param orderOptions Ordering conditions (clause SQL ORDER BY).
  *  @param pageIndex    Page index (start at 0 value).
  *  @param itemsPerPage Number of items per page.
  *
  *  @return Array of entities.
  */
-+ (NSMutableArray*)SQPFetchAllForTable:(NSString*)tableName andClassName:(NSString*)className Where:(NSString*)queryOptions orderBy:(NSString*)orderOptions pageIndex:(NSInteger)pageIndex itemsPerPage:(NSInteger)itemsPerPage {
++ (NSMutableArray*)SQPFetchAllForTable:(NSString*)tableName andClassName:(NSString*)className Where:(NSString*)queryOptions groupBy:(NSString*)groupOptions orderBy:(NSString*)orderOptions pageIndex:(NSInteger)pageIndex itemsPerPage:(NSInteger)itemsPerPage {
     
     NSMutableArray *items = [[NSMutableArray alloc] init];
     
@@ -671,6 +706,8 @@
     NSMutableString *sql = [[NSMutableString alloc] initWithFormat:@"SELECT * FROM %@", tableName];
     
     if (queryOptions != nil) [sql appendFormat:@" WHERE %@", queryOptions];
+    
+    if (groupOptions != nil) [sql appendFormat:@" GROUP BY %@", groupOptions];
     
     if (orderOptions != nil) [sql appendFormat:@" ORDER BY %@", orderOptions];
    
