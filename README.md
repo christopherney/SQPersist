@@ -3,7 +3,7 @@ SQPersist
 
 Objective-C Persistence framework wrapper around SQLite.
 
-```Version 1.0.2```
+```Version 1.0.3```
 
 What is it?
 -----------
@@ -127,7 +127,7 @@ To insert a new object into your database, just call the method named ***SQPSave
 User *userCreated = [User SQPCreateEntity];
 userCreated.firstName = @"John";
 userCreated.lastName = @"McClane";
-    
+
 // INSERT Object :
 [userCreated SQPSaveEntity];
 ```
@@ -139,7 +139,7 @@ To update an existing object into your database, just call the method named ***S
 // SELECT BY objectID :
 User *existingUser = [User SQPFetchOneByID:objectID];
 existingUser.amount = 10.50f;
- 
+
 // UPDATE Object :
 [existingUser SQPSaveEntity];
 
@@ -242,9 +242,9 @@ Manage your transactions with 3 methods : ***beginTransaction***, ***commitTrans
 // Your objects manipulation...
 
 if (result == YES) {
-    [[SQPDatabase sharedInstance] commitTransaction];
+[[SQPDatabase sharedInstance] commitTransaction];
 } else {
-    [[SQPDatabase sharedInstance] rollbackTransaction];
+[[SQPDatabase sharedInstance] rollbackTransaction];
 }
 ```
 
@@ -258,7 +258,7 @@ You can remove the database with the method ***removeDatabase*** :
 Test if database file exists on local :
 ```
 if ([[SQPDatabase sharedInstance] databaseExists]) {
-    // SQLite Db file exists.
+// SQLite Db file exists.
 }
 ```
 Add new property into an existing table (use just for update your model - generate many SQL request) :
