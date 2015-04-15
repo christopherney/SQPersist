@@ -50,8 +50,8 @@
     
     // NSLog(@"%@", propertyAttributes);
     
-    // Si c'est un type primitif :
-    if ([self string:propertyAttributes containsSubString:@",&,"]) {
+    // If is complex type : :
+    if ([self string:propertyAttributes containsSubString:@",&,"] || [self string:propertyAttributes containsSubString:@",C,"]) {
         
         self.isPrimitive = NO;
         
@@ -120,11 +120,25 @@
         
     }
     
-    // Si attirbut Non Atomic :
+    // If attribut nonatomic :
     if ([self string:propertyAttributes containsSubString:@",N,"]) {
         self.isNonatomic = YES;
     } else {
         self.isNonatomic = NO;
+    }
+    
+    // If attribut retain :
+    if ([self string:propertyAttributes containsSubString:@",&,"]) {
+        self.isRetain = YES;
+    } else {
+        self.isRetain = NO;
+    }
+    
+    // If attribut retain :
+    if ([self string:propertyAttributes containsSubString:@",C,"]) {
+        self.isCopy = YES;
+    } else {
+        self.isCopy = NO;
     }
 }
 

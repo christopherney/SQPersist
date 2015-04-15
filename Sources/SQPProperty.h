@@ -74,6 +74,16 @@ typedef enum SQPPropertyType : NSUInteger {
 @property (nonatomic) BOOL isCompatibleType;
 
 /**
+ *  Indicate that is retain (strong) property.
+ */
+@property (nonatomic) BOOL isRetain;
+
+/**
+ *  Indicate that is copy property.
+ */
+@property (nonatomic) BOOL isCopy;
+
+/**
  *  If property if complex type, this member return the name of the complex type.
  */
 @property (nonatomic, strong) NSString *complexTypeName;

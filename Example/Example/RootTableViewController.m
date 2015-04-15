@@ -120,6 +120,8 @@
     testObject.testFloat = FLT_MAX; // float -> become REAL into SQLite database
     testObject.testBool = YES; // BOOL -> become INTEGER into SQLite database
     
+    testObject.testCopyProperty = @"Copy value";
+    
     [testObject SQPSaveEntity];
     
     TestObject *testResult = [TestObject SQPFetchOneByID:testObject.objectID];
@@ -206,6 +208,12 @@
         NSLog(@"BOOL OK - (%d)", testResult.testBool);
     } else {
         NSLog(@"BOOL KO!");
+    }
+    
+    if ([testResult.testCopyProperty isEqualToString:testObject.testCopyProperty]) {
+        NSLog(@"Copy property OK - (%@)", testResult.testCopyProperty);
+    } else {
+        NSLog(@"Copy property KO!");
     }
     
     // Convertion to Dictionary (for JSON request for example) :

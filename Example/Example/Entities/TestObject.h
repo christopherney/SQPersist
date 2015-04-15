@@ -27,4 +27,6 @@
 @property (nonatomic) float testFloat; // float -> become REAL into SQLite database
 @property (nonatomic) bool testBool; // bool -> become INTEGER into SQLite database
 
+@property (nonatomic, copy) NSString *testCopyProperty; // NSString -> become TEXT into SQLite database
+
 @end
