@@ -13,5 +13,19 @@ Pod::Spec.new do |s|
   s.public_header_files = "Sources/**/*.h"
   s.requires_arc = true
   # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
-  s.dependency "FMDB", "~> 2.4"
+  s.dependency "FMDB", "~> 2.5"
+  
+  # Added Core subspec to share source
+  s.subspec 'Core' do |ss|
+  ss.source_files = 'Sources/*.{h,m}'
+
+  end 
+  
+  # Added Cipher subspec to use the SQLCipher subspec of FMDB
+  s.subspec 'Cipher' do |ss|
+  ss.dependency 'SQPersist/Core'
+  ss.dependency 'FMDB/SQLCipher'
+
+  end
+
 end
