@@ -140,6 +140,13 @@
     } else {
         self.isCopy = NO;
     }
+    
+    // If attribut readonly :
+    if ([self string:propertyAttributes containsSubString:@",R,"]) {
+        self.isReadonly = YES;
+    } else {
+        self.isReadonly = NO;
+    }
 }
 
 /**

@@ -96,6 +96,15 @@
 - (BOOL)SQPDeleteEntity;
 
 /**
+ *  Delete entities objects into the associated table.
+ *
+ *  @param queryOptions Filtering conditions (clause SQL WHERE).
+ *
+ *  @return Result of Delete (YES = succes).
+ */
++ (BOOL)SQPDeleteWhere:(NSString*)queryOptions;
+
+/**
  *  Delete the entity into the database.
  *
  *  @param cascade Remove children object in cascade.

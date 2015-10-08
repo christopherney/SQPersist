@@ -586,6 +586,32 @@
     return result;
 }
 
+/**
+ *  Delete entities objects into the associated table.
+ *
+ *  @param queryOptions Filtering conditions (clause SQL WHERE).
+ *
+ *  @return Result of Delete (YES = succes).
+ */
++ (BOOL)SQPDeleteWhere:(NSString*)queryOptions {
+    
+    NSString *className = NSStringFromClass([self class]);
+    NSString *tableName = [NSString stringWithFormat:@"%@%@", kSQPTablePrefix, className];
+    
+    FMDatabase *db = [[SQPDatabase sharedInstance] database];
+    
+    NSString *sql = [NSString stringWithFormat:@"DELETE FROM %@ WHERE %@", tableName, queryOptions];
+    
+    // Log SQL request :
+    if ([SQPDatabase sharedInstance].logRequests) {
+        [SQPObject logRequest:sql];
+    }
+    
+    BOOL result = [db executeUpdate:sql];
+    
+    return result;
+}
+
 #pragma mark - Fetch
 
 /**

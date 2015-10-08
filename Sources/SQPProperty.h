@@ -84,6 +84,11 @@ typedef enum SQPPropertyType : NSUInteger {
 @property (nonatomic) BOOL isCopy;
 
 /**
+ *  Indicate that is readonly property.
+ */
+@property (nonatomic) BOOL isReadonly;
+
+/**
  *  If property if complex type, this member return the name of the complex type.
  */
 @property (nonatomic, strong) NSString *complexTypeName;
