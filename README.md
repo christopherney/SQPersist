@@ -3,7 +3,7 @@ SQPersist
 
 Objective-C Persistence framework wrapper around SQLite.
 
-```Version 1.0.4```
+```Version 1.0.5```
 
 What is it?
 -----------
@@ -169,6 +169,11 @@ existingUser.deleteObject = YES;
 ```
 
 The ***cascade*** option delete all sub-objects (childrens) contains by the main entity object.
+
+```
+// DELETE Objects with WHERE conditions :
+[Car SQPDeleteWhere:@"color != 'black' AND name = 'Porsche'"];
+```
 
 SELECT One object
 --------------------
